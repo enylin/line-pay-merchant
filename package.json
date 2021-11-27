@@ -1,0 +1,27 @@
+{
+  "name": "line-pay-merchant",
+  "version": "0.0.1",
+  "description": "LINE Pay Merchant API V3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enylin/line-pay-merchant.git"
+  },
+  "keywords": [
+    "LINE Pay",
+    "V3",
+    "ES6",
+    "TypeScript"
+  ],
+  "author": {
+    "name": "Sean Lin",
+    "email": "sean.enylin@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enylin/line-pay-merchant/issues"
+  },
+  "homepage": "https://github.com/enylin/line-pay-merchant#readme"
+}

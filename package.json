@@ -6,9 +6,24 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm run clean && npx tsc",
+    "check-types": "tsc --noemit -p tsconfig.json",
     "clean": "rimraf dist coverage",
+    "eslint": "eslint \"src/**/*.ts\"",
+    "lint": "npm run eslint && npm run check-types",
+    "prepare": "husky install",
+    "release": "npm run build && npm publish",
     "test": "jest --silent",
-    "prepare": "husky install"
+    "test:cov": "jest --coverage",
+    "test:log": "jest",
+    "test:watch": "jest --watch",
+    "v:major": "npm version major -m \"build: release %s\"",
+    "v:minor": "npm version minor -m \"build: release %s\"",
+    "v:patch": "npm version patch -m \"build: release %s\"",
+    "v:premajor": "npm version premajor -m \"build: release %s\"",
+    "v:preminor": "npm version preminor -m \"build: release %s\"",
+    "v:prepatch": "npm version prepatch -m \"build: release %s\"",
+    "v:prerelease": "npm version prerelease -m \"build: release %s\"",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",

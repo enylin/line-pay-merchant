@@ -48,7 +48,10 @@
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-angular": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@types/crypto-js": "^4.0.2",
     "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.10",
+    "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "commitizen": "^4.2.4",
@@ -70,5 +73,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "crypto-js": "^4.1.1",
+    "uuid": "^8.3.2"
   }
 }

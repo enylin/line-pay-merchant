@@ -1,4 +1,4 @@
-import { request, RequestRequestBody } from './request'
+import { requestWithClient, RequestRequestBody } from './request'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -37,7 +37,11 @@ describe('request', () => {
 
     mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
 
-    request(httpClient)(body)
+    const req = {
+      body
+    }
+
+    requestWithClient(httpClient)(req)
 
     expect(httpClient.post).toHaveBeenCalledWith('/v3/payments/request', body)
 

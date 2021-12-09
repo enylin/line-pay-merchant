@@ -1,7 +1,17 @@
-import { createApiClient } from './line-pay-api'
+import { createAuthHttpClient } from './line-pay-api/auth-http-client'
+import { confirmWithClient } from './line-pay-api/confirm'
+import { refundWithClient } from './line-pay-api/refund'
+import { requestWithClient } from './line-pay-api/request'
 import { LineMerchantConfig } from './line-pay-api/type'
+import { LinePayClient } from './type'
+import { createPaymentApi } from './payment-api/create'
 
-export function initializeMerchant(config: LineMerchantConfig) {
-  const apiClient = createApiClient(config)
-  return apiClient
+export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
+  const httpClient = createAuthHttpClient(config)
+
+  return {
+    request: createPaymentApi(requestWithClient, httpClient),
+    confirm: createPaymentApi(confirmWithClient, httpClient),
+    refund: createPaymentApi(refundWithClient, httpClient)
+  }
 }

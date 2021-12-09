@@ -1,4 +1,4 @@
-import { HttpClient } from '.'
+import { HttpClient } from './type'
 
 export type RefundRequestBody = {
   /**
@@ -6,6 +6,17 @@ export type RefundRequestBody = {
    * - Full refund if not returned
    */
   refundAmount: number
+}
+
+export type RefundRequestConfig = {
+  /**
+   * ID of the transaction
+   */
+  transactionId: string
+  /**
+   * Request body of refund API
+   */
+  body: RefundRequestBody
 }
 
 export type Info = {
@@ -34,9 +45,9 @@ export type RefundResponseBody = {
   info?: Info
 }
 
-export const refund =
+export const refundWithClient =
   (httpClient: HttpClient) =>
-  async (transactionId: string, body: RefundRequestBody) => {
+  async ({ transactionId, body }: RefundRequestConfig) => {
     const { data } = await httpClient.post<
       RefundRequestBody,
       RefundResponseBody

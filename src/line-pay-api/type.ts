@@ -8,6 +8,16 @@ export type LineMerchantConfig = {
   env: 'development' | 'production'
 }
 
+export type HttpResponse<R> = {
+  data: R
+  status: number
+}
+
+export interface HttpClient {
+  get: <R>(url: string) => Promise<HttpResponse<R>>
+  post: <T, R>(url: string, body: T) => Promise<HttpResponse<R>>
+}
+
 export type Recipient = {
   /**
    * Recipient name

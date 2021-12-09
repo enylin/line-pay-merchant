@@ -1,4 +1,4 @@
-import { initializeMerchant } from './index'
+import { createLinePayClient } from './index'
 
 describe('index.ts', () => {
   it('should be tested', async () => {

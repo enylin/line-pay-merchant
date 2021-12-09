@@ -1,4 +1,8 @@
-import { confirm, ConfirmRequestBody } from './confirm'
+import {
+  confirmWithClient,
+  ConfirmRequestBody,
+  ConfirmRequestConfig
+} from './confirm'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -18,7 +22,12 @@ describe('confirm', () => {
 
     const transactionId = '2021113000697317600'
 
-    confirm(httpClient)(transactionId, body)
+    const req: ConfirmRequestConfig = {
+      transactionId,
+      body
+    }
+
+    confirmWithClient(httpClient)(req)
 
     expect(httpClient.post).toHaveBeenCalledWith(
       `/v3/payments/${transactionId}/confirm`,

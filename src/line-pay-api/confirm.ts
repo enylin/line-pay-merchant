@@ -1,5 +1,4 @@
-import { HttpClient } from '.'
-import { Currency, Address } from './type'
+import { Currency, Address, HttpClient } from './type'
 
 export type ConfirmRequestBody = {
   /**
@@ -15,6 +14,17 @@ export type ConfirmRequestBody = {
    * - THB
    */
   currency: Currency
+}
+
+export type ConfirmRequestConfig = {
+  /**
+   * ID of the transaction
+   */
+  transactionId: string
+  /**
+   * Request body of confirm API
+   */
+  body: ConfirmRequestBody
 }
 
 export type PayInfo = {
@@ -134,9 +144,9 @@ export type ConfirmResponseBody = {
   info?: Info
 }
 
-export const confirm =
+export const confirmWithClient =
   (httpClient: HttpClient) =>
-  async (transactionId: string, body: ConfirmRequestBody) => {
+  async ({ transactionId, body }: ConfirmRequestConfig) => {
     const { data } = await httpClient.post<
       ConfirmRequestBody,
       ConfirmResponseBody

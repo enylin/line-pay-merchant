@@ -1,5 +1,4 @@
-import { HttpClient } from '.'
-import { Currency, Address } from './type'
+import { Currency, Address, HttpClient } from './type'
 
 export type Product = {
   /**
@@ -263,8 +262,16 @@ export type RequestResponseBody = {
   errorDetailMap?: unknown
 }
 
-export const request =
-  (httpClient: HttpClient) => async (body: RequestRequestBody) => {
+export type RequestRequestConfig = {
+  /**
+   * Request body of request API
+   */
+  body: RequestRequestBody
+}
+
+export const requestWithClient =
+  (httpClient: HttpClient) =>
+  async ({ body }: RequestRequestConfig) => {
     const { data } = await httpClient.post<
       RequestRequestBody,
       RequestResponseBody

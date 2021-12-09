@@ -1,4 +1,8 @@
-import { refund, RefundRequestBody } from './refund'
+import {
+  refundWithClient,
+  RefundRequestBody,
+  RefundRequestConfig
+} from './refund'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -17,7 +21,12 @@ describe('refund', () => {
 
     const transactionId = '2021113000697317600'
 
-    refund(httpClient)(transactionId, body)
+    const req: RefundRequestConfig = {
+      transactionId,
+      body
+    }
+
+    refundWithClient(httpClient)(req)
 
     expect(httpClient.post).toHaveBeenCalledWith(
       `/v3/payments/${transactionId}/refund`,

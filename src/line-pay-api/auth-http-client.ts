@@ -100,6 +100,7 @@ export function createClientProxy(
             nonce,
             signature
           )
+
           return Reflect.get(target, prop, receiver)(url, data, {
             headers,
             ...config

@@ -2,12 +2,12 @@
   "compilerOptions": {
     "target": "ES6",
     "strict": true,
-    "importHelpers": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": true,
+    "module": "commonjs",
     "types": [
       "jest",
       "node"

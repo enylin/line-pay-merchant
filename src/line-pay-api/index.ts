@@ -1,5 +1,6 @@
 import { createAuthHttpClient } from './auth-http-client'
 import { confirm, ConfirmRequestBody, ConfirmResponseBody } from './confirm'
+import { refund, RefundRequestBody, RefundResponseBody } from './refund'
 import { request, RequestRequestBody, RequestResponseBody } from './request'
 import { LineMerchantConfig } from './type'
 
@@ -33,6 +34,18 @@ export interface ApiClient {
     transactionId: string,
     body: ConfirmRequestBody
   ) => Promise<ConfirmResponseBody>
+  /**
+   * An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
+   *
+   * @param { string } transactionId ID of the transaction
+   * @param { RefundRequestBody } body Request body of refund API
+   * @returns { RefundResponseBody } response body of refund API
+   * @throws
+   */
+  refund: (
+    transactionId: string,
+    body: RefundRequestBody
+  ) => Promise<RefundResponseBody>
 }
 
 export function createApiClient(
@@ -41,6 +54,7 @@ export function createApiClient(
 ): ApiClient {
   return {
     request: request(httpClient),
-    confirm: confirm(httpClient)
+    confirm: confirm(httpClient),
+    refund: refund(httpClient)
   }
 }

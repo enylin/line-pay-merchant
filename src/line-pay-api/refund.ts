@@ -31,7 +31,7 @@ export type RefundResponseBody = {
   /**
    * Refund information
    */
-  info: Info
+  info?: Info
 }
 
 export const refund =

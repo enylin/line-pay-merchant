@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { LineMerchantConfig, QueryParams } from './type'
 import hmacSHA256 from 'crypto-js/hmac-sha256'
 import Base64 from 'crypto-js/enc-base64'
@@ -14,24 +14,7 @@ type RequestHeader = {
   'X-LINE-Authorization': string
 }
 
-export function createAuthHttpClient(
-  merchantConfig: LineMerchantConfig
-): AuthHttpClient {
-  const PRODUCTION_URL = 'https://api-pay.line.me'
-  const SANDBOX_URL = 'https://sandbox-api-pay.line.me'
-
-  const BASE_URL =
-    merchantConfig.env === 'production' ? PRODUCTION_URL : SANDBOX_URL
-
-  // TODO: timeout
-  const axiosInstance = axios.create({
-    baseURL: BASE_URL
-  })
-
-  return createClientProxy(axiosInstance, merchantConfig)
-}
-
-function buildQueryString(params: QueryParams): string {
+export function paramsSerializer(params: QueryParams): string {
   return Object.entries(params)
     .map(p => p.map(encodeURIComponent).join('='))
     .join('&')
@@ -55,63 +38,64 @@ function generateHeader(
   }
 }
 
-export function createClientProxy(
-  client: AxiosInstance,
-  merchantConfig: LineMerchantConfig
-) {
-  const handler: ProxyHandler<AxiosInstance> = {
-    get: (target, prop, receiver) => {
-      if (prop === 'get') {
-        const f: typeof axios.get = (url, config?) => {
-          const nonce = uuidv4()
-          const queryString = buildQueryString({
-            ...config?.params
-          })
+function handleGetRequest(
+  merchantConfig: LineMerchantConfig,
+  config: AxiosRequestConfig
+): AxiosRequestConfig {
+  const nonce = uuidv4()
+  const queryString = paramsSerializer({
+    ...config?.params
+  })
 
-          const text = `${merchantConfig.channelSecretKey}${url}${queryString}${nonce}`
-          const signature = encrypt(text, merchantConfig.channelSecretKey)
+  const text = `${merchantConfig.channelSecretKey}${config.url}${queryString}${nonce}`
+  const signature = encrypt(text, merchantConfig.channelSecretKey)
 
-          const headers = generateHeader(
-            merchantConfig.channelId,
-            nonce,
-            signature
-          )
-
-          return Reflect.get(
-            target,
-            prop,
-            receiver
-          )(url, { headers, ...config })
-        }
-
-        return f
-      }
-
-      if (prop === 'post') {
-        const f: typeof axios.post = (url, data, config?) => {
-          const nonce = uuidv4()
-          const dataString = JSON.stringify(data)
-
-          const text = `${merchantConfig.channelSecretKey}${url}${dataString}${nonce}`
-          const signature = encrypt(text, merchantConfig.channelSecretKey)
-
-          const headers = generateHeader(
-            merchantConfig.channelId,
-            nonce,
-            signature
-          )
-
-          return Reflect.get(target, prop, receiver)(url, data, {
-            headers,
-            ...config
-          })
-        }
-
-        return f
-      }
-
-      return Reflect.get(target, prop, receiver)
-    }
+  const headers = generateHeader(merchantConfig.channelId, nonce, signature)
+  return {
+    ...config,
+    headers
   }
-  return new Proxy(client, handler)
+}
+
+function handlePostRequest(
+  merchantConfig: LineMerchantConfig,
+  config: AxiosRequestConfig
+): AxiosRequestConfig {
+  const nonce = uuidv4()
+  const dataString = JSON.stringify(config.data)
+
+  const text = `${merchantConfig.channelSecretKey}${config.url}${dataString}${nonce}`
+  const signature = encrypt(text, merchantConfig.channelSecretKey)
+
+  const headers = generateHeader(merchantConfig.channelId, nonce, signature)
+  return {
+    ...config,
+    headers
+  }
+}
+
+export function createAuthHttpClient(
+  merchantConfig: LineMerchantConfig
+): AuthHttpClient {
+  const PRODUCTION_URL = 'https://api-pay.line.me'
+  const SANDBOX_URL = 'https://sandbox-api-pay.line.me'
+
+  const BASE_URL =
+    merchantConfig.env === 'production' ? PRODUCTION_URL : SANDBOX_URL
+
+  const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    paramsSerializer,
+    timeout: merchantConfig.timeout || 20000
+  })
+
+  axiosInstance.interceptors.request.use(config =>
+    config.method === 'get'
+      ? handleGetRequest(merchantConfig, config)
+      : config.method === 'post'
+      ? handlePostRequest(merchantConfig, config)
+      : config
+  )
+
+  return axiosInstance
 }

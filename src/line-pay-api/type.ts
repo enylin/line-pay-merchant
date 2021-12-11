@@ -6,6 +6,7 @@ export type LineMerchantConfig = {
   channelId: string
   channelSecretKey: string
   env: 'development' | 'production'
+  timeout?: number
 }
 
 export type HttpResponse<R> = {
@@ -13,9 +14,19 @@ export type HttpResponse<R> = {
   status: number
 }
 
+export type HttpConfig<Params = Record<string, string>> = {
+  headers?: Record<string, string>
+  params?: Params
+  timeout?: number
+}
+
 export interface HttpClient {
-  get: <R>(url: string) => Promise<HttpResponse<R>>
-  post: <T, R>(url: string, body: T) => Promise<HttpResponse<R>>
+  get: <P, R>(url: string, config: HttpConfig<P>) => Promise<HttpResponse<R>>
+  post: <T, R>(
+    url: string,
+    body: T,
+    config?: HttpConfig
+  ) => Promise<HttpResponse<R>>
 }
 
 export type Recipient = {

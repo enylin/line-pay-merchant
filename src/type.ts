@@ -5,7 +5,7 @@ import {
 import {
   PaymentDetailsRequestConfig,
   PaymentDetailsResponseBody
-} from './line-pay-api/payment-detail'
+} from './line-pay-api/payment-details'
 import { RefundRequestConfig, RefundResponseBody } from './line-pay-api/refund'
 import {
   RequestRequestConfig,

@@ -1,31 +1,4 @@
-import { Currency, Address, HttpClient } from './type'
-
-export type Product = {
-  /**
-   * ID of sales products of the merchant
-   */
-  id?: string
-  /**
-   * Name of the sales products
-   */
-  name: string
-  /**
-   * Image URL of the sales products
-   */
-  imageUrl?: string
-  /**
-   * 	Number of products
-   */
-  quantity: number
-  /**
-   * Price of each product
-   */
-  price: number
-  /**
-   * Original price of each product
-   */
-  originalPrice?: number
-}
+import { Currency, Address, Product, HttpClient } from './type'
 
 export type Package = {
   /**

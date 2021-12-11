@@ -1,7 +1,8 @@
 import { HttpClient } from '@/line-pay-api/type'
 import { ApiResponse, ApiHandler, PaymentApi } from './type'
+import { GeneralResponseBody } from '@/line-pay-api/type'
 
-export function createPaymentApi<Req, Res>(
+export function createPaymentApi<Req, Res extends GeneralResponseBody>(
   createSender: (httpClient: HttpClient) => (req: Req) => Promise<Res>,
   httpClient: HttpClient,
   handlers: ApiHandler<Req, ApiResponse<Res>>[] = []

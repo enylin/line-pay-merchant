@@ -1,3 +1,4 @@
+import { GeneralResponseBody } from './type'
 import { Currency, Address, Product, HttpClient } from './type'
 
 export type Package = {
@@ -216,23 +217,11 @@ export type Info = {
   paymentUrl: PaymentUrl
 }
 
-export type RequestResponseBody = {
-  /**
-   * Return code
-   */
-  returnCode: string
-  /**
-   * Return message
-   */
-  returnMessage: string
+export type RequestResponseBody = GeneralResponseBody & {
   /**
    * Payment information
    */
-  info?: Info
-  /**
-   * Error details
-   */
-  errorDetailMap?: unknown
+  info: Info
 }
 
 export type RequestRequestConfig = {

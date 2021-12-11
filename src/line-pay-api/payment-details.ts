@@ -1,3 +1,4 @@
+import { GeneralResponseBody } from './type'
 import { Product, HttpClient, Address } from './type'
 
 export type Fields = 'ALL' | 'TRANSACTION' | 'ORDER'
@@ -173,19 +174,11 @@ export type Info = {
   events?: Event[]
 }
 
-export type PaymentDetailsResponseBody = {
-  /**
-   * Return code
-   */
-  returnCode: string
-  /**
-   * Return message or reason for failure
-   */
-  returnMessage: string
+export type PaymentDetailsResponseBody = GeneralResponseBody & {
   /**
    * Refund information
    */
-  info?: Info
+  info: Info
 }
 
 export const paymentDetailsWithClient =

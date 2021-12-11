@@ -14,6 +14,17 @@ export type HttpResponse<R> = {
   status: number
 }
 
+export type GeneralResponseBody = {
+  /**
+   * Return code
+   */
+  returnCode: string
+  /**
+   * Return message
+   */
+  returnMessage: string
+}
+
 export type HttpConfig<Params = Record<string, string>> = {
   headers?: Record<string, string>
   params?: Params

@@ -97,5 +97,24 @@ export function createAuthHttpClient(
       : config
   )
 
+  axiosInstance.interceptors.response.use(
+    res => {
+      if (res.data.returnCode !== '0000') {
+        throw {
+          statusCode: res.status,
+          data: res.data
+        }
+      }
+
+      return res
+    },
+    err => {
+      throw {
+        statusCode: err.response.status,
+        data: err.response.data
+      }
+    }
+  )
+
   return axiosInstance
 }

@@ -1,3 +1,4 @@
+import { GeneralResponseBody } from './type'
 import { Currency, Address, HttpClient } from './type'
 
 export type ConfirmRequestBody = {
@@ -129,19 +130,11 @@ export type Info = {
   shipping?: Shipping
 }
 
-export type ConfirmResponseBody = {
-  /**
-   * Return code
-   */
-  returnCode: string
-  /**
-   * Return message
-   */
-  returnMessage: string
+export type ConfirmResponseBody = GeneralResponseBody & {
   /**
    * Payment information
    */
-  info?: Info
+  info: Info
 }
 
 export const confirmWithClient =

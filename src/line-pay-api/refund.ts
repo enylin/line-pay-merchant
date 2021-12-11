@@ -1,3 +1,4 @@
+import { GeneralResponseBody } from './type'
 import { HttpClient } from './type'
 
 export type RefundRequestBody = {
@@ -30,19 +31,11 @@ export type Info = {
   refundTransactionDate: string
 }
 
-export type RefundResponseBody = {
-  /**
-   * Return code
-   */
-  returnCode: string
-  /**
-   * Return message or reason for failure
-   */
-  returnMessage: string
+export type RefundResponseBody = GeneralResponseBody & {
   /**
    * Refund information
    */
-  info?: Info
+  info: Info
 }
 
 export const refundWithClient =

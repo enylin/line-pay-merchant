@@ -7,6 +7,9 @@ import { LineMerchantConfig, QueryParams } from './type'
 import hmacSHA256 from 'crypto-js/hmac-sha256'
 import Base64 from 'crypto-js/enc-base64'
 import { v4 as uuidv4 } from 'uuid'
+import { TimeoutError } from './error/timeout'
+import { HttpError } from './error/http'
+import { LinePayApiError } from './error/line-pay-api'
 
 export type AuthHttpClient = AxiosInstance
 
@@ -117,19 +120,18 @@ export function createAuthHttpClient(
   axiosInstance.interceptors.response.use(
     res => {
       if (res.data.returnCode !== '0000') {
-        throw {
-          statusCode: res.status,
-          data: res.data
-        }
+        throw new LinePayApiError(res.data.returnMessage, res.status, res.data)
       }
 
       return res
     },
     err => {
-      throw {
-        statusCode: err.response.status,
-        data: err.response.data
+      if (err.response !== undefined) {
+        throw new HttpError(err.message, err.response.status, err.response.data)
+      } else if (err.response === undefined && err.code === 'ECONNABORTED') {
+        throw new TimeoutError(err.message)
       }
+      throw err
     }
   )
 

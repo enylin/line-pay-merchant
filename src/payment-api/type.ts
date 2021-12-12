@@ -1,4 +1,4 @@
-import { HttpClient } from '@/line-pay-api/type'
+import { GeneralResponseBody, HttpClient } from '@/line-pay-api/type'
 
 export type ApiHandler<Req, Res> = (
   req: Req,
@@ -6,8 +6,8 @@ export type ApiHandler<Req, Res> = (
   httpClient: HttpClient
 ) => Promise<Res>
 
-export type ApiResponse<Body> = {
-  body: Body | void
+export type ApiResponse<Body extends GeneralResponseBody> = {
+  body: Body
   comments: Record<string, unknown>
 }
 

@@ -71,7 +71,7 @@ export type Package = {
   /**
    * Name of the sales products
    */
-  name: string
+  name?: string
   /**
    * Total amount of products per package\
    * `=sum(products[].quantity * products[].price)`
@@ -80,7 +80,7 @@ export type Package = {
   /**
    * User fee: Sent as a respond if a list of fee is found within the payment amount.
    */
-  userFeeAmount: number
+  userFeeAmount?: number
 }
 
 export type Shipping = {

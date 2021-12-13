@@ -65,7 +65,7 @@ Response:
         web: 'https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=MGG5dXZZaatkK3Y0NlFmTVVCdXVpTWtyYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJbGhWdzNiU0M2ZlBFTA',
         app: 'line://pay/payment/MGY5dXZZaitkK3Y0NlFmTVVCdXVpTWtzYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJcGhWdzNiU0M2ZlBFTA'
       },
-      transactionId: 2021120900898162200,
+      transactionId: '2021120900898162210',
       paymentAccessToken: '361925937255'
     }
   },
@@ -101,7 +101,7 @@ const res = await linePayClient.refund
     }
   )
   .send({
-    transactionId: '2021120900898162200',
+    transactionId: '2021120900898162210',
     body: {
       refundAmount: 20
     }

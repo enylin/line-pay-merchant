@@ -36,7 +36,7 @@ export type Refund = {
   /**
    * Refund transaction ID (19 digits)
    */
-  refundTransactionId: number
+  refundTransactionId: string
   /**
    * Transaction options:
    * - PAYMENT_REFUND: Refund
@@ -111,7 +111,7 @@ export type Info = {
   /**
    * Transaction ID (19 digits)
    */
-  transactionId: number
+  transactionId: string
   /**
    * An unique order ID of the merchant sent upon requesting the payment.
    */

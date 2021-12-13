@@ -24,7 +24,7 @@ export type Info = {
   /**
    * Refund transaction ID (Newly issued, 19 digits)
    */
-  refundTransactionId: number
+  refundTransactionId: string
   /**
    * Refund transaction date (ISO 8601)
    */

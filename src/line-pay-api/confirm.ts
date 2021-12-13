@@ -57,7 +57,7 @@ export type PayInfo = {
    */
   creditCardBrand?: string
   /**
-   * Masked credit card number (Send only for Taiwan merchants. Able to use the feature when requesting to the merchant center manager).
+   * Masked credit card number (Send only for Taiwan merchants. Able to use the feature when requesting to the merchant center manager. Not sending in payment details API).
    * - Format: **** **** **** 1234
    */
   maskedCreditCardNumber?: string
@@ -106,7 +106,7 @@ export type Info = {
   /**
    * Transaction ID
    */
-  transactionId: number
+  transactionId: string
   /**
    * Authentication expiration date and time (ISO 8601)
    * - Send if the payment proceeded only up to authentication (capture=false)

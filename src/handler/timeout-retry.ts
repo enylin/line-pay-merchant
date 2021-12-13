@@ -2,6 +2,13 @@ import { GeneralResponseBody } from '@/line-pay-api/type'
 import { isTimeoutError } from '../line-pay-api/error/timeout'
 import { ApiHandler, ApiResponse } from '../payment-api/type'
 
+/**
+ * Create a handler that retries the request if it fails with a timeout error.
+ *
+ * @param maxRetry maximum number of retries
+ * @param timeout milliseconds to wait before retrying
+ * @returns a handler that retries the request if it fails with a timeout error
+ */
 export const createTimeoutRetryHandler =
   <Req, Res extends GeneralResponseBody>(
     maxRetry = 10,

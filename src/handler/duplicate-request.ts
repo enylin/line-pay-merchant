@@ -11,6 +11,13 @@ import { createPaymentApi } from '../payment-api/create'
 import { isLinePayApiError } from '../line-pay-api/error/line-pay-api'
 import { ApiHandler, ApiResponse } from '../payment-api/type'
 
+/**
+ * Response converter for confirm API. Convert the response body from payment details API to confirm API.
+ *
+ * @param req original request
+ * @param paymentDetails response body from payment details API
+ * @returns confirm API response body
+ */
 export function toConfirmResponse<
   Req extends ConfirmRequestConfig | RefundRequestConfig
 >(req: Req, paymentDetails: PaymentDetailsResponseBody): ConfirmResponseBody {
@@ -26,6 +33,13 @@ export function toConfirmResponse<
   }
 }
 
+/**
+ * Response converter for refund API. Convert the response body from payment details API to refund API.
+ *
+ * @param req original request
+ * @param paymentDetails response body from payment details API
+ * @returns refund API response body
+ */
 export function toRefundResponse<
   Req extends ConfirmRequestConfig | RefundRequestConfig
 >(req: Req, paymentDetails: PaymentDetailsResponseBody): RefundResponseBody {
@@ -76,6 +90,7 @@ export const createDuplicateRequestHandler =
         )
 
         try {
+          // Check with payment details API
           const paymentDetailsResponse = await paymentDetails.send({
             params: {
               transactionId: [req.transactionId]

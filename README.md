@@ -19,7 +19,7 @@ import { createLinePayClient } from 'line-pay-merchant'
 const linePayClient = createLinePayClient({
   channelId: '1479113123',
   channelSecretKey: '1f021e50f28fb3f40b7a9c5e758b0a19',
-  env: 'development'
+  env: 'development' // env can be 'development' or 'production'
 })
 
 const order = {
@@ -128,11 +128,49 @@ after third handler
 
 An API to request payment information to LINE Pay. User can change settings such as order information or various payment methods. Once the request is successful, a transaction ID is generated and with the ID, you can complete the payment or process refund.
 
+```ts
+send(req: RequestRequestConfig): Promise<ApiResponse<RequestResponseBody>>
+```
+
+See type definitions:
+- [RequestRequestConfig](src/line-pay-api/request.ts#L227)
+- [RequestResponseBody](src/line-pay-api/request.ts#L133)
+
 ### Confirm
+
+An API for the merchant to complete the payment when the user approves with the [ConfirmURL](https://pay.line.me/documents/online_v3_en.html?shell#confirmurl-spec) or [Check Payment Status API](https://pay.line.me/documents/online_v3_en.html?shell#check-payment-status-api). Status of a payment where authorization and purchase are separated because 'options.payment.capture' of the Request API is set as `false` will be in purchase standby (Authentication) even after it is completed. To complete the purchase, an additional purchase process is required through the [Capture API](https://pay.line.me/documents/online_v3_en.html?shell#capture-api).
+
+```ts
+send(req: ConfirmRequestConfig): Promise<ApiResponse<ConfirmResponseBody>>
+```
+
+See type definitions:
+- [ConfirmRequestConfig](src/line-pay-api/confirm.ts#L20)
+- [ConfirmResponseBody](src/line-pay-api/confirm.ts#L220)
 
 ### Refund
 
+An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
+
+```ts
+send(req: RefundRequestConfig): Promise<ApiResponse<RefundResponseBody>>
+```
+
+See type definitions:
+- [RefundRequestConfig](src/line-pay-api/refund.ts#L12)
+- [RefundResponseBody](src/line-pay-api/refund.ts#L34)
+
 ### Payment Details
+
+An API to check transaction history in LINE Pay. You can check histories of authorizations and payment completions. With fields setting, you can selectively check transaction information or order information as needed.
+
+```ts
+send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsResponseBody>>
+```
+
+See type definitions:
+- [PaymentDetailsRequestConfig](src/line-pay-api/payment-details.ts#L26)
+- [PaymentDetailsResponseBody](src/line-pay-api/payment-details.ts#L195)
 
 ## Further details
 
@@ -143,9 +181,9 @@ This library is written in TypeScript. Users can get type definitions without in
 ### Transaction ID
 
 JavaScript numbers are double-precision floating-point numbers.
-LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is 2^53, 9007199254740992).
-This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number 2021121300698360310 may be converted to 2021121300698360300 by default parser.
-This library handles the behavior by converting the transaction ID number to string format before the default parser (JSON.parse) parses the response received from LINE Pay APIs.
+LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is `2^53`, `9007199254740992`).
+This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number `2021121300698360310` may be converted to `2021121300698360300` by default parser.
+This library handles the behavior by converting the transaction ID number to string format before the default parser (`JSON.parse`) parses the response received from LINE Pay APIs.
 
 ## Resources
 

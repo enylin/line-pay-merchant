@@ -1,16 +1,40 @@
+/**
+ * HTTP query string object
+ */
 export type QueryParams = Record<string, string | number | boolean>
 
+/**
+ * Payment currency (ISO 4217)
+ */
 export type Currency = 'USD' | 'JPY' | 'TWD' | 'THB'
 
 export type LineMerchantConfig = {
+  /**
+   * Payment Integration Information - Channel ID
+   */
   channelId: string
+  /**
+   * Required for the authentication. Secret key can be checked from the [merchant center](https://pay.line.me) after the merchant review is completed.
+   */
   channelSecretKey: string
+  /**
+   * For synchronization, LINE Pay supports the Sandbox environment. You can check both test channel info (ID, SecretKey) usable in the Sandbox environment and actual channel info (ID, SecretKey) in the production environment from the merchant center.
+   */
   env: 'development' | 'production'
+  /**
+   * Timeout for the request to the LINE Pay API.
+   */
   timeout?: number
 }
 
 export type HttpResponse<R> = {
+  /**
+   * HTTP response body
+   */
   data: R
+  /**
+   * HTTP status code
+   */
   status: number
 }
 
@@ -26,13 +50,28 @@ export type GeneralResponseBody = {
 }
 
 export type HttpConfig<Params = Record<string, string>> = {
+  /**
+   * HTTP request headers
+   */
   headers?: Record<string, string>
+  /**
+   * HTTP query parameters
+   */
   params?: Params
+  /**
+   * HTTP request timeout
+   */
   timeout?: number
 }
 
 export interface HttpClient {
+  /**
+   * Send a HTTP GET request
+   */
   get: <P, R>(url: string, config: HttpConfig<P>) => Promise<HttpResponse<R>>
+  /**
+   * Send a HTTP POST request
+   */
   post: <T, R>(
     url: string,
     body: T,

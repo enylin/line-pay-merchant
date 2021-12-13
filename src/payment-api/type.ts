@@ -1,13 +1,28 @@
 import { GeneralResponseBody, HttpClient } from '@/line-pay-api/type'
 
 export type ApiHandler<Req, Res> = (
+  /**
+   * The request object
+   */
   req: Req,
+  /**
+   * The next handler or the request sending function
+   */
   next: (req: Req) => Promise<Res>,
+  /**
+   * The HTTP client
+   */
   httpClient: HttpClient
 ) => Promise<Res>
 
 export type ApiResponse<Body extends GeneralResponseBody> = {
+  /**
+   * Response body
+   */
   body: Body
+  /**
+   * Additional comments may be added by handlers
+   */
   comments: Record<string, unknown>
 }
 
@@ -27,7 +42,7 @@ export interface PaymentApi<Req, Res> {
   /**
    * Send request to the API
    *
-   * @param Request request config
+   * @param request request config
    */
-  send(Request: Req): Promise<Res>
+  send(request: Req): Promise<Res>
 }

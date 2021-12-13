@@ -1,3 +1,18 @@
+## [0.1.1](https://github.com/enylin/line-pay-merchant/compare/v0.1.0...v0.1.1) (2021-12-13)
+
+
+### Bug Fixes
+
+* **api:** update api types ([1abe716](https://github.com/enylin/line-pay-merchant/commit/1abe71688f2b0fb86f4bafe7f27a24aa63698d9a))
+* **transactionid:** convert transaction ID to string to prevent from losing precision ([7cd72e7](https://github.com/enylin/line-pay-merchant/commit/7cd72e7c6d7f245317fb04756110bd36afbc27c3))
+
+
+### BREAKING CHANGES
+
+* **transactionid:** Convert transaction ID from number to string.
+
+
+
 # 0.1.0 (2021-12-12)
 
 

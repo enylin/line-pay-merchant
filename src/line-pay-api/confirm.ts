@@ -1,5 +1,6 @@
+import { LinePayApiClients } from '@/payment-api/type'
 import { GeneralResponseBody } from './type'
-import { Currency, Address, HttpClient } from './type'
+import { Currency, Address } from './type'
 
 export type ConfirmRequestBody = {
   /**
@@ -137,9 +138,9 @@ export type ConfirmResponseBody = GeneralResponseBody & {
   info: Info
 }
 
-export const confirmWithClient =
-  (httpClient: HttpClient) =>
-  async ({ transactionId, body }: ConfirmRequestConfig) => {
+export const confirmWithClient: LinePayApiClients['confirm'] =
+  httpClient =>
+  async ({ transactionId, body }) => {
     const { data } = await httpClient.post<
       ConfirmRequestBody,
       ConfirmResponseBody

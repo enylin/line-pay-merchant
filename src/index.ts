@@ -17,9 +17,13 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
   const httpClient = createAuthHttpClient(config)
 
   return {
-    request: createPaymentApi(requestWithClient, httpClient),
-    confirm: createPaymentApi(confirmWithClient, httpClient),
-    refund: createPaymentApi(refundWithClient, httpClient),
-    paymentDetails: createPaymentApi(paymentDetailsWithClient, httpClient)
+    request: createPaymentApi('request', requestWithClient, httpClient),
+    confirm: createPaymentApi('confirm', confirmWithClient, httpClient),
+    refund: createPaymentApi('refund', refundWithClient, httpClient),
+    paymentDetails: createPaymentApi(
+      'paymentDetails',
+      paymentDetailsWithClient,
+      httpClient
+    )
   }
 }

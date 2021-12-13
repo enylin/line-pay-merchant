@@ -1,5 +1,6 @@
+import { LinePayApiClients } from '@/payment-api/type'
 import { GeneralResponseBody } from './type'
-import { Currency, Address, Product, HttpClient } from './type'
+import { Currency, Address, Product } from './type'
 
 export type Package = {
   /**
@@ -231,9 +232,9 @@ export type RequestRequestConfig = {
   body: RequestRequestBody
 }
 
-export const requestWithClient =
-  (httpClient: HttpClient) =>
-  async ({ body }: RequestRequestConfig) => {
+export const requestWithClient: LinePayApiClients['request'] =
+  httpClient =>
+  async ({ body }) => {
     const { data } = await httpClient.post<
       RequestRequestBody,
       RequestResponseBody

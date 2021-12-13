@@ -10,6 +10,7 @@ import { RefundRequestConfig, RefundResponseBody } from '../line-pay-api/refund'
 import { createPaymentApi } from '../payment-api/create'
 import { isLinePayApiError } from '../line-pay-api/error/line-pay-api'
 import { ApiHandler, ApiResponse } from '../payment-api/type'
+import { isTimeoutError } from '../line-pay-api/error/timeout'
 
 /**
  * Response converter for confirm API. Convert the response body from payment details API to confirm API.
@@ -58,53 +59,65 @@ export function toRefundResponse<
   }
 }
 
+// 1172: There is a record of transaction with the same order number.
+// 1198: API call request has been duplicated.
+const defaultPredicate = (error: unknown) =>
+  isTimeoutError(error) ||
+  (isLinePayApiError(error) &&
+    (error.data.returnCode === '1172' || error.data.returnCode === '1198'))
+
+export type PaymentDetailsConverter<
+  Req extends ConfirmRequestConfig | RefundRequestConfig,
+  Res extends ConfirmResponseBody | RefundResponseBody
+> = (req: Req, paymentDetailsResponseBody: PaymentDetailsResponseBody) => Res
+
 /**
- * Create a handler for confirm and refund API. The handler will handle the 1172 and 1198 error by calling the payment details API and verify the transaction result.
+ * Create a handler for confirm and refund API. The handler will handle the 1172 and 1198 error and timeout error by calling the payment details API and verify the transaction result.
  *
  * @param converter convert payment details to response body (confirm/refund)
+ * @param predicate predicate to determine whether the error should be handled
  * @returns API handler
  */
-export const createDuplicateRequestHandler =
+export const createPaymentDetailsRecoveryHandler =
   <
     Req extends ConfirmRequestConfig | RefundRequestConfig,
     Res extends ConfirmResponseBody | RefundResponseBody
   >(
-    converter: (
-      req: Req,
-      paymentDetailsResponseBody: PaymentDetailsResponseBody
-    ) => Res
+    converter: PaymentDetailsConverter<Req, Res>,
+    predicate = defaultPredicate
   ): ApiHandler<Req, ApiResponse<Res>> =>
-  async (req, next, httpClient) => {
+  async ({ req, next, httpClient }) => {
     try {
       return await next(req)
     } catch (e) {
-      // 1172: There is a record of transaction with the same order number.
-      // 1198: API call request has been duplicated.
-      if (
-        isLinePayApiError(e) &&
-        (e.data.returnCode === '1172' || e.data.returnCode === '1198')
-      ) {
-        const paymentDetails = createPaymentApi(
-          paymentDetailsWithClient,
-          httpClient
-        )
+      if (!predicate(e)) throw e
 
-        try {
-          // Check with payment details API
-          const paymentDetailsResponse = await paymentDetails.send({
-            params: {
-              transactionId: [req.transactionId]
-            }
-          })
+      const paymentDetails = createPaymentApi(
+        'paymentDetails',
+        paymentDetailsWithClient,
+        httpClient
+      )
 
-          return {
-            body: converter(req, paymentDetailsResponse.body),
-            comments: {}
+      try {
+        // Check with payment details API
+        const paymentDetailsResponse = await paymentDetails.send({
+          params: {
+            transactionId: [req.transactionId]
           }
-        } catch (paymentDetailsError) {
-          throw e
+        })
+
+        const comments: Record<string, unknown> = {}
+
+        if (isLinePayApiError(e)) {
+          comments.originalLinePayApiError = e
         }
+
+        return {
+          body: converter(req, paymentDetailsResponse.body),
+          comments
+        }
+      } catch (paymentDetailsError) {
+        throw e
       }
-      throw e
     }
   }

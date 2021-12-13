@@ -3,6 +3,10 @@
  */
 export type QueryParams = Record<string, string | number | boolean>
 
+export type ApiClientBuilder<Req, Res> = (
+  httpClient: HttpClient
+) => (req: Req) => Promise<Res>
+
 /**
  * Payment currency (ISO 4217)
  */

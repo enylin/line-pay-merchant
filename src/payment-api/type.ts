@@ -1,18 +1,53 @@
-import { GeneralResponseBody, HttpClient } from '@/line-pay-api/type'
+import {
+  ConfirmRequestConfig,
+  ConfirmResponseBody
+} from '@/line-pay-api/confirm'
+import {
+  PaymentDetailsRequestConfig,
+  PaymentDetailsResponseBody
+} from '@/line-pay-api/payment-details'
+import { RefundRequestConfig, RefundResponseBody } from '@/line-pay-api/refund'
+import {
+  RequestRequestConfig,
+  RequestResponseBody
+} from '@/line-pay-api/request'
+import {
+  ApiClientBuilder,
+  GeneralResponseBody,
+  HttpClient
+} from '@/line-pay-api/type'
 
-export type ApiHandler<Req, Res> = (
+export type LinePayApiClients = {
+  request: ApiClientBuilder<RequestRequestConfig, RequestResponseBody>
+  confirm: ApiClientBuilder<ConfirmRequestConfig, ConfirmResponseBody>
+  refund: ApiClientBuilder<RefundRequestConfig, RefundResponseBody>
+  paymentDetails: ApiClientBuilder<
+    PaymentDetailsRequestConfig,
+    PaymentDetailsResponseBody
+  >
+}
+
+export type ApiHandlerParams<Req, Res> = {
+  /**
+   * LINE Pay API type
+   */
+  type: keyof LinePayApiClients
   /**
    * The request object
    */
-  req: Req,
+  req: Req
   /**
    * The next handler or the request sending function
    */
-  next: (req: Req) => Promise<Res>,
+  next: (req: Req) => Promise<Res>
   /**
    * The HTTP client
    */
   httpClient: HttpClient
+}
+
+export type ApiHandler<Req, Res> = (
+  params: ApiHandlerParams<Req, Res>
 ) => Promise<Res>
 
 export type ApiResponse<Body extends GeneralResponseBody> = {

@@ -1,5 +1,6 @@
+import { LinePayApiClients } from '@/payment-api/type'
 import { GeneralResponseBody } from './type'
-import { Product, HttpClient, Address } from './type'
+import { Product, Address } from './type'
 
 export type Fields = 'ALL' | 'TRANSACTION' | 'ORDER'
 
@@ -199,8 +200,8 @@ export type PaymentDetailsResponseBody = GeneralResponseBody & {
   info: Info[]
 }
 
-export const paymentDetailsWithClient =
-  (httpClient: HttpClient) => async (config: PaymentDetailsRequestConfig) => {
+export const paymentDetailsWithClient: LinePayApiClients['paymentDetails'] =
+  httpClient => async config => {
     const { data } = await httpClient.get<
       PaymentDetailsRequestParams,
       PaymentDetailsResponseBody

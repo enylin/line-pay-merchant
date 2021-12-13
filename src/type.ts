@@ -27,6 +27,9 @@ export type LinePayClient = {
    */
   refund: PaymentApi<RefundRequestConfig, ApiResponse<RefundResponseBody>>
 
+  /**
+   * An API to check transaction history in LINE Pay. You can check histories of authorizations and payment completions. With fields setting, you can selectively check transaction information or order information as needed.
+   */
   paymentDetails: PaymentApi<
     PaymentDetailsRequestConfig,
     ApiResponse<PaymentDetailsResponseBody>

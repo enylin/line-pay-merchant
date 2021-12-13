@@ -7,6 +7,12 @@ import { LinePayClient } from './type'
 import { createPaymentApi } from './payment-api/create'
 import { paymentDetailsWithClient } from './line-pay-api/payment-details'
 
+/**
+ * Create a client for LINE Pay API.
+ *
+ * @param config Configuration from the LINE Pay for the client
+ * @returns LINE Pay client
+ */
 export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
   const httpClient = createAuthHttpClient(config)
 

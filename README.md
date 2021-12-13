@@ -1,9 +1,11 @@
 # line-pay-merchant
 
+LINE Pay V3 Online APIs library for Node.js
+
 ## Quick start
 
 ```
-npm install --save line-pay-merchant
+npm install line-pay-merchant
 ```
 
 ## Usage
@@ -65,7 +67,7 @@ Response:
         web: 'https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=MGG5dXZZaatkK3Y0NlFmTVVCdXVpTWtyYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJbGhWdzNiU0M2ZlBFTA',
         app: 'line://pay/payment/MGY5dXZZaitkK3Y0NlFmTVVCdXVpTWtzYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJcGhWdzNiU0M2ZlBFTA'
       },
-      transactionId: 2021120900898162200,
+      transactionId: '2021120900898162210',
       paymentAccessToken: '361925937255'
     }
   },
@@ -101,7 +103,7 @@ const res = await linePayClient.refund
     }
   )
   .send({
-    transactionId: '2021120900898162200',
+    transactionId: '2021120900898162210',
     body: {
       refundAmount: 20
     }
@@ -132,6 +134,19 @@ An API to request payment information to LINE Pay. User can change settings such
 
 ### Payment Details
 
+## Further details
+
+### TypeScript support
+
+This library is written in TypeScript. Users can get type definitions without installing additional libraries.
+
+### Transaction ID
+
+JavaScript numbers are double-precision floating-point numbers.
+LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is 2^53, 9007199254740992).
+This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number 2021121300698360310 may be converted to 2021121300698360300 by default parser.
+This library handles the behavior by converting the transaction ID number to string format before the default parser (JSON.parse) parses the response received from LINE Pay APIs.
+
 ## Resources
 
 - [LINE Pay Online APIs](https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US)
@@ -145,5 +160,5 @@ TODOs:
 - Implement Check RegKey API and add unit tests
 - Implement Pay Preapproved API and add unit tests
 - Implement Expire RegKey API and add unit tests
-- Provide default handlers
+- Provide handlers
 - Add more examples to README.md

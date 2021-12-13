@@ -206,7 +206,7 @@ export type Info = {
   /**
    * Transaction ID
    */
-  transactionId: number
+  transactionId: string
   /**
    * The code value entered when code is used instead of scanner in the LINE Pay.
    */

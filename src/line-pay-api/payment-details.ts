@@ -36,7 +36,7 @@ export type Refund = {
   /**
    * Refund transaction ID (19 digits)
    */
-  refundTransactionId: number
+  refundTransactionId: string
   /**
    * Transaction options:
    * - PAYMENT_REFUND: Refund
@@ -111,7 +111,11 @@ export type Info = {
   /**
    * Transaction ID (19 digits)
    */
-  transactionId: number
+  transactionId: string
+  /**
+   * An unique order ID of the merchant sent upon requesting the payment.
+   */
+  orderId: string
   /**
    * Transaction date([ISO-8601](https://en.wikipedia.org/wiki/ISO_8601))
    */
@@ -150,7 +154,7 @@ export type Info = {
   /**
    * Payment information
    */
-  payInfo: PayInfo
+  payInfo: PayInfo[]
   /**
    * Refund list\
    * In case of checking the `Transaction` type when original and refund transactions are available
@@ -178,7 +182,7 @@ export type PaymentDetailsResponseBody = GeneralResponseBody & {
   /**
    * Refund information
    */
-  info: Info
+  info: Info[]
 }
 
 export const paymentDetailsWithClient =

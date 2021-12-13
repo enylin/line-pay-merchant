@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponseTransformer
+} from 'axios'
 import { LineMerchantConfig, QueryParams } from './type'
 import hmacSHA256 from 'crypto-js/hmac-sha256'
 import Base64 from 'crypto-js/enc-base64'
@@ -83,10 +87,23 @@ export function createAuthHttpClient(
   const BASE_URL =
     merchantConfig.env === 'production' ? PRODUCTION_URL : SANDBOX_URL
 
+  /**
+   * JavaScript numbers are double-precision floating-point.
+   * Transaction ID is larger than the largest integer JavaScript can be precisely stored (which is 2^53, 9007199254740992).
+   * So we should convert the number to string.
+   */
+  const transformResponse: AxiosResponseTransformer = data =>
+    JSON.parse(
+      data
+        .replace(/"transactionId":(\d+),/g, '"transactionId":"$1",')
+        .replace(/"refundTransactionId":(\d+),/g, '"refundTransactionId":"$1",')
+    )
+
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
     paramsSerializer,
-    timeout: merchantConfig.timeout || 20000
+    timeout: merchantConfig.timeout || 20000,
+    transformResponse
   })
 
   axiosInstance.interceptors.request.use(config =>

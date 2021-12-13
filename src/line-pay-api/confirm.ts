@@ -57,7 +57,7 @@ export type PayInfo = {
    */
   creditCardBrand?: string
   /**
-   * Masked credit card number (Send only for Taiwan merchants. Able to use the feature when requesting to the merchant center manager).
+   * Masked credit card number (Send only for Taiwan merchants. Able to use the feature when requesting to the merchant center manager. Not sending in payment details API).
    * - Format: **** **** **** 1234
    */
   maskedCreditCardNumber?: string
@@ -71,7 +71,7 @@ export type Package = {
   /**
    * Name of the sales products
    */
-  name: string
+  name?: string
   /**
    * Total amount of products per package\
    * `=sum(products[].quantity * products[].price)`
@@ -80,7 +80,7 @@ export type Package = {
   /**
    * User fee: Sent as a respond if a list of fee is found within the payment amount.
    */
-  userFeeAmount: number
+  userFeeAmount?: number
 }
 
 export type Shipping = {
@@ -106,7 +106,7 @@ export type Info = {
   /**
    * Transaction ID
    */
-  transactionId: number
+  transactionId: string
   /**
    * Authentication expiration date and time (ISO 8601)
    * - Send if the payment proceeded only up to authentication (capture=false)

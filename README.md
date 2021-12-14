@@ -76,7 +76,36 @@ Response:
 
 ```
 
-### Handler
+### Built-in handler
+
+Request:
+```ts
+import { createLinePayClient, handler } from 'line-pay-merchant'
+
+const linePayClient = createLinePayClient(config)
+
+try {
+  const res = await linePayClient.confirm
+    .addHandlers(
+      handler.createTimeoutRetryHandler(),
+      handler.createPaymentDetailsRecoveryHandler(handler.toConfirmResponse)
+    )
+    .send({
+      transactionId: '2021121300698360310',
+      body: {
+        currency: 'TWD',
+        amount: 1000
+      }
+    })
+
+  console.log('res = ', JSON.stringify(res, null, 2))
+} catch (e) {
+  console.log('e = ', e)
+}
+```
+
+
+### Custom handler
 
 Request:
 ```ts
@@ -132,9 +161,9 @@ An API to request payment information to LINE Pay. User can change settings such
 send(req: RequestRequestConfig): Promise<ApiResponse<RequestResponseBody>>
 ```
 
-See type definitions:
-- [RequestRequestConfig](src/line-pay-api/request.ts#L227)
-- [RequestResponseBody](src/line-pay-api/request.ts#L133)
+Definitions:
+- [RequestRequestConfig](src/line-pay-api/request.ts#L228)
+- [RequestResponseBody](src/line-pay-api/request.ts#L221)
 
 ### Confirm
 
@@ -144,9 +173,9 @@ An API for the merchant to complete the payment when the user approves with the 
 send(req: ConfirmRequestConfig): Promise<ApiResponse<ConfirmResponseBody>>
 ```
 
-See type definitions:
-- [ConfirmRequestConfig](src/line-pay-api/confirm.ts#L20)
-- [ConfirmResponseBody](src/line-pay-api/confirm.ts#L220)
+Definitions:
+- [ConfirmRequestConfig](src/line-pay-api/confirm.ts#L21)
+- [ConfirmResponseBody](src/line-pay-api/confirm.ts#L134)
 
 ### Refund
 
@@ -169,8 +198,8 @@ send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsRespon
 ```
 
 See type definitions:
-- [PaymentDetailsRequestConfig](src/line-pay-api/payment-details.ts#L26)
-- [PaymentDetailsResponseBody](src/line-pay-api/payment-details.ts#L195)
+- [PaymentDetailsRequestConfig](src/line-pay-api/payment-details.ts#L27)
+- [PaymentDetailsResponseBody](src/line-pay-api/payment-details.ts#L196)
 
 ## Further details
 
@@ -181,22 +210,10 @@ This library is written in TypeScript. Users can get type definitions without in
 ### Transaction ID
 
 JavaScript numbers are double-precision floating-point numbers.
-LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is `2^53`, `9007199254740992`).
-This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number `2021121300698360310` may be converted to `2021121300698360300` by default parser.
+LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is 2^53, 9007199254740992).
+This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number 2021121300698360310 may be converted to 2021121300698360300 by default parser.
 This library handles the behavior by converting the transaction ID number to string format before the default parser (`JSON.parse`) parses the response received from LINE Pay APIs.
 
 ## Resources
 
 - [LINE Pay Online APIs](https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US)
-
-## Roadmap
-
-TODOs:
-- Implement Capture API and add unit tests
-- Implement Void API and add unit tests
-- Implement Check Payment Status API and add unit tests
-- Implement Check RegKey API and add unit tests
-- Implement Pay Preapproved API and add unit tests
-- Implement Expire RegKey API and add unit tests
-- Provide handlers
-- Add more examples to README.md

@@ -1,6 +1,5 @@
-import { GeneralResponseBody } from '../line-pay-api/type'
 import { isTimeoutError } from '../line-pay-api/error/timeout'
-import { ApiHandler, ApiResponse } from '../payment-api/type'
+import { ApiHandler, LinePayApiClients } from '../payment-api/type'
 
 /**
  * Create a handler that retries the request if it fails with a timeout error.
@@ -10,10 +9,10 @@ import { ApiHandler, ApiResponse } from '../payment-api/type'
  * @returns a handler that retries the request if it fails with a timeout error
  */
 export const createTimeoutRetryHandler =
-  <Req, Res extends GeneralResponseBody>(
+  <T extends keyof LinePayApiClients>(
     maxRetry = 10,
     timeout = 5000
-  ): ApiHandler<Req, ApiResponse<Res>> =>
+  ): ApiHandler<T> =>
   async ({ req, next }) =>
     new Promise((resolve, reject) => {
       const f = async (count: number, originalError: unknown) => {

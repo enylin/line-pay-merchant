@@ -1,15 +1,12 @@
 import { HttpClient } from '@/line-pay-api/type'
-import { ApiResponse, ApiHandler, PaymentApi, LinePayApiClients } from './type'
-
-type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
-
-type RequestConfig<T extends keyof LinePayApiClients> = Parameters<
-  ReturnType<LinePayApiClients[T]>
->[0]
-
-type ResponseBody<T extends keyof LinePayApiClients> = Awaited<
-  ReturnType<ReturnType<LinePayApiClients[T]>>
->
+import {
+  ApiResponse,
+  ApiHandler,
+  PaymentApi,
+  LinePayApiClients,
+  RequestConfig,
+  ResponseBody
+} from './type'
 
 export function createPaymentApi<T extends keyof LinePayApiClients>(
   type: T,
@@ -17,11 +14,9 @@ export function createPaymentApi<T extends keyof LinePayApiClients>(
     httpClient: HttpClient
   ) => (req: RequestConfig<T>) => Promise<ResponseBody<T>>,
   httpClient: HttpClient,
-  handlers: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[] = []
+  handlers: ApiHandler<T>[] = []
 ): PaymentApi<T> {
-  const addHandlers = (
-    ...fs: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[]
-  ) => {
+  const addHandlers = (...fs: ApiHandler<T>[]) => {
     handlers.push(...fs)
     return createPaymentApi(type, createSender, httpClient, handlers)
   }

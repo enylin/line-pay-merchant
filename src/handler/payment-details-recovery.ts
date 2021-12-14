@@ -1,16 +1,21 @@
-import {
-  ConfirmRequestConfig,
-  ConfirmResponseBody
-} from '../line-pay-api/confirm'
+import { ConfirmResponseBody } from '../line-pay-api/confirm'
 import {
   PaymentDetailsResponseBody,
   paymentDetailsWithClient
 } from '../line-pay-api/payment-details'
-import { RefundRequestConfig, RefundResponseBody } from '../line-pay-api/refund'
+import { RefundResponseBody } from '../line-pay-api/refund'
 import { createPaymentApi } from '../payment-api/create'
 import { isLinePayApiError } from '../line-pay-api/error/line-pay-api'
-import { ApiHandler, ApiResponse } from '../payment-api/type'
+import { ApiHandler, RequestConfig, ResponseBody } from '../payment-api/type'
 import { isTimeoutError } from '../line-pay-api/error/timeout'
+
+/**
+ * Convert confirm response or refund response body to payment details response body
+ */
+export type PaymentDetailsConverter<T extends 'confirm' | 'refund'> = (
+  req: RequestConfig<T>,
+  paymentDetailsResponseBody: PaymentDetailsResponseBody
+) => ResponseBody<T>
 
 /**
  * Response converter for confirm API. Convert the response body from payment details API to confirm API.
@@ -19,9 +24,10 @@ import { isTimeoutError } from '../line-pay-api/error/timeout'
  * @param paymentDetails response body from payment details API
  * @returns confirm API response body
  */
-export function toConfirmResponse<
-  Req extends ConfirmRequestConfig | RefundRequestConfig
->(req: Req, paymentDetails: PaymentDetailsResponseBody): ConfirmResponseBody {
+export function toConfirmResponse<T extends 'confirm' | 'refund'>(
+  req: RequestConfig<T>,
+  paymentDetails: PaymentDetailsResponseBody
+): ConfirmResponseBody {
   const { transactionId } = req
   const info = paymentDetails.info.find(i => i.transactionId === transactionId)
 
@@ -41,9 +47,10 @@ export function toConfirmResponse<
  * @param paymentDetails response body from payment details API
  * @returns refund API response body
  */
-export function toRefundResponse<
-  Req extends ConfirmRequestConfig | RefundRequestConfig
->(req: Req, paymentDetails: PaymentDetailsResponseBody): RefundResponseBody {
+export function toRefundResponse<T extends 'confirm' | 'refund'>(
+  req: RequestConfig<T>,
+  paymentDetails: PaymentDetailsResponseBody
+): RefundResponseBody {
   const { transactionId } = req
   const info = paymentDetails.info.find(i => i.transactionId === transactionId)
 
@@ -66,11 +73,6 @@ const defaultPredicate = (error: unknown) =>
   (isLinePayApiError(error) &&
     (error.data.returnCode === '1172' || error.data.returnCode === '1198'))
 
-export type PaymentDetailsConverter<
-  Req extends ConfirmRequestConfig | RefundRequestConfig,
-  Res extends ConfirmResponseBody | RefundResponseBody
-> = (req: Req, paymentDetailsResponseBody: PaymentDetailsResponseBody) => Res
-
 /**
  * Create a handler for confirm and refund API. The handler will handle the 1172 and 1198 error and timeout error by calling the payment details API and verify the transaction result.
  *
@@ -79,13 +81,10 @@ export type PaymentDetailsConverter<
  * @returns API handler
  */
 export const createPaymentDetailsRecoveryHandler =
-  <
-    Req extends ConfirmRequestConfig | RefundRequestConfig,
-    Res extends ConfirmResponseBody | RefundResponseBody
-  >(
-    converter: PaymentDetailsConverter<Req, Res>,
+  <T extends 'confirm' | 'refund'>(
+    converter: PaymentDetailsConverter<T>,
     predicate = defaultPredicate
-  ): ApiHandler<Req, ApiResponse<Res>> =>
+  ): ApiHandler<T> =>
   async ({ req, next, httpClient }) => {
     try {
       return await next(req)

@@ -17,6 +17,9 @@ import {
   HttpClient
 } from '@/line-pay-api/type'
 
+/**
+ * All LINE Pay API Clients supported by this library.
+ */
 export type LinePayApiClients = {
   request: ApiClientBuilder<RequestRequestConfig, RequestResponseBody>
   confirm: ApiClientBuilder<ConfirmRequestConfig, ConfirmResponseBody>
@@ -29,15 +32,21 @@ export type LinePayApiClients = {
 
 type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
 
+/**
+ * Request config of LinePayApiClients
+ */
 export type RequestConfig<T extends keyof LinePayApiClients> = Parameters<
   ReturnType<LinePayApiClients[T]>
 >[0]
 
+/**
+ * Response body of LinePayApiClients
+ */
 export type ResponseBody<T extends keyof LinePayApiClients> = Awaited<
   ReturnType<ReturnType<LinePayApiClients[T]>>
 >
 
-export type ApiHandlerParams<Req, Res> = {
+export type ApiHandlerParams<T extends keyof LinePayApiClients> = {
   /**
    * LINE Pay API type
    */
@@ -45,20 +54,20 @@ export type ApiHandlerParams<Req, Res> = {
   /**
    * The request object
    */
-  req: Req
+  req: RequestConfig<T>
   /**
    * The next handler or the request sending function
    */
-  next: (req: Req) => Promise<Res>
+  next: (req: RequestConfig<T>) => Promise<ApiResponse<ResponseBody<T>>>
   /**
    * The HTTP client
    */
   httpClient: HttpClient
 }
 
-export type ApiHandler<Req, Res> = (
-  params: ApiHandlerParams<Req, Res>
-) => Promise<Res>
+export type ApiHandler<T extends keyof LinePayApiClients> = (
+  params: ApiHandlerParams<T>
+) => Promise<ApiResponse<ResponseBody<T>>>
 
 export type ApiResponse<Body extends GeneralResponseBody> = {
   /**
@@ -77,17 +86,13 @@ export interface PaymentApi<T extends keyof LinePayApiClients> {
    *
    * @param handler API handler
    */
-  addHandler(
-    handler: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>
-  ): PaymentApi<T>
+  addHandler(handler: ApiHandler<T>): PaymentApi<T>
   /**
    * Add request/response handlers to the API
    *
    * @param handlers API handlers
    */
-  addHandlers(
-    ...handlers: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[]
-  ): PaymentApi<T>
+  addHandlers(...handlers: ApiHandler<T>[]): PaymentApi<T>
   /**
    * Send request to the API
    *

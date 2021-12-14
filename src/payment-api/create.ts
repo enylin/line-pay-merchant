@@ -18,7 +18,7 @@ export function createPaymentApi<T extends keyof LinePayApiClients>(
   ) => (req: RequestConfig<T>) => Promise<ResponseBody<T>>,
   httpClient: HttpClient,
   handlers: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[] = []
-): PaymentApi<RequestConfig<T>, ApiResponse<ResponseBody<T>>> {
+): PaymentApi<T> {
   const addHandlers = (
     ...fs: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[]
   ) => {

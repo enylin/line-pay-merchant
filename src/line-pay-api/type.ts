@@ -3,6 +3,12 @@
  */
 export type QueryParams = Record<string, string | number | boolean>
 
+/**
+ * LINE Pay API client builder
+ *
+ * @param httpClient http client communicate with LINE Pay API
+ * @returns LINE Pay API request function
+ */
 export type ApiClientBuilder<Req, Res> = (
   httpClient: HttpClient
 ) => (req: Req) => Promise<Res>

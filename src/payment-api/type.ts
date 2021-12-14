@@ -27,6 +27,16 @@ export type LinePayApiClients = {
   >
 }
 
+type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
+
+export type RequestConfig<T extends keyof LinePayApiClients> = Parameters<
+  ReturnType<LinePayApiClients[T]>
+>[0]
+
+export type ResponseBody<T extends keyof LinePayApiClients> = Awaited<
+  ReturnType<ReturnType<LinePayApiClients[T]>>
+>
+
 export type ApiHandlerParams<Req, Res> = {
   /**
    * LINE Pay API type
@@ -61,23 +71,27 @@ export type ApiResponse<Body extends GeneralResponseBody> = {
   comments: Record<string, unknown>
 }
 
-export interface PaymentApi<Req, Res> {
+export interface PaymentApi<T extends keyof LinePayApiClients> {
   /**
    * Add request/response handler to the API
    *
    * @param handler API handler
    */
-  addHandler(handler: ApiHandler<Req, Res>): PaymentApi<Req, Res>
+  addHandler(
+    handler: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>
+  ): PaymentApi<T>
   /**
    * Add request/response handlers to the API
    *
    * @param handlers API handlers
    */
-  addHandlers(...handlers: ApiHandler<Req, Res>[]): PaymentApi<Req, Res>
+  addHandlers(
+    ...handlers: ApiHandler<RequestConfig<T>, ApiResponse<ResponseBody<T>>>[]
+  ): PaymentApi<T>
   /**
    * Send request to the API
    *
    * @param request request config
    */
-  send(request: Req): Promise<Res>
+  send(request: RequestConfig<T>): Promise<ApiResponse<ResponseBody<T>>>
 }

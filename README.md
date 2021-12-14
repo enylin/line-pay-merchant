@@ -161,7 +161,7 @@ An API to request payment information to LINE Pay. User can change settings such
 send(req: RequestRequestConfig): Promise<ApiResponse<RequestResponseBody>>
 ```
 
-Definitions:
+Type definitions:
 - [RequestRequestConfig](src/line-pay-api/request.ts#L228)
 - [RequestResponseBody](src/line-pay-api/request.ts#L221)
 
@@ -202,13 +202,37 @@ An API for the merchant to complete the payment when the user approves with the 
 send(req: ConfirmRequestConfig): Promise<ApiResponse<ConfirmResponseBody>>
 ```
 
-Definitions:
+Type definitions:
 - [ConfirmRequestConfig](src/line-pay-api/confirm.ts#L21)
 - [ConfirmResponseBody](src/line-pay-api/confirm.ts#L134)
 
 Example:
 ```ts
 const res = await linePayClient.confirm
+  .send({
+    transactionId: '2021121300698360310',
+    body: {
+      currency: 'TWD',
+      amount: 1000
+    }
+})
+```
+
+### Capture
+
+Transactions that have set options.payment.capture as `false` when requesting the Request API payment will be put on hold when the payment is completed with the Confirm API. In order to finalize the payment, an additional purchase with Capture API is required.
+
+```ts
+send(req: CaptureRequestConfig): Promise<ApiResponse<CaptureResponseBody>>
+```
+
+Type definitions:
+- [CaptureRequestConfig](src/line-pay-api/capture.ts#L38)
+- [CaptureResponseBody](src/line-pay-api/capture.ts#L78)
+
+Example:
+```ts
+const res = await linePayClient.capture
   .send({
     transactionId: '2021121300698360310',
     body: {
@@ -226,7 +250,7 @@ An API to refund transactions that has been completed the payment (purchase). Th
 send(req: RefundRequestConfig): Promise<ApiResponse<RefundResponseBody>>
 ```
 
-Definitions:
+Type definitions:
 - [RefundRequestConfig](src/line-pay-api/refund.ts#L12)
 - [RefundResponseBody](src/line-pay-api/refund.ts#L34)
 
@@ -249,7 +273,7 @@ An API to check transaction history in LINE Pay. You can check histories of auth
 send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsResponseBody>>
 ```
 
-Definitions:
+Type definitions:
 - [PaymentDetailsRequestConfig](src/line-pay-api/payment-details.ts#L27)
 - [PaymentDetailsResponseBody](src/line-pay-api/payment-details.ts#L196)
 

@@ -30,7 +30,10 @@ describe('refund', () => {
 
     expect(httpClient.post).toHaveBeenCalledWith(
       `/v3/payments/${transactionId}/refund`,
-      body
+      body,
+      {
+        timeout: 20000
+      }
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)

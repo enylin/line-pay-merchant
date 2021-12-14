@@ -48,6 +48,13 @@ export type HttpResponse<R> = {
   status: number
 }
 
+export type GeneralRequestConfig = {
+  /**
+   * API timeout
+   */
+  timeout?: number
+}
+
 export type GeneralResponseBody = {
   /**
    * Return code

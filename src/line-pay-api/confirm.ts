@@ -1,5 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
-import { GeneralResponseBody } from './type'
+import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Currency, Address } from './type'
 
 export type ConfirmRequestBody = {
@@ -18,7 +18,7 @@ export type ConfirmRequestBody = {
   currency: Currency
 }
 
-export type ConfirmRequestConfig = {
+export type ConfirmRequestConfig = GeneralRequestConfig & {
   /**
    * ID of the transaction
    */
@@ -140,11 +140,13 @@ export type ConfirmResponseBody = GeneralResponseBody & {
 
 export const confirmWithClient: LinePayApiClients['confirm'] =
   httpClient =>
-  async ({ transactionId, body }) => {
+  async ({ transactionId, body, timeout }) => {
     const { data } = await httpClient.post<
       ConfirmRequestBody,
       ConfirmResponseBody
-    >(`/v3/payments/${transactionId}/confirm`, body)
+    >(`/v3/payments/${transactionId}/confirm`, body, {
+      timeout: timeout || 40000
+    })
 
     return data
   }

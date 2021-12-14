@@ -1,5 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
-import { GeneralResponseBody } from './type'
+import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
 export type Options = {
   extra: {
@@ -35,7 +35,7 @@ export type CaptureRequestBody = {
   options?: Options
 }
 
-export type CaptureRequestConfig = {
+export type CaptureRequestConfig = GeneralRequestConfig & {
   /**
    * ID of the transaction
    */
@@ -84,11 +84,13 @@ export type CaptureResponseBody = GeneralResponseBody & {
 
 export const captureWithClient: LinePayApiClients['capture'] =
   httpClient =>
-  async ({ transactionId, body }) => {
+  async ({ transactionId, body, timeout }) => {
     const { data } = await httpClient.post<
       CaptureRequestBody,
       CaptureResponseBody
-    >(`/v3/payments/authorizations/${transactionId}/capture`, body)
+    >(`/v3/payments/authorizations/${transactionId}/capture`, body, {
+      timeout: timeout || 60000
+    })
 
     return data
   }

@@ -27,7 +27,10 @@ describe('payment-details', () => {
 
     paymentDetailsWithClient(httpClient)(req)
 
-    expect(httpClient.get).toHaveBeenCalledWith('/v3/payments', req)
+    expect(httpClient.get).toHaveBeenCalledWith('/v3/payments', {
+      ...req,
+      timeout: 60000
+    })
 
     expect(httpClient.get).toHaveBeenCalledTimes(1)
   })

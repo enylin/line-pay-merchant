@@ -31,7 +31,10 @@ describe('confirm', () => {
 
     expect(httpClient.post).toHaveBeenCalledWith(
       `/v3/payments/${transactionId}/confirm`,
-      body
+      body,
+      {
+        timeout: 40000
+      }
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)

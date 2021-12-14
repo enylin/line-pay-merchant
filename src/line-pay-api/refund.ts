@@ -1,5 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
-import { GeneralResponseBody } from './type'
+import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
 export type RefundRequestBody = {
   /**
@@ -9,7 +9,7 @@ export type RefundRequestBody = {
   refundAmount: number
 }
 
-export type RefundRequestConfig = {
+export type RefundRequestConfig = GeneralRequestConfig & {
   /**
    * ID of the transaction
    */
@@ -40,11 +40,13 @@ export type RefundResponseBody = GeneralResponseBody & {
 
 export const refundWithClient: LinePayApiClients['refund'] =
   httpClient =>
-  async ({ transactionId, body }) => {
+  async ({ transactionId, body, timeout }) => {
     const { data } = await httpClient.post<
       RefundRequestBody,
       RefundResponseBody
-    >(`/v3/payments/${transactionId}/refund`, body)
+    >(`/v3/payments/${transactionId}/refund`, body, {
+      timeout: timeout || 20000
+    })
 
     return data
   }

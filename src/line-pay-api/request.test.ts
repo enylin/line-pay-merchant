@@ -43,7 +43,9 @@ describe('request', () => {
 
     requestWithClient(httpClient)(req)
 
-    expect(httpClient.post).toHaveBeenCalledWith('/v3/payments/request', body)
+    expect(httpClient.post).toHaveBeenCalledWith('/v3/payments/request', body, {
+      timeout: 20000
+    })
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })

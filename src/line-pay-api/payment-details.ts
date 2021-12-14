@@ -1,5 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
-import { GeneralResponseBody } from './type'
+import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Product, Address } from './type'
 
 export type Fields = 'ALL' | 'TRANSACTION' | 'ORDER'
@@ -24,7 +24,7 @@ export type PaymentDetailsRequestParams = {
   fields?: Fields
 }
 
-export type PaymentDetailsRequestConfig = {
+export type PaymentDetailsRequestConfig = GeneralRequestConfig & {
   /**
    * Request parameters of payment detail API
    */
@@ -205,7 +205,10 @@ export const paymentDetailsWithClient: LinePayApiClients['paymentDetails'] =
     const { data } = await httpClient.get<
       PaymentDetailsRequestParams,
       PaymentDetailsResponseBody
-    >('/v3/payments', config)
+    >('/v3/payments', {
+      ...config,
+      timeout: config.timeout || 60000
+    })
 
     return data
   }

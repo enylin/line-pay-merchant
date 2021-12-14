@@ -51,6 +51,22 @@ export type LinePayClient = {
    */
   confirm: PaymentApi<'confirm'>
   /**
+   * Transactions that have set options.payment.capture as `false` when requesting the Request API payment will be put on hold when the payment is completed with the Confirm API. In order to finalize the payment, an additional purchase with Capture API is required.
+   *
+   * Example:
+   * ```ts
+   * const res = await linePayClient.capture
+   *   .send({
+   *     transactionId: '2021121300698360310',
+   *     body: {
+   *       amount: 1000,
+   *       currency: 'TWD'
+   *     }
+   * })
+   * ```
+   */
+  capture: PaymentApi<'capture'>
+  /**
    * An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
    *
    * Example:

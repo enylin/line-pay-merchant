@@ -1,4 +1,8 @@
 import {
+  CaptureRequestConfig,
+  CaptureResponseBody
+} from '@/line-pay-api/capture'
+import {
   ConfirmRequestConfig,
   ConfirmResponseBody
 } from '@/line-pay-api/confirm'
@@ -23,6 +27,7 @@ import {
 export type LinePayApiClients = {
   request: ApiClientBuilder<RequestRequestConfig, RequestResponseBody>
   confirm: ApiClientBuilder<ConfirmRequestConfig, ConfirmResponseBody>
+  capture: ApiClientBuilder<CaptureRequestConfig, CaptureResponseBody>
   refund: ApiClientBuilder<RefundRequestConfig, RefundResponseBody>
   paymentDetails: ApiClientBuilder<
     PaymentDetailsRequestConfig,

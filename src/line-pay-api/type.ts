@@ -55,6 +55,9 @@ export type GeneralResponseBody = {
   returnCode: string
   /**
    * Return message
+   * Return message or reason for failure. The following are examples.
+   * - Unpayable merchant
+   * - Merchant authentication information error
    */
   returnMessage: string
 }

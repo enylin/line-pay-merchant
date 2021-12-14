@@ -12,6 +12,7 @@ import {
   toRefundResponse
 } from './handler/payment-details-recovery'
 import { createTimeoutRetryHandler } from './handler/timeout-retry'
+import { captureWithClient } from './line-pay-api/capture'
 
 /**
  * Create a client for LINE Pay API.
@@ -25,6 +26,7 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
   return {
     request: createPaymentApi('request', requestWithClient, httpClient),
     confirm: createPaymentApi('confirm', confirmWithClient, httpClient),
+    capture: createPaymentApi('capture', captureWithClient, httpClient),
     refund: createPaymentApi('refund', refundWithClient, httpClient),
     paymentDetails: createPaymentApi(
       'paymentDetails',

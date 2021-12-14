@@ -165,6 +165,35 @@ Definitions:
 - [RequestRequestConfig](src/line-pay-api/request.ts#L228)
 - [RequestResponseBody](src/line-pay-api/request.ts#L221)
 
+Example:
+```ts
+const order: RequestRequestBody = {
+  amount: 1000,
+  currency: 'TWD',
+  orderId: '20211209003',
+  packages: [
+    {
+      id: 'c99abc79-3b29-4f40-8851-bc618ca57857',
+      amount: 1000,
+      products: [
+        {
+          name: 'Demo Product',
+          quantity: 2,
+          price: 500
+        }
+      ]
+    }
+  ],
+  redirectUrls: {
+    confirmUrl: 'https://example.com/confirmUrl',
+    cancelUrl: 'https://example.com/cancelUrl'
+  }
+}
+const res = await linePayClient.request.send({
+  body: order
+})
+```
+
 ### Confirm
 
 An API for the merchant to complete the payment when the user approves with the [ConfirmURL](https://pay.line.me/documents/online_v3_en.html?shell#confirmurl-spec) or [Check Payment Status API](https://pay.line.me/documents/online_v3_en.html?shell#check-payment-status-api). Status of a payment where authorization and purchase are separated because 'options.payment.capture' of the Request API is set as `false` will be in purchase standby (Authentication) even after it is completed. To complete the purchase, an additional purchase process is required through the [Capture API](https://pay.line.me/documents/online_v3_en.html?shell#capture-api).
@@ -177,6 +206,18 @@ Definitions:
 - [ConfirmRequestConfig](src/line-pay-api/confirm.ts#L21)
 - [ConfirmResponseBody](src/line-pay-api/confirm.ts#L134)
 
+Example:
+```ts
+const res = await linePayClient.confirm
+  .send({
+    transactionId: '2021121300698360310',
+    body: {
+      currency: 'TWD',
+      amount: 1000
+    }
+})
+```
+
 ### Refund
 
 An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
@@ -185,9 +226,20 @@ An API to refund transactions that has been completed the payment (purchase). Th
 send(req: RefundRequestConfig): Promise<ApiResponse<RefundResponseBody>>
 ```
 
-See type definitions:
+Definitions:
 - [RefundRequestConfig](src/line-pay-api/refund.ts#L12)
 - [RefundResponseBody](src/line-pay-api/refund.ts#L34)
+
+Example:
+```ts
+const res = await linePayClient.refund
+  .send({
+    transactionId: '2021121300698360310',
+    body: {
+      refundAmount: 20
+    }
+})
+```
 
 ### Payment Details
 
@@ -197,9 +249,20 @@ An API to check transaction history in LINE Pay. You can check histories of auth
 send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsResponseBody>>
 ```
 
-See type definitions:
+Definitions:
 - [PaymentDetailsRequestConfig](src/line-pay-api/payment-details.ts#L27)
 - [PaymentDetailsResponseBody](src/line-pay-api/payment-details.ts#L196)
+
+Example:
+```ts
+const res = await linePayClient.paymentDetails
+  .send({
+    params: {
+      transactionId: ['2021113000697335210'],
+      orderId: ['20211209003'],
+    }
+})
+```
 
 ## Further details
 

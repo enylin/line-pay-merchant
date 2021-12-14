@@ -6,6 +6,12 @@ import { LineMerchantConfig } from './line-pay-api/type'
 import { LinePayClient } from './type'
 import { createPaymentApi } from './payment-api/create'
 import { paymentDetailsWithClient } from './line-pay-api/payment-details'
+import {
+  createPaymentDetailsRecoveryHandler,
+  toConfirmResponse,
+  toRefundResponse
+} from './handler/payment-details-recovery'
+import { createTimeoutRetryHandler } from './handler/timeout-retry'
 
 /**
  * Create a client for LINE Pay API.
@@ -26,4 +32,11 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
       httpClient
     )
   }
+}
+
+export const handler = {
+  createPaymentDetailsRecoveryHandler,
+  createTimeoutRetryHandler,
+  toConfirmResponse,
+  toRefundResponse
 }

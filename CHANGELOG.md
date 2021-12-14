@@ -1,3 +1,16 @@
+# [0.2.0](https://github.com/enylin/line-pay-merchant/compare/v0.1.1...v0.2.0) (2021-12-14)
+
+
+### Features
+
+* **error:** add basic error types ([8c0c8b7](https://github.com/enylin/line-pay-merchant/commit/8c0c8b70d24099f6f454ea83d4f97cb445ac60d7))
+* **handler:** add duplicate request handler ([0708066](https://github.com/enylin/line-pay-merchant/commit/0708066c4ea6b75d149a420b1a0ea3a5ca88e920))
+* **handler:** add retry handler ([a96f2d3](https://github.com/enylin/line-pay-merchant/commit/a96f2d371f1db6f5185e098f4edd440f5d6aebf3))
+* **handler:** export built-in handlers ([41be390](https://github.com/enylin/line-pay-merchant/commit/41be3904811b6c78f1b39344da8f6859a1409932))
+* **handler:** rename duplicate-request handler and allow customized predicate ([28c552c](https://github.com/enylin/line-pay-merchant/commit/28c552c191ca66eac0d615bfb2ddd881a79ef5c0))
+
+
+
 ## [0.1.1](https://github.com/enylin/line-pay-merchant/compare/v0.1.0...v0.1.1) (2021-12-13)
 
 

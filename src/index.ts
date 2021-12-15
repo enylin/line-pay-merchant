@@ -13,6 +13,12 @@ import {
 } from './handler/payment-details-recovery'
 import { createTimeoutRetryHandler } from './handler/timeout-retry'
 import { captureWithClient } from './line-pay-api/capture'
+import { HttpError, isHttpError } from './line-pay-api/error/http'
+import {
+  LinePayApiError,
+  isLinePayApiError
+} from './line-pay-api/error/line-pay-api'
+import { TimeoutError, isTimeoutError } from './line-pay-api/error/timeout'
 
 /**
  * Create a client for LINE Pay API.
@@ -41,4 +47,13 @@ export const handler = {
   createTimeoutRetryHandler,
   toConfirmResponse,
   toRefundResponse
+}
+
+export const error = {
+  HttpError,
+  isHttpError,
+  LinePayApiError,
+  isLinePayApiError,
+  TimeoutError,
+  isTimeoutError
 }

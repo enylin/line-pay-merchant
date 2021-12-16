@@ -23,32 +23,30 @@ const linePayClient = createLinePayClient({
   env: 'development' // env can be 'development' or 'production'
 })
 
-const order = {
-  amount: 1000,
-  currency: 'TWD',
-  orderId: '20211209003',
-  packages: [
-    {
-      id: 'c99abc79-3b29-4f40-8851-bc618ca57856',
-      amount: 1000,
-      products: [
-        {
-          name: 'Product Name',
-          quantity: 2,
-          price: 500
-        }
-      ]
-    }
-  ],
-  redirectUrls: {
-    confirmUrl: 'https://myshop.com/confirmUrl',
-    cancelUrl: 'https://myshop.com/cancelUrl'
-  }
-}
-
 try {
   const res = await linePayClient.request.send({
-    body: order
+    body: {
+      amount: 1000,
+      currency: 'TWD',
+      orderId: '20211209003',
+      packages: [
+        {
+          id: 'c99abc79-3b29-4f40-8851-bc618ca57856',
+          amount: 1000,
+          products: [
+            {
+              name: 'Product Name',
+              quantity: 2,
+              price: 500
+            }
+          ]
+        }
+      ],
+      redirectUrls: {
+        confirmUrl: 'https://myshop.com/confirmUrl',
+        cancelUrl: 'https://myshop.com/cancelUrl'
+      }
+    }
   })
 
   console.log(res)
@@ -74,7 +72,6 @@ Response:
   },
   comments: {}
 }
-
 ```
 
 <!-- omit in toc -->
@@ -123,7 +120,6 @@ try {
   console.log('e = ', e)
 }
 ```
-
 
 ## Custom handler
 
@@ -186,32 +182,51 @@ Type definitions:
 - [RequestResponseBody](src/line-pay-api/request.ts#L221)
 
 Example:
+
 ```ts
-const order: RequestRequestBody = {
-  amount: 1000,
-  currency: 'TWD',
-  orderId: '20211209003',
-  packages: [
-    {
-      id: 'c99abc79-3b29-4f40-8851-bc618ca57857',
-      amount: 1000,
-      products: [
-        {
-          name: 'Demo Product',
-          quantity: 2,
-          price: 500
-        }
-      ]
-    }
-  ],
-  redirectUrls: {
-    confirmUrl: 'https://example.com/confirmUrl',
-    cancelUrl: 'https://example.com/cancelUrl'
-  }
-}
 const res = await linePayClient.request.send({
-  body: order
+  body: {
+    amount: 1000,
+    currency: 'TWD',
+    orderId: '20211209003',
+    packages: [
+      {
+        id: 'c99abc79-3b29-4f40-8851-bc618ca57857',
+        amount: 1000,
+        products: [
+          {
+            name: 'Demo Product',
+            quantity: 2,
+            price: 500
+          }
+        ]
+      }
+    ],
+    redirectUrls: {
+      confirmUrl: 'https://example.com/confirmUrl',
+      cancelUrl: 'https://example.com/cancelUrl'
+    }
+  }
 })
+```
+
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "paymentUrl": {
+        "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw",
+        "app": "line://pay/payment/eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw"
+      },
+      "transactionId": "2021121600698709710",
+      "paymentAccessToken": "656097936065"
+    }
+  },
+  "comments": {}
+}
 ```
 
 ## Confirm
@@ -227,15 +242,51 @@ Type definitions:
 - [ConfirmResponseBody](src/line-pay-api/confirm.ts#L134)
 
 Example:
+
 ```ts
 const res = await linePayClient.confirm
   .send({
-    transactionId: '2021121300698360310',
+    transactionId: '2021121600698709510',
     body: {
       currency: 'TWD',
       amount: 1000
     }
 })
+```
+
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "transactionId": "2021121600698709510",
+      "orderId": "20211216002",
+      "payInfo": [
+        {
+          "method": "CREDIT_CARD",
+          "amount": 1000,
+        }
+      ],
+      "packages": [
+        {
+          "id": "c99abc79-3b29-4f40-8851-bc618ca57857",
+          "amount": 1000,
+          "userFeeAmount": 0,
+          "products": [
+            {
+              "name": "Demo Product",
+              "quantity": 2,
+              "price": 500
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "comments": {}
+}
 ```
 
 ## Capture
@@ -251,6 +302,7 @@ Type definitions:
 - [CaptureResponseBody](src/line-pay-api/capture.ts#L78)
 
 Example:
+
 ```ts
 const res = await linePayClient.capture
   .send({
@@ -260,6 +312,28 @@ const res = await linePayClient.capture
       amount: 1000
     }
 })
+```
+
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "OK",
+    "info": {
+      "transactionId": "2021121300698360310",
+      "orderId": "20211216002",
+      "payInfo": [{
+        "method": "BALANCE",
+        "amount": 900
+      }, {
+        "method": "DISCOUNT",
+        "amount": 100
+      }]
+    }
+  },
+  "comments": {}
+}
 ```
 
 ## Refund
@@ -285,6 +359,21 @@ const res = await linePayClient.refund
 })
 ```
 
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "refundTransactionId": "2021121600698710312",
+      "refundTransactionDate": "2021-12-16T00:50:15Z"
+    }
+  },
+  "comments": {}
+}
+```
+
 ## Payment Details
 
 An API to check transaction history in LINE Pay. You can check histories of authorizations and payment completions. With fields setting, you can selectively check transaction information or order information as needed.
@@ -302,10 +391,60 @@ Example:
 const res = await linePayClient.paymentDetails
   .send({
     params: {
-      transactionId: ['2021113000697335210'],
-      orderId: ['20211209003'],
+      transactionId: ['2021121600698709510']
     }
 })
+```
+
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": [
+      {
+        "transactionId": "2021121600698709510",
+        "transactionDate": "2021-12-16T00:27:40Z",
+        "transactionType": "PAYMENT",
+        "productName": "Demo Product",
+        "currency": "TWD",
+        "authorizationExpireDate": "2021-12-16T00:27:40Z",
+        "payInfo": [
+          {
+            "method": "CREDIT_CARD",
+            "amount": 1000
+          }
+        ],
+        "refundList": [
+          {
+            "refundTransactionId": "2021121600698710312",
+            "transactionType": "PARTIAL_REFUND",
+            "refundAmount": -20,
+            "refundTransactionDate": "2021-12-16T00:50:15Z"
+          }
+        ],
+        "orderId": "20211216002",
+        "payStatus": "CAPTURE",
+        "packages": [
+          {
+            "id": "c99abc79-3b29-4f40-8851-bc618ca57857",
+            "amount": 1000,
+            "userFeeAmount": 0,
+            "products": [
+              {
+                "name": "Demo Product",
+                "quantity": 2,
+                "price": 500
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "comments": {}
+}
 ```
 
 # Further details

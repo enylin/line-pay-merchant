@@ -50,6 +50,8 @@ export type Payment = {
    * Regarding automatic payment
    * - True: Processing authorization and purchase with the Confirm API at the same time
    * - False: Authorized with the Confirm API but need to purchase with the Capture API.
+   *
+   * Note that this field is not available by default. Users should contact LINE Pay to activate manually.
    */
   capture?: boolean
   /**

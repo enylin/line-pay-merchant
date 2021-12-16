@@ -1,3 +1,14 @@
+# [0.3.0](https://github.com/enylin/line-pay-merchant/compare/v0.2.0...v0.3.0) (2021-12-16)
+
+
+### Features
+
+* **api:** implement capture API ([9a89d4f](https://github.com/enylin/line-pay-merchant/commit/9a89d4fb433d72f228d5c12f20b40818c90575dc))
+* **api:** support default timeout for each api ([d11e9f7](https://github.com/enylin/line-pay-merchant/commit/d11e9f70407701afdc162f06e27d3d6c54513725))
+* **error:** export built-in errors ([72ea021](https://github.com/enylin/line-pay-merchant/commit/72ea0217f86a27ed2562ae4a7c06ae69aa3fb5d5))
+
+
+
 # [0.2.0](https://github.com/enylin/line-pay-merchant/compare/v0.1.1...v0.2.0) (2021-12-14)
 
 

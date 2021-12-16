@@ -62,6 +62,12 @@ export type ApiHandlerParams<T extends keyof LinePayApiClients> = {
   req: RequestConfig<T>
   /**
    * The next handler or the request sending function
+   *
+   * @template T the type of the LINE Pay API
+   * @param req request object
+   * @throws {HttpError} if the request failed
+   * @throws {TimeoutError} if the request timed out
+   * @throws {LinePayApiError} if the response return code is not '0000'
    */
   next: (req: RequestConfig<T>) => Promise<ApiResponse<ResponseBody<T>>>
   /**
@@ -74,6 +80,9 @@ export type ApiHandler<T extends keyof LinePayApiClients> = (
   params: ApiHandlerParams<T>
 ) => Promise<ApiResponse<ResponseBody<T>>>
 
+/**
+ * @template Body response body type
+ */
 export type ApiResponse<Body extends GeneralResponseBody> = {
   /**
    * Response body
@@ -102,6 +111,10 @@ export interface PaymentApi<T extends keyof LinePayApiClients> {
    * Send request to the API
    *
    * @param request request config
+   * @returns the API response
+   * @throws {HttpError} if the request failed
+   * @throws {TimeoutError} if the request timed out
+   * @throws {LinePayApiError} if the response return code is not '0000'
    */
   send(request: RequestConfig<T>): Promise<ApiResponse<ResponseBody<T>>>
 }

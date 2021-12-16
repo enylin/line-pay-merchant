@@ -21,6 +21,12 @@ type RequestHeader = {
   'X-LINE-Authorization': string
 }
 
+/**
+ * convert query object to query string
+ *
+ * @param params query string object
+ * @returns query string
+ */
 export function paramsSerializer(params: QueryParams): string {
   return Object.entries(params)
     .map(p => p.map(encodeURIComponent).join('='))
@@ -45,6 +51,11 @@ function generateHeader(
   }
 }
 
+/**
+ * Implement LINE Pay API GET Authentication specification
+ * Signature = Base64(HMAC-SHA256(Your ChannelSecret, (Your ChannelSecret + URL Path + Query String + nonce)))\
+ * Query String : A query string except ? (Example: Name1=Value1&Name2=Value2...)
+ */
 function handleGetRequest(
   merchantConfig: LineMerchantConfig,
   config: AxiosRequestConfig
@@ -64,6 +75,10 @@ function handleGetRequest(
   }
 }
 
+/**
+ * Implement LINE Pay API POST Authentication specification
+ * Signature = Base64(HMAC-SHA256(Your ChannelSecret, (Your ChannelSecret + URL Path + RequestBody + nonce)))
+ */
 function handlePostRequest(
   merchantConfig: LineMerchantConfig,
   config: AxiosRequestConfig
@@ -109,6 +124,7 @@ export function createAuthHttpClient(
     transformResponse
   })
 
+  // add auth headers
   axiosInstance.interceptors.request.use(config =>
     config.method === 'get'
       ? handleGetRequest(merchantConfig, config)

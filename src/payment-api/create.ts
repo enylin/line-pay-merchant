@@ -8,6 +8,16 @@ import {
   ResponseBody
 } from './type'
 
+/**
+ * Create a new Payment API instance
+ *
+ * @template T
+ * @param type LINE Pay API type
+ * @param createSender create a request sender function
+ * @param httpClient the HTTP client
+ * @param handlers handlers to add to the API client
+ * @returns a new Payment API instance
+ */
 export function createPaymentApi<T extends keyof LinePayApiClients>(
   type: T,
   createSender: (
@@ -21,6 +31,7 @@ export function createPaymentApi<T extends keyof LinePayApiClients>(
     return createPaymentApi(type, createSender, httpClient, handlers)
   }
 
+  // Wrap API response to add comments
   const sender = async (
     req: RequestConfig<T>
   ): Promise<ApiResponse<ResponseBody<T>>> => ({

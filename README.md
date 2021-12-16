@@ -77,95 +77,34 @@ Response:
 <!-- omit in toc -->
 # Table of Contents
 
-- [Usage](#usage)
-  - [Built-in handler](#built-in-handler)
-  - [Custom handler](#custom-handler)
+- [Features](#features)
 - [APIs](#apis)
   - [Request](#request)
   - [Confirm](#confirm)
   - [Capture](#capture)
   - [Refund](#refund)
   - [Payment Details](#payment-details)
+- [Error handling](#error-handling)
+  - [Error](#error)
+    - [HttpError](#httperror)
+    - [Timeout Error](#timeout-error)
+    - [LinePayError](#linepayerror)
+  - [Handler](#handler)
+    - [Built-in handler](#built-in-handler)
+    - [Custom handler](#custom-handler)
 - [Further details](#further-details)
   - [TypeScript support](#typescript-support)
   - [Transaction ID](#transaction-id)
 - [Resources](#resources)
 
-# Usage
 
-## Built-in handler
+# Features
 
-Request:
-```ts
-import { createLinePayClient, handler } from 'line-pay-merchant'
-
-const linePayClient = createLinePayClient(config)
-
-try {
-  const res = await linePayClient.confirm
-    .addHandlers(
-      handler.createTimeoutRetryHandler(),
-      handler.createPaymentDetailsRecoveryHandler(handler.toConfirmResponse)
-    )
-    .send({
-      transactionId: '2021121300698360310',
-      body: {
-        currency: 'TWD',
-        amount: 1000
-      }
-    })
-
-  console.log('res = ', JSON.stringify(res, null, 2))
-} catch (e) {
-  console.log('e = ', e)
-}
-```
-
-## Custom handler
-
-Request:
-```ts
-const res = await linePayClient.refund
-  .addHandler(async (req, next) => {
-    console.log('before first handler')
-    const result = await next(req)
-    console.log('after first handler')
-    return result
-  })
-  .addHandlers(
-    async (req, next) => {
-      console.log('before second handler')
-      const result = await next(req)
-      const result2 = await next(req)
-      console.log('after second handler')
-      return result
-    },
-    async (req, next) => {
-      console.log('before third handler')
-      const result = await next(req)
-      console.log('after third handler')
-      return result
-    }
-  )
-  .send({
-    transactionId: '2021120900898162210',
-    body: {
-      refundAmount: 20
-    }
-  })
-```
-
-Output:
-```
-before third handler
-before second handler
-before first handler
-after first handler
-before first handler
-after first handler
-after second handler
-after third handler
-```
+- Auto-generated LINE Pay API V3 authentication header
+- Built-in API request and response [handler](#built-in-handler)
+- Fully customizable API request and response [handler](#custom-handler)
+- [TypeScript](http://typescript.net/) support
+- Handles transaction ID parsing (see [Transaction ID](#transaction-id))
 
 # APIs
 
@@ -445,6 +384,103 @@ Response:
   },
   "comments": {}
 }
+```
+
+# Error handling
+
+## Error
+
+### HttpError
+
+Http error (ex. 400, 403, 404, 500)
+
+### Timeout Error
+
+Http request timeout.
+### LinePayError
+
+LINE Pay API returns non-0000 return code.
+
+## Handler
+
+### Built-in handler
+
+Request:
+```ts
+import { createLinePayClient, handler, error } from 'line-pay-merchant'
+
+const linePayClient = createLinePayClient(config)
+
+try {
+  const res = await linePayClient.confirm
+    .addHandlers(
+      handler.createTimeoutRetryHandler(),
+      handler.createPaymentDetailsRecoveryHandler(handler.toConfirmResponse)
+    )
+    .send({
+      transactionId: '2021121300698360310',
+      body: {
+        currency: 'TWD',
+        amount: 1000
+      }
+    })
+
+  console.log('res = ', JSON.stringify(res, null, 2))
+} catch (e) {
+  if (e instanceof error.LinePayApiError) {
+    console.log('LinePayApiError = ', e)
+  } else if (e instanceof error.HttpError) {
+    console.log('HttpError = ', e)
+  } else if (e instanceof error.TimeoutError) {
+    console.log('TimeoutError = ', e)
+  }
+}
+```
+
+### Custom handler
+
+Request:
+```ts
+const res = await linePayClient.refund
+  .addHandler(async (req, next) => {
+    console.log('before first handler')
+    const result = await next(req)
+    console.log('after first handler')
+    return result
+  })
+  .addHandlers(
+    async (req, next) => {
+      console.log('before second handler')
+      const result = await next(req)
+      const result2 = await next(req)
+      console.log('after second handler')
+      return result
+    },
+    async (req, next) => {
+      console.log('before third handler')
+      const result = await next(req)
+      console.log('after third handler')
+      return result
+    }
+  )
+  .send({
+    transactionId: '2021120900898162210',
+    body: {
+      refundAmount: 20
+    }
+  })
+```
+
+Output:
+```
+before third handler
+before second handler
+before first handler
+after first handler
+before first handler
+after first handler
+after second handler
+after third handler
 ```
 
 # Further details

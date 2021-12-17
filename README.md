@@ -442,21 +442,21 @@ try {
 Request:
 ```ts
 const res = await linePayClient.refund
-  .addHandler(async (req, next) => {
+  .addHandler(async ({ req, next }) => {
     console.log('before first handler')
     const result = await next(req)
     console.log('after first handler')
     return result
   })
   .addHandlers(
-    async (req, next) => {
+    async ({ req, next }) => {
       console.log('before second handler')
       const result = await next(req)
       const result2 = await next(req)
       console.log('after second handler')
       return result
     },
-    async (req, next) => {
+    async ({ req, next }) => {
       console.log('before third handler')
       const result = await next(req)
       console.log('after third handler')

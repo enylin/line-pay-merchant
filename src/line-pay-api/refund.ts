@@ -38,6 +38,8 @@ export type RefundResponseBody = GeneralResponseBody & {
   info: Info
 }
 
+export const defaultTimeout = 20000
+
 export const refundWithClient: LinePayApiClients['refund'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
@@ -45,7 +47,7 @@ export const refundWithClient: LinePayApiClients['refund'] =
       RefundRequestBody,
       RefundResponseBody
     >(`/v3/payments/${transactionId}/refund`, body, {
-      timeout: timeout || 20000
+      timeout: timeout ?? defaultTimeout
     })
 
     return data

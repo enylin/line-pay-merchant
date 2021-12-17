@@ -120,7 +120,7 @@ export function createAuthHttpClient(
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
     paramsSerializer,
-    timeout: merchantConfig.timeout || 20000,
+    timeout: merchantConfig.timeout ?? 20000,
     transformResponse
   })
 

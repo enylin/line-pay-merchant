@@ -138,6 +138,8 @@ export type ConfirmResponseBody = GeneralResponseBody & {
   info: Info
 }
 
+export const defaultTimeout = 40000
+
 export const confirmWithClient: LinePayApiClients['confirm'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
@@ -145,7 +147,7 @@ export const confirmWithClient: LinePayApiClients['confirm'] =
       ConfirmRequestBody,
       ConfirmResponseBody
     >(`/v3/payments/${transactionId}/confirm`, body, {
-      timeout: timeout || 40000
+      timeout: timeout ?? defaultTimeout
     })
 
     return data

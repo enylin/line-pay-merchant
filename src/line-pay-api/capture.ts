@@ -82,6 +82,8 @@ export type CaptureResponseBody = GeneralResponseBody & {
   info: Info
 }
 
+export const defaultTimeout = 60000
+
 export const captureWithClient: LinePayApiClients['capture'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
@@ -89,7 +91,7 @@ export const captureWithClient: LinePayApiClients['capture'] =
       CaptureRequestBody,
       CaptureResponseBody
     >(`/v3/payments/authorizations/${transactionId}/capture`, body, {
-      timeout: timeout || 60000
+      timeout: timeout ?? defaultTimeout
     })
 
     return data

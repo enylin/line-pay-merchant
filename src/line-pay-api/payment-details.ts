@@ -200,6 +200,8 @@ export type PaymentDetailsResponseBody = GeneralResponseBody & {
   info: Info[]
 }
 
+export const defaultTimeout = 60000
+
 export const paymentDetailsWithClient: LinePayApiClients['paymentDetails'] =
   httpClient => async config => {
     const { data } = await httpClient.get<
@@ -207,7 +209,7 @@ export const paymentDetailsWithClient: LinePayApiClients['paymentDetails'] =
       PaymentDetailsResponseBody
     >('/v3/payments', {
       ...config,
-      timeout: config.timeout || 60000
+      timeout: config.timeout ?? defaultTimeout
     })
 
     return data

@@ -234,6 +234,8 @@ export type RequestRequestConfig = GeneralRequestConfig & {
   body: RequestRequestBody
 }
 
+export const defaultTimeout = 20000
+
 export const requestWithClient: LinePayApiClients['request'] =
   httpClient =>
   async ({ body, timeout }) => {
@@ -241,7 +243,7 @@ export const requestWithClient: LinePayApiClients['request'] =
       RequestRequestBody,
       RequestResponseBody
     >('/v3/payments/request', body, {
-      timeout: timeout || 20000
+      timeout: timeout ?? defaultTimeout
     })
 
     return data

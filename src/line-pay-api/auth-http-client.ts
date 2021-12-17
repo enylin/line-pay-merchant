@@ -29,7 +29,12 @@ type RequestHeader = {
  */
 export function paramsSerializer(params: QueryParams): string {
   return Object.entries(params)
-    .map(p => p.map(encodeURIComponent).join('='))
+    .map(p =>
+      p
+        .map(v => v.toString())
+        .map(encodeURIComponent)
+        .join('=')
+    )
     .join('&')
 }
 

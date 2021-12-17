@@ -1,7 +1,7 @@
 /**
  * HTTP query string object
  */
-export type QueryParams = Record<string, string | number | boolean>
+export type QueryParams = Record<string, string | number | boolean | string[]>
 
 /**
  * LINE Pay API client builder

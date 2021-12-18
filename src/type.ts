@@ -6,30 +6,29 @@ export type LinePayClient = {
    *
    * Example:
    * ```ts
-   * const order: RequestRequestBody = {
-   *   amount: 1000,
-   *   currency: 'TWD',
-   *   orderId: '20211209003',
-   *   packages: [
-   *     {
-   *       id: 'c99abc79-3b29-4f40-8851-bc618ca57857',
-   *       amount: 1000,
-   *       products: [
-   *         {
-   *           name: 'Demo Product',
-   *           quantity: 2,
-   *           price: 500
-   *         }
-   *       ]
-   *     }
-   *   ],
-   *   redirectUrls: {
-   *     confirmUrl: 'https://example.com/confirmUrl',
-   *     cancelUrl: 'https://example.com/cancelUrl'
-   *   }
-   * }
    * const res = await linePayClient.request.send({
-   *   body: order
+   *   body: {
+   *     amount: 1000,
+   *     currency: 'TWD',
+   *     orderId: '20211209003',
+   *     packages: [
+   *       {
+   *         id: 'c99abc79-3b29-4f40-8851-bc618ca57857',
+   *         amount: 1000,
+   *         products: [
+   *           {
+   *             name: 'Demo Product',
+   *             quantity: 2,
+   *             price: 500
+   *           }
+   *         ]
+   *       }
+   *     ],
+   *     redirectUrls: {
+   *       confirmUrl: 'https://example.com/confirmUrl',
+   *       cancelUrl: 'https://example.com/cancelUrl'
+   *     }
+   *   }
    * })
    * ```
    */

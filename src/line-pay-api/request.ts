@@ -1,4 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
+import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Currency, Address, Product } from './type'
 
@@ -239,6 +240,8 @@ export const defaultTimeout = 20000
 export const requestWithClient: LinePayApiClients['request'] =
   httpClient =>
   async ({ body, timeout }) => {
+    if (!body) throw new FormatError('"body" is required')
+
     const { data } = await httpClient.post<
       RequestRequestBody,
       RequestResponseBody

@@ -1,4 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
+import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Currency, Address } from './type'
 
@@ -143,6 +144,10 @@ export const defaultTimeout = 40000
 export const confirmWithClient: LinePayApiClients['confirm'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
+    if (!transactionId) throw new FormatError('"transactionId" is required')
+
+    if (!body) throw new FormatError('"body" is required')
+
     const { data } = await httpClient.post<
       ConfirmRequestBody,
       ConfirmResponseBody

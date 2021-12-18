@@ -1,4 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
+import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
 export type Options = {
@@ -87,6 +88,10 @@ export const defaultTimeout = 60000
 export const captureWithClient: LinePayApiClients['capture'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
+    if (!transactionId) throw new FormatError('"transactionId" is required')
+
+    if (!body) throw new FormatError('"body" is required')
+
     const { data } = await httpClient.post<
       CaptureRequestBody,
       CaptureResponseBody

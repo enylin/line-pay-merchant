@@ -1,4 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
+import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
 export type RefundRequestBody = {
@@ -43,6 +44,10 @@ export const defaultTimeout = 20000
 export const refundWithClient: LinePayApiClients['refund'] =
   httpClient =>
   async ({ transactionId, body, timeout }) => {
+    if (!transactionId) throw new FormatError('"transactionId" is required')
+
+    if (!body) throw new FormatError('"body" is required')
+
     const { data } = await httpClient.post<
       RefundRequestBody,
       RefundResponseBody

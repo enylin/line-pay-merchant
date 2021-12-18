@@ -1,4 +1,5 @@
 import { LinePayApiClients } from '@/payment-api/type'
+import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Product, Address } from './type'
 
@@ -204,6 +205,16 @@ export const defaultTimeout = 60000
 
 export const paymentDetailsWithClient: LinePayApiClients['paymentDetails'] =
   httpClient => async config => {
+    if (!config.params) throw new FormatError('"params" is required')
+
+    const { transactionId, orderId } = config.params
+    const noTransactionId = !transactionId || transactionId.length === 0
+    const noOrderId = !orderId || orderId.length === 0
+
+    if (noTransactionId && noOrderId) {
+      throw new FormatError('transactionId or orderId is required')
+    }
+
     const { data } = await httpClient.get<
       PaymentDetailsRequestParams,
       PaymentDetailsResponseBody

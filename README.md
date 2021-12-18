@@ -86,9 +86,6 @@ Response:
   - [Payment Details](#payment-details)
 - [Error handling](#error-handling)
   - [Error](#error)
-    - [HttpError](#httperror)
-    - [Timeout Error](#timeout-error)
-    - [LinePayError](#linepayerror)
   - [Handler](#handler)
     - [Built-in handler](#built-in-handler)
     - [Custom handler](#custom-handler)
@@ -390,16 +387,10 @@ Response:
 
 ## Error
 
-### HttpError
-
-Http error (ex. 400, 403, 404, 500)
-
-### Timeout Error
-
-Http request timeout.
-### LinePayError
-
-LINE Pay API returns non-0000 return code.
+- FormatError: Request format incorrect
+- HttpError: HTTP error (ex. 400, 403, 404, 500)
+- TimeoutError: HTTP request timeout.
+- LinePayError: LINE Pay API returns non-0000 return code.
 
 ## Handler
 

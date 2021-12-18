@@ -6,8 +6,14 @@ import {
 import { RefundResponseBody } from '../line-pay-api/refund'
 import { createPaymentApi } from '../payment-api/create'
 import { isLinePayApiError } from '../line-pay-api/error/line-pay-api'
-import { ApiHandler, RequestConfig, ResponseBody } from '../payment-api/type'
+import {
+  ApiHandler,
+  ApiResponse,
+  RequestConfig,
+  ResponseBody
+} from '../payment-api/type'
 import { isTimeoutError } from '../line-pay-api/error/timeout'
+import { HttpClient } from '@/line-pay-api/type'
 
 /**
  * Convert confirm response or refund response body to payment details response body
@@ -73,6 +79,42 @@ const defaultPredicate = (error: unknown) =>
   (isLinePayApiError(error) &&
     (error.data.returnCode === '1172' || error.data.returnCode === '1198'))
 
+async function fix<T extends 'confirm' | 'refund'>(
+  converter: PaymentDetailsConverter<T>,
+  req: RequestConfig<T>,
+  httpClient: HttpClient,
+  error: unknown
+): Promise<ApiResponse<ResponseBody<T>>> {
+  try {
+    const paymentDetails = createPaymentApi(
+      'paymentDetails',
+      paymentDetailsWithClient,
+      httpClient
+    )
+
+    // Check with payment details API
+    const paymentDetailsResponse = await paymentDetails.send({
+      params: {
+        transactionId: [req.transactionId]
+      }
+    })
+
+    const comments: Record<string, unknown> = {}
+
+    if (isLinePayApiError(error)) {
+      comments.originalLinePayApiError = error
+    }
+
+    return {
+      body: converter(req, paymentDetailsResponse.body),
+      comments
+    }
+  } catch (paymentDetailsError) {
+    // Failed to fix. Throw the original exception.
+    throw error
+  }
+}
+
 /**
  * Create a handler for confirm and refund API. The handler will handle the 1172 and 1198 error and timeout error by calling the payment details API and verify the transaction result.
  *
@@ -91,32 +133,6 @@ export const createPaymentDetailsRecoveryHandler =
     } catch (e) {
       if (!predicate(e)) throw e
 
-      const paymentDetails = createPaymentApi(
-        'paymentDetails',
-        paymentDetailsWithClient,
-        httpClient
-      )
-
-      try {
-        // Check with payment details API
-        const paymentDetailsResponse = await paymentDetails.send({
-          params: {
-            transactionId: [req.transactionId]
-          }
-        })
-
-        const comments: Record<string, unknown> = {}
-
-        if (isLinePayApiError(e)) {
-          comments.originalLinePayApiError = e
-        }
-
-        return {
-          body: converter(req, paymentDetailsResponse.body),
-          comments
-        }
-      } catch (paymentDetailsError) {
-        throw e
-      }
+      return fix(converter, req, httpClient, e)
     }
   }

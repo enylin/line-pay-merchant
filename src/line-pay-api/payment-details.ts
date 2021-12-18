@@ -196,7 +196,7 @@ export type Info = {
 
 export type PaymentDetailsResponseBody = GeneralResponseBody & {
   /**
-   * Refund information
+   * Payment details information
    */
   info: Info[]
 }

@@ -84,6 +84,7 @@ Response:
   - [Capture](#capture)
   - [Refund](#refund)
   - [Payment Details](#payment-details)
+  - [Check Payment Status](#check-payment-status)
 - [Error handling](#error-handling)
   - [Error](#error)
   - [Handler](#handler)
@@ -378,6 +379,39 @@ Response:
         ]
       }
     ]
+  },
+  "comments": {}
+}
+```
+
+## Check Payment Status
+
+An API to check payment request status of LINE Pay. The merchant should regularly check user payment confirm status **without using the ConfirmURL** and decide if it is possible to complete the payment.
+
+```ts
+send(req: CheckPaymentStatusRequestConfig): Promise<ApiResponse<CheckPaymentStatusResponseBody>>
+```
+
+Type definitions:
+- [CheckPaymentStatusRequestConfig](src/line-pay-api/payment-details.ts#L12)
+- [CheckPaymentStatusResponseBody](src/line-pay-api/payment-details.ts#L37)
+
+Example:
+```ts
+const res = await linePayClient.checkPaymentStatus
+  .send({
+    params: {
+      transactionId: '2021121600698709510'
+    }
+})
+```
+
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "reserved transaction."
   },
   "comments": {}
 }

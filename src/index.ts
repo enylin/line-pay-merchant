@@ -19,6 +19,7 @@ import {
   isLinePayApiError
 } from './line-pay-api/error/line-pay-api'
 import { TimeoutError, isTimeoutError } from './line-pay-api/error/timeout'
+import { checkPaymentStatusWithClient } from './line-pay-api/check-payment-status'
 
 /**
  * Create a client for LINE Pay API.
@@ -37,6 +38,11 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
     paymentDetails: createPaymentApi(
       'paymentDetails',
       paymentDetailsWithClient,
+      httpClient
+    ),
+    checkPaymentStatus: createPaymentApi(
+      'checkPaymentStatus',
+      checkPaymentStatusWithClient,
       httpClient
     )
   }

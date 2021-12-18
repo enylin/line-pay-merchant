@@ -3,6 +3,10 @@ import {
   CaptureResponseBody
 } from '@/line-pay-api/capture'
 import {
+  CheckPaymentStatusRequestConfig,
+  CheckPaymentStatusResponseBody
+} from '@/line-pay-api/check-payment-status'
+import {
   ConfirmRequestConfig,
   ConfirmResponseBody
 } from '@/line-pay-api/confirm'
@@ -32,6 +36,10 @@ export type LinePayApiClients = {
   paymentDetails: ApiClientBuilder<
     PaymentDetailsRequestConfig,
     PaymentDetailsResponseBody
+  >
+  checkPaymentStatus: ApiClientBuilder<
+    CheckPaymentStatusRequestConfig,
+    CheckPaymentStatusResponseBody
   >
 }
 

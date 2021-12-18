@@ -95,4 +95,19 @@ export type LinePayClient = {
    * ```
    */
   paymentDetails: PaymentApi<'paymentDetails'>
+
+  /**
+   * An API to check payment request status of LINE Pay. The merchant should regularly check user payment confirm status **without using the ConfirmURL** and decide if it is possible to complete the payment.
+   *
+   * Example:
+   * ```ts
+   * const res = await linePayClient.checkPaymentStatus
+   *   .send({
+   *     params: {
+   *       transactionId: '2021121900699011210'
+   *     }
+   * })
+   * ```
+   */
+  checkPaymentStatus: PaymentApi<'checkPaymentStatus'>
 }

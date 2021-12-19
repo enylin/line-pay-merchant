@@ -41,7 +41,7 @@ export type CheckPaymentStatusResponseBody = GeneralResponseBody & {
   info?: Info[]
 }
 
-export const defaultTimeout = 60000
+export const defaultTimeout = 20000
 
 export const checkPaymentStatusWithClient: LinePayApiClients['checkPaymentStatus'] =
   httpClient => async config => {

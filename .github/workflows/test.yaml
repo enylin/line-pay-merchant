@@ -1,0 +1,21 @@
+name: Test
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 16.x, 17.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+      - name: Setup node
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm test

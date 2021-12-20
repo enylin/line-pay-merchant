@@ -1,5 +1,12 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx eslint
-npm test
+# lint
+for file in $(git diff --cached --name-only --diff-filter=ACMRTU | grep -E '\.(ts|js|json)$')
+do
+  git show ":$file" | npx eslint --stdin --stdin-filename "$file" # lint staged changes only
+  if [ $? -ne 0 ]; then
+    echo "Lint failed on staged file '$file'."
+    exit 1
+  fi
+done

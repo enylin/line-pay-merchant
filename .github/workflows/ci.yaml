@@ -1,10 +1,20 @@
-name: Test
+name: ci
 on:
   push:
-  pull_request:
-    branches:
-      - main
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+      - name: Setup node
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: 16
+      - run: npx pretty-quick --staged
+      - run: npx eslint
+      - run: npm i typescript
+      - run: npx tsc --noemit -p tsconfig.json
   run-test:
     runs-on: ubuntu-latest
     strategy:

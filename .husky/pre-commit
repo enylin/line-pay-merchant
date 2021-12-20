@@ -2,7 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # lint
-for file in $(git diff --cached --name-only --diff-filter=ACMRTU | grep -E '\.(ts|js|json)$')
+for file in $(git diff --cached --name-only --diff-filter=ACMRTU | grep -v "package-lock.json\|package.json" | grep -E '\.(ts|js|json)$')
 do
   git show ":$file" | npx eslint --stdin --stdin-filename "$file" # lint staged changes only
   if [ $? -ne 0 ]; then

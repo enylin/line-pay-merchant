@@ -1,3 +1,13 @@
+# [0.4.0](https://github.com/enylin/line-pay-merchant/compare/v0.3.0...v0.4.0) (2021-12-20)
+
+
+### Features
+
+* **api:** implement check-payment-status API ([3c725b9](https://github.com/enylin/line-pay-merchant/commit/3c725b9de5cb210a4c6c703357d14b06a260f67e))
+* **error:** throw error if no request body ([6c96fcc](https://github.com/enylin/line-pay-merchant/commit/6c96fcc81f30809199604516a98919db342dd5af))
+
+
+
 # [0.3.0](https://github.com/enylin/line-pay-merchant/compare/v0.2.0...v0.3.0) (2021-12-16)
 
 

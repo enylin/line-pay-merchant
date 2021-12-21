@@ -11,6 +11,10 @@ import {
   ConfirmResponseBody
 } from '@/line-pay-api/confirm'
 import {
+  PayPreapprovedRequestConfig,
+  PayPreapprovedResponseBody
+} from '@/line-pay-api/pay-preapproved'
+import {
   PaymentDetailsRequestConfig,
   PaymentDetailsResponseBody
 } from '@/line-pay-api/payment-details'
@@ -40,6 +44,10 @@ export type LinePayApiClients = {
   checkPaymentStatus: ApiClientBuilder<
     CheckPaymentStatusRequestConfig,
     CheckPaymentStatusResponseBody
+  >
+  payPreapproved: ApiClientBuilder<
+    PayPreapprovedRequestConfig,
+    PayPreapprovedResponseBody
   >
 }
 

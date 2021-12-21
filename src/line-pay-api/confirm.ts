@@ -9,7 +9,7 @@ export type ConfirmRequestBody = {
    */
   amount: number
   /**
-   * Payment currency (ISO 4217)\
+   * Payment currency ([ISO 4217](https://en.wikipedia.org/wiki/ISO_4217))\
    * Supported currencies are as follows.
    * - USD
    * - JPY

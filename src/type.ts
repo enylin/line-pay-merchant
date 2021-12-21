@@ -95,7 +95,6 @@ export type LinePayClient = {
    * ```
    */
   paymentDetails: PaymentApi<'paymentDetails'>
-
   /**
    * An API to check payment request status of LINE Pay. The merchant should regularly check user payment confirm status **without using the ConfirmURL** and decide if it is possible to complete the payment.
    *
@@ -110,4 +109,21 @@ export type LinePayClient = {
    * ```
    */
   checkPaymentStatus: PaymentApi<'checkPaymentStatus'>
+  /**
+   * An automatic payment registration process is required using [Request API](https://pay.line.me/documents/online_v3_en.html#request-api) and [Confirm API](https://pay.line.me/documents/online_v3_en.html#confirm-api). With **RegKey** sent through the Confirm API, the payment can be processed without use approval.
+   *
+   * Example:
+   * ```ts
+   * const res = await linePayClient.payPreapproved.send({
+   *   regKey: 'RK9A2BA1937EQTO',
+   *   body: {
+   *     productName: 'Demo Product',
+   *     amount: 100,
+   *     currency: 'TWD',
+   *     orderId: '20211221001'
+   *   }
+   * })
+   * ```
+   */
+  payPreapproved: PaymentApi<'payPreapproved'>
 }

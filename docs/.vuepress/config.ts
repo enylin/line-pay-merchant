@@ -18,7 +18,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: 'Guide',
-        link: '/guide/getting-started'
+        link: '/guide/introduction'
       },
       {
         text: 'API Reference',
@@ -43,13 +43,30 @@ export default defineUserConfig<DefaultThemeOptions>({
       '/guide/': [
         {
           text: 'Guide',
-          children: ['/guide/getting-started.md']
+          children: [
+            '/guide/introduction.md',
+            '/guide/getting-started.md',
+            '/guide/sandbox-account-creation.md',
+            '/guide/basic-usage.md',
+            '/guide/handlers.md'
+          ]
         }
       ],
       '/api-reference/': [
         {
           text: 'Reference',
-          children: ['/api-reference/request.md']
+          children: [
+            '/api-reference/request.md',
+            '/api-reference/confirm.md',
+            '/api-reference/capture.md',
+            '/api-reference/void.md',
+            '/api-reference/refund.md',
+            '/api-reference/payment-details.md',
+            '/api-reference/check-payment-status.md',
+            '/api-reference/check-regkey.md',
+            '/api-reference/pay-preapproved.md',
+            '/api-reference/expire-regkey.md'
+          ]
         }
       ]
     }

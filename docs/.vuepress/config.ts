@@ -11,6 +11,47 @@ export default defineUserConfig<DefaultThemeOptions>({
   // theme and its config
   theme: '@vuepress/theme-default',
   themeConfig: {
-    logo: 'https://vuejs.org/images/logo.png'
+    navbar: [
+      {
+        text: 'Home',
+        link: '/'
+      },
+      {
+        text: 'Guide',
+        link: '/guide/getting-started'
+      },
+      {
+        text: 'API Reference',
+        link: '/api-reference/request'
+      },
+      {
+        text: 'Resources',
+        children: [
+          {
+            text: 'Official Online API V3 Guide',
+            link: 'https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US'
+          }
+        ]
+      },
+      {
+        text: 'GitHub',
+        link: 'https://github.com/enylin/line-pay-merchant'
+      }
+    ],
+    sidebar: {
+      '/': [],
+      '/guide/': [
+        {
+          text: 'Guide',
+          children: ['/guide/getting-started.md']
+        }
+      ],
+      '/api-reference/': [
+        {
+          text: 'Reference',
+          children: ['/api-reference/request.md']
+        }
+      ]
+    }
   }
 })

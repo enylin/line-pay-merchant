@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/enylin/line-pay-merchant/compare/v0.4.0...v0.5.0) (2021-12-23)
+
+
+### Features
+
+* **api:** implement pay-preapproved API ([1da842e](https://github.com/enylin/line-pay-merchant/commit/1da842e61778cdcbeb7b4bf709e388c97f0e7352))
+
+
+
 # [0.4.0](https://github.com/enylin/line-pay-merchant/compare/v0.3.0...v0.4.0) (2021-12-20)
 
 

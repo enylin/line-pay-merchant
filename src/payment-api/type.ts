@@ -3,6 +3,10 @@ import {
   CaptureResponseBody
 } from '@/line-pay-api/capture'
 import {
+  CheckRegKeyRequestConfig,
+  CheckRegKeyResponseBody
+} from '@/line-pay-api/check-regkey'
+import {
   CheckPaymentStatusRequestConfig,
   CheckPaymentStatusResponseBody
 } from '@/line-pay-api/check-payment-status'
@@ -44,6 +48,10 @@ export type LinePayApiClients = {
   checkPaymentStatus: ApiClientBuilder<
     CheckPaymentStatusRequestConfig,
     CheckPaymentStatusResponseBody
+  >
+  checkRegKey: ApiClientBuilder<
+    CheckRegKeyRequestConfig,
+    CheckRegKeyResponseBody
   >
   payPreapproved: ApiClientBuilder<
     PayPreapprovedRequestConfig,

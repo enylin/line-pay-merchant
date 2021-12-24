@@ -4,6 +4,11 @@
 export type QueryParams = Record<string, string | number | boolean | string[]>
 
 /**
+ * Empty Object
+ */
+export type EmptyObject = Record<string | number | symbol, never>
+
+/**
  * LINE Pay API client builder
  *
  * @param httpClient http client communicate with LINE Pay API

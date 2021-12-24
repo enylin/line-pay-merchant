@@ -114,7 +114,7 @@ export type LinePayClient = {
    *
    * Example:
    * ```ts
-   * const res = await linePayClient.checkPaymentStatus
+   * const res = await linePayClient.checkRegKey
    *   .send({
    *     params: {
    *       regKey: 'RK9A2BA1937EQTO'
@@ -140,4 +140,12 @@ export type LinePayClient = {
    * ```
    */
   payPreapproved: PaymentApi<'payPreapproved'>
+  /**
+   * An API to expire issued RegKey
+   *
+   * const res = await linePayClient.expireRegKey.send({
+   *   regKey: 'RK9A2BA1937EQTO'
+   * })
+   */
+  expireRegKey: PaymentApi<'expireRegKey'>
 }

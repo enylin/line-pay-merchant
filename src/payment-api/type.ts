@@ -32,6 +32,10 @@ import {
   GeneralResponseBody,
   HttpClient
 } from '@/line-pay-api/type'
+import {
+  ExpireRegKeyRequestConfig,
+  ExpireRegKeyResponseBody
+} from '@/line-pay-api/expire-regkey'
 
 /**
  * All LINE Pay API Clients supported by this library.
@@ -56,6 +60,10 @@ export type LinePayApiClients = {
   payPreapproved: ApiClientBuilder<
     PayPreapprovedRequestConfig,
     PayPreapprovedResponseBody
+  >
+  expireRegKey: ApiClientBuilder<
+    ExpireRegKeyRequestConfig,
+    ExpireRegKeyResponseBody
   >
 }
 

@@ -110,6 +110,20 @@ export type LinePayClient = {
    */
   checkPaymentStatus: PaymentApi<'checkPaymentStatus'>
   /**
+   * An API to check issued RegKey status
+   *
+   * Example:
+   * ```ts
+   * const res = await linePayClient.checkPaymentStatus
+   *   .send({
+   *     params: {
+   *       regKey: 'RK9A2BA1937EQTO'
+   *     }
+   * })
+   * ```
+   */
+  checkRegKey: PaymentApi<'checkRegKey'>
+  /**
    * An automatic payment registration process is required using [Request API](https://pay.line.me/documents/online_v3_en.html#request-api) and [Confirm API](https://pay.line.me/documents/online_v3_en.html#confirm-api). With **RegKey** sent through the Confirm API, the payment can be processed without use approval.
    *
    * Example:

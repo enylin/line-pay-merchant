@@ -21,6 +21,7 @@ import {
 import { TimeoutError, isTimeoutError } from './line-pay-api/error/timeout'
 import { checkPaymentStatusWithClient } from './line-pay-api/check-payment-status'
 import { payPreapprovedWithClient } from './line-pay-api/pay-preapproved'
+import { checkRegKeyWithClient } from './line-pay-api/check-regkey'
 
 /**
  * Create a client for LINE Pay API.
@@ -44,6 +45,11 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
     checkPaymentStatus: createPaymentApi(
       'checkPaymentStatus',
       checkPaymentStatusWithClient,
+      httpClient
+    ),
+    checkRegKey: createPaymentApi(
+      'checkRegKey',
+      checkRegKeyWithClient,
       httpClient
     ),
     payPreapproved: createPaymentApi(

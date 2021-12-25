@@ -16,7 +16,16 @@ send(req: RequestRequestConfig): Promise<ApiResponse<RequestResponseBody>>
 
 @[code{203-240} ts{18-31,33-38}](@/line-pay-api/request.ts)
 
-## Error Codes
+## Return Code
+
+### Success
+
+Code | Description
+:----:|:------------------------
+0000 | Success
+
+
+### Error
 
 Code | Description
 :----:|:------------------------

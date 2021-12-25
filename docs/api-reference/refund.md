@@ -16,7 +16,16 @@ send(req: RefundRequestConfig): Promise<ApiResponse<RefundResponseBody>>
 
 @[code{26-42} ts](@/line-pay-api/refund.ts)
 
-## Error Codes
+## Return Code
+
+### Success
+
+Code | Description
+:----:|:------------------------
+0000 | Success
+
+
+### Error
 
 Code | Description
 :----:|:------------------------

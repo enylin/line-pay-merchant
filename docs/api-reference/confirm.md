@@ -16,7 +16,16 @@ send(req: ConfirmRequestConfig): Promise<ApiResponse<ConfirmResponseBody>>
 
 @[code{35-142} ts{71-101,103-108}](@/line-pay-api/confirm.ts)
 
-## Error Codes
+## Return Code
+
+### Success
+
+Code | Description
+:----:|:------------------------
+0000 | Success
+
+
+### Error
 
 Code | Description
 :----:|:------------------------

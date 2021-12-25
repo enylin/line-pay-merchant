@@ -16,7 +16,16 @@ send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsRespon
 
 @[code{37-204} ts](@/line-pay-api/payment-details.ts)
 
-## Error Codes
+## Return Code
+
+### Success
+
+Code | Description
+:----:|:------------------------
+0000 | Success
+
+
+### Error
 
 Code | Description
 :----:|:------------------------

@@ -16,7 +16,16 @@ send(req: CaptureRequestConfig): Promise<ApiResponse<CaptureResponseBody>>
 
 @[code{52-86} ts](@/line-pay-api/capture.ts)
 
-## Error Codes
+## Return Code
+
+### Success
+
+Code | Description
+:----:|:------------------------
+0000 | Success
+
+
+### Error
 
 Code | Description
 :----:|:------------------------

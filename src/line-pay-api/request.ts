@@ -3,6 +3,8 @@ import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Currency, Address, Product } from './type'
 
+/** Request */
+
 export type Package = {
   /**
    * An unique ID of package list
@@ -189,6 +191,15 @@ export type RequestRequestBody = {
   options?: Options
 }
 
+export type RequestRequestConfig = GeneralRequestConfig & {
+  /**
+   * Request body of request API
+   */
+  body: RequestRequestBody
+}
+
+/** Response */
+
 export type PaymentUrl = {
   /**
    * App URL to move to the payment page
@@ -226,13 +237,6 @@ export type RequestResponseBody = GeneralResponseBody & {
    * Payment information
    */
   info: Info
-}
-
-export type RequestRequestConfig = GeneralRequestConfig & {
-  /**
-   * Request body of request API
-   */
-  body: RequestRequestBody
 }
 
 export const defaultTimeout = 20000

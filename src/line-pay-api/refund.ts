@@ -2,6 +2,7 @@ import { LinePayApiClients } from '@/payment-api/type'
 import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
+/** Request */
 export type RefundRequestBody = {
   /**
    * Refund amount
@@ -21,6 +22,7 @@ export type RefundRequestConfig = GeneralRequestConfig & {
   body: RefundRequestBody
 }
 
+/** Response */
 export type Info = {
   /**
    * Refund transaction ID (Newly issued, 19 digits)

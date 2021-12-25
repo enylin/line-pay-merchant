@@ -3,6 +3,7 @@ import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Currency, Address } from './type'
 
+/** Request */
 export type ConfirmRequestBody = {
   /**
    * Payment amount
@@ -30,6 +31,7 @@ export type ConfirmRequestConfig = GeneralRequestConfig & {
   body: ConfirmRequestBody
 }
 
+/** Response */
 export type PayInfo = {
   /**
    * A payment method used for payment

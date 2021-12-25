@@ -1,5 +1,6 @@
 import { defineUserConfig } from 'vuepress'
 import type { DefaultThemeOptions } from 'vuepress'
+import path from 'path'
 
 export default defineUserConfig<DefaultThemeOptions>({
   // site config
@@ -7,6 +8,13 @@ export default defineUserConfig<DefaultThemeOptions>({
   lang: 'en-US',
   title: 'LINE Pay Merchant',
   description: 'LINE Pay V3 Online APIs library for Node.js',
+
+  markdown: {
+    importCode: {
+      handleImportPath: str =>
+        str.replace(/^@/, path.resolve(__dirname, '../../src'))
+    }
+  },
 
   // theme and its config
   theme: '@vuepress/theme-default',

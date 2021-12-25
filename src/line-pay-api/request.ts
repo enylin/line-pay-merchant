@@ -62,7 +62,7 @@ export type Payment = {
    * - NORMAL
    * - PREAPPROVED
    */
-  payType?: string
+  payType?: 'NORMAL' | 'PREAPPROVED'
 }
 
 export type Display = {

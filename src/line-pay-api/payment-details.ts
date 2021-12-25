@@ -3,6 +3,7 @@ import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 import { Product, Address } from './type'
 
+/** Request */
 export type Fields = 'ALL' | 'TRANSACTION' | 'ORDER'
 
 export type PaymentDetailsRequestParams = {
@@ -32,6 +33,7 @@ export type PaymentDetailsRequestConfig = GeneralRequestConfig & {
   params: PaymentDetailsRequestParams
 }
 
+/** Response */
 export type PayInfo = {
   /**
    * A payment method used for payment

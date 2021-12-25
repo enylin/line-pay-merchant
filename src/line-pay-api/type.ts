@@ -13,11 +13,6 @@ export type ApiClientBuilder<Req, Res> = (
   httpClient: HttpClient
 ) => (req: Req) => Promise<Res>
 
-/**
- * Payment currency (ISO 4217)
- */
-export type Currency = 'USD' | 'JPY' | 'TWD' | 'THB'
-
 export type LineMerchantConfig = {
   /**
    * Payment Integration Information - Channel ID
@@ -183,3 +178,8 @@ export type Product = {
    */
   originalPrice?: number
 }
+
+/**
+ * Payment currency (ISO 4217)
+ */
+export type Currency = 'USD' | 'JPY' | 'TWD' | 'THB'

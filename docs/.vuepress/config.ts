@@ -73,7 +73,8 @@ export default defineUserConfig<DefaultThemeOptions>({
             '/api-reference/check-payment-status.md',
             '/api-reference/check-regkey.md',
             '/api-reference/pay-preapproved.md',
-            '/api-reference/expire-regkey.md'
+            '/api-reference/expire-regkey.md',
+            '/api-reference/common.md'
           ]
         }
       ]

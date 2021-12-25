@@ -2,6 +2,7 @@ import { LinePayApiClients } from '@/payment-api/type'
 import { FormatError } from './error/format'
 import { GeneralRequestConfig, GeneralResponseBody } from './type'
 
+/** Request */
 export type Options = {
   extra: {
     /**
@@ -47,6 +48,7 @@ export type CaptureRequestConfig = GeneralRequestConfig & {
   body: CaptureRequestBody
 }
 
+/** Response */
 export type PayInfo = {
   /**
    * A payment method used to process the payment

@@ -1,9 +1,10 @@
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
+  AxiosResponse,
   AxiosResponseTransformer
 } from 'axios'
-import { LineMerchantConfig, QueryParams } from './type'
+import { GeneralResponseBody, LineMerchantConfig, QueryParams } from './type'
 import hmacSHA256 from 'crypto-js/hmac-sha256'
 import Base64 from 'crypto-js/enc-base64'
 import { v4 as uuidv4 } from 'uuid'
@@ -139,8 +140,12 @@ export function createAuthHttpClient(
   )
 
   axiosInstance.interceptors.response.use(
-    res => {
-      if (res.data.returnCode !== '0000') {
+    (res: AxiosResponse<GeneralResponseBody>) => {
+      if (res.data.returnCode.length !== 4) {
+        throw new Error('LINE Pay API error')
+      }
+
+      if (!res.data.returnCode.startsWith('0')) {
         throw new LinePayApiError(res.data.returnMessage, res.status, res.data)
       }
 

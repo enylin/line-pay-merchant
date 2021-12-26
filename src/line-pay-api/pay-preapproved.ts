@@ -59,7 +59,7 @@ export type Info = {
   /**
    * Expiration date ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))
    */
-  authorizationExpireDate: string
+  authorizationExpireDate?: string
 }
 
 export type PayPreapprovedResponseBody = GeneralResponseBody & {

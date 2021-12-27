@@ -29,7 +29,7 @@ describe('check-regkey', () => {
     expect(httpClient.get).toHaveBeenCalledWith(
       `/v3/payments/preapprovedPay/${regKey}/check`,
       {
-        ...req,
+        params,
         timeout: 20000
       }
     )

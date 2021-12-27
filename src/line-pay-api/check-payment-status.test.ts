@@ -12,9 +12,7 @@ const mockHttpClient = {
 describe('check-payment-status', () => {
   const transactionId = '2021113000697317600'
 
-  const params: CheckPaymentStatusRequestParams = {
-    transactionId: transactionId
-  }
+  const params: CheckPaymentStatusRequestParams = {}
 
   it('should call httpClient.get', async () => {
     const httpClient = mockHttpClient
@@ -22,6 +20,7 @@ describe('check-payment-status', () => {
     mockHttpClient.get.mockReturnValueOnce(Promise.resolve({ data: {} }))
 
     const req: CheckPaymentStatusRequestConfig = {
+      transactionId: transactionId,
       params
     }
 
@@ -30,7 +29,7 @@ describe('check-payment-status', () => {
     expect(httpClient.get).toHaveBeenCalledWith(
       `/v3/payments/requests/${transactionId}/check`,
       {
-        ...req,
+        params,
         timeout: 20000
       }
     )

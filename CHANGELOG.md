@@ -1,3 +1,19 @@
+# [0.6.0](https://github.com/enylin/line-pay-merchant/compare/v0.5.0...v0.6.0) (2021-12-27)
+
+
+### Bug Fixes
+
+* **error:** remove return codes begin with 0 from error list ([aaa2c09](https://github.com/enylin/line-pay-merchant/commit/aaa2c097be2113431dff1df57558752523e03b4f))
+* **request:** fix type of payment.payType ([ace30dc](https://github.com/enylin/line-pay-merchant/commit/ace30dcaef895da04eeeb17629eb1eb3bc20a886))
+
+
+### Features
+
+* **api:** implement check regkey API ([88f9610](https://github.com/enylin/line-pay-merchant/commit/88f9610351e3ae17f6f5b295cc773a9ae8f75ec1))
+* **api:** implement expire regKey API ([10571a6](https://github.com/enylin/line-pay-merchant/commit/10571a6468af1cba02fb981c1f5f0611b38dc9c6))
+
+
+
 # [0.5.0](https://github.com/enylin/line-pay-merchant/compare/v0.4.0...v0.5.0) (2021-12-23)
 
 

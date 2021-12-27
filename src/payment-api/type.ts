@@ -36,6 +36,7 @@ import {
   ExpireRegKeyRequestConfig,
   ExpireRegKeyResponseBody
 } from '@/line-pay-api/expire-regkey'
+import { VoidRequestConfig, VoidResponseBody } from '@/line-pay-api/void'
 
 /**
  * All LINE Pay API Clients supported by this library.
@@ -44,6 +45,7 @@ export type LinePayApiClients = {
   request: ApiClientBuilder<RequestRequestConfig, RequestResponseBody>
   confirm: ApiClientBuilder<ConfirmRequestConfig, ConfirmResponseBody>
   capture: ApiClientBuilder<CaptureRequestConfig, CaptureResponseBody>
+  void: ApiClientBuilder<VoidRequestConfig, VoidResponseBody>
   refund: ApiClientBuilder<RefundRequestConfig, RefundResponseBody>
   paymentDetails: ApiClientBuilder<
     PaymentDetailsRequestConfig,

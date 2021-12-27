@@ -23,6 +23,7 @@ import { checkPaymentStatusWithClient } from './line-pay-api/check-payment-statu
 import { payPreapprovedWithClient } from './line-pay-api/pay-preapproved'
 import { checkRegKeyWithClient } from './line-pay-api/check-regkey'
 import { expireRegKeyWithClient } from './line-pay-api/expire-regkey'
+import { voidWithClient } from './line-pay-api/void'
 
 /**
  * Create a client for LINE Pay API.
@@ -37,6 +38,7 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
     request: createPaymentApi('request', requestWithClient, httpClient),
     confirm: createPaymentApi('confirm', confirmWithClient, httpClient),
     capture: createPaymentApi('capture', captureWithClient, httpClient),
+    void: createPaymentApi('void', voidWithClient, httpClient),
     refund: createPaymentApi('refund', refundWithClient, httpClient),
     paymentDetails: createPaymentApi(
       'paymentDetails',

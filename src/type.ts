@@ -66,6 +66,10 @@ export type LinePayClient = {
    */
   capture: PaymentApi<'capture'>
   /**
+   * An API to void payment data that are in authorization status. The API cancels authorization transaction after the payment is completed with the Confirm API. Only the transactions that are in authorization status(purchase standby status) can be cancelled and purchased transactions should be refunded with [Refund API](https://pay.line.me/documents/online_v3_en.html#refund-api).
+   */
+  void: PaymentApi<'void'>
+  /**
    * An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
    *
    * Example:

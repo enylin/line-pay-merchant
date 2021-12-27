@@ -99,7 +99,7 @@ export type ApiHandlerParams<T extends keyof LinePayApiClients> = {
    * @param req request object
    * @throws {HttpError} if the request failed
    * @throws {TimeoutError} if the request timed out
-   * @throws {LinePayApiError} if the response return code is not '0000'
+   * @throws {LinePayApiError} if the response return code is not begin with '0'
    */
   next: (req: RequestConfig<T>) => Promise<ApiResponse<ResponseBody<T>>>
   /**
@@ -146,7 +146,7 @@ export interface PaymentApi<T extends keyof LinePayApiClients> {
    * @returns the API response
    * @throws {HttpError} if the request failed
    * @throws {TimeoutError} if the request timed out
-   * @throws {LinePayApiError} if the response return code is not '0000'
+   * @throws {LinePayApiError} if the response return code is not begin with '0000'
    */
   send(request: RequestConfig<T>): Promise<ApiResponse<ResponseBody<T>>>
 }

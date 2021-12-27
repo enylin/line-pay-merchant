@@ -79,7 +79,7 @@ const res = await linePayClient.confirm
       currency: 'TWD',
       amount: 1000
     }
-})
+  })
 ```
 
 ### Response

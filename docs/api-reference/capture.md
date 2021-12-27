@@ -72,7 +72,7 @@ const res = await linePayClient.capture
       currency: 'TWD',
       amount: 1000
     }
-})
+  })
 ```
 
 ### Response

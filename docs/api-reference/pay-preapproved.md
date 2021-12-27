@@ -92,7 +92,7 @@ const res = await linePayClient.payPreapproved.send({
       "transactionId": "2021123112345678910",
       "transactionDate": "2021-12-31T09:00:31Z"
     }
-},
+  },
   "comments": {}
 }
 ```

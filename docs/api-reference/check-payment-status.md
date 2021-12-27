@@ -45,7 +45,7 @@ const res = await linePayClient.checkPaymentStatus
     params: {
       transactionId: '2021121600698709510'
     }
-})
+  })
 ```
 
 ### Response

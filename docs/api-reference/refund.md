@@ -55,7 +55,7 @@ const res = await linePayClient.refund
     body: {
       refundAmount: 20
     }
-})
+  })
 ```
 
 ### Response

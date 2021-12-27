@@ -10,7 +10,7 @@ send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsRespon
 
 ## Request Config
 
-@[code{6-34} ts](@/line-pay-api/payment-details.ts)
+@[code{7-34} ts](@/line-pay-api/payment-details.ts)
 
 ## Response Body
 

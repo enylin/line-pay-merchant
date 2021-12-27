@@ -49,7 +49,7 @@ const res = await linePayClient.expireRegKey.send({
 {
   "body": {
     "returnCode": "0000",
-    "returnMessage": "OK",
+    "returnMessage": "Success.",
   },
   "comments": {}
 }

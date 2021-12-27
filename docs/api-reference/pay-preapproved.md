@@ -87,7 +87,7 @@ const res = await linePayClient.payPreapproved.send({
 {
   "body": {
     "returnCode": "0000",
-    "returnMessage": "OK",
+    "returnMessage": "Success.",
     "info": {
       "transactionId": "2021123112345678910",
       "transactionDate": "2021-12-31T09:00:31Z"

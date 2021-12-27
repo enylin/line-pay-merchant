@@ -80,7 +80,7 @@ const res = await linePayClient.capture
 {
   "body": {
     "returnCode": "0000",
-    "returnMessage": "OK",
+    "returnMessage": "Success.",
     "info": {
       "transactionId": "2021121300698360310",
       "orderId": "20211216002",

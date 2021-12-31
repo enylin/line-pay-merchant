@@ -3,6 +3,7 @@ import {
   CheckPaymentStatusRequestParams,
   checkPaymentStatusWithClient
 } from './check-payment-status'
+import { FormatError, isFormatError } from './error/format'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -35,5 +36,37 @@ describe('check-payment-status', () => {
     )
 
     expect(httpClient.get).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if transactionId does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      params
+    } as CheckPaymentStatusRequestConfig
+
+    try {
+      await checkPaymentStatusWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"transactionId" is required'))
+      }
+    }
+  })
+
+  it('should throw exception if params does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      transactionId
+    } as CheckPaymentStatusRequestConfig
+
+    try {
+      await checkPaymentStatusWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"params" is required'))
+      }
+    }
   })
 })

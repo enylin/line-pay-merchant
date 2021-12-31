@@ -1,4 +1,9 @@
-import { requestWithClient, RequestRequestBody } from './request'
+import { FormatError, isFormatError } from './error/format'
+import {
+  requestWithClient,
+  RequestRequestBody,
+  RequestRequestConfig
+} from './request'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -48,5 +53,19 @@ describe('request', () => {
     })
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if body does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {} as RequestRequestConfig
+
+    try {
+      await requestWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"body" is required'))
+      }
+    }
   })
 })

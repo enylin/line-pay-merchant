@@ -3,6 +3,7 @@ import {
   CaptureRequestBody,
   CaptureRequestConfig
 } from './capture'
+import { FormatError, isFormatError } from './error/format'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -15,12 +16,12 @@ describe('capture', () => {
     currency: 'TWD'
   }
 
+  const transactionId = '2021113000697317600'
+
   it('should call httpClient.post', async () => {
     const httpClient = mockHttpClient
 
     mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
-
-    const transactionId = '2021113000697317600'
 
     const req: CaptureRequestConfig = {
       transactionId,
@@ -38,5 +39,37 @@ describe('capture', () => {
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if transactionId does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      body
+    } as CaptureRequestConfig
+
+    try {
+      await captureWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"transactionId" is required'))
+      }
+    }
+  })
+
+  it('should throw exception if body does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      transactionId
+    } as CaptureRequestConfig
+
+    try {
+      await captureWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"body" is required'))
+      }
+    }
   })
 })

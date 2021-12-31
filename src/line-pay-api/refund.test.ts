@@ -1,3 +1,4 @@
+import { FormatError, isFormatError } from './error/format'
 import {
   refundWithClient,
   RefundRequestBody,
@@ -14,12 +15,12 @@ describe('refund', () => {
     refundAmount: 100
   }
 
+  const transactionId = '2021113000697317600'
+
   it('should call httpClient.post', async () => {
     const httpClient = mockHttpClient
 
     mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
-
-    const transactionId = '2021113000697317600'
 
     const req: RefundRequestConfig = {
       transactionId,
@@ -37,5 +38,37 @@ describe('refund', () => {
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if transactionId does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      body
+    } as RefundRequestConfig
+
+    try {
+      await refundWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"transactionId" is required'))
+      }
+    }
+  })
+
+  it('should throw exception if body does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      transactionId
+    } as RefundRequestConfig
+
+    try {
+      await refundWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"body" is required'))
+      }
+    }
   })
 })

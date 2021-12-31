@@ -1,6 +1,12 @@
 <!-- omit in toc -->
 # line-pay-merchant
 
+![NPM](https://img.shields.io/npm/l/line-pay-merchant)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/enylin/line-pay-merchant/ci/main)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/enylin/line-pay-merchant)
+![npm](https://img.shields.io/npm/dt/line-pay-merchant)
+![npm](https://img.shields.io/npm/v/line-pay-merchant)
+
 LINE Pay V3 Online APIs library for Node.js
 
 <!-- omit in toc -->

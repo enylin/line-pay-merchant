@@ -117,11 +117,16 @@ export function createAuthHttpClient(
    * So we should convert the number to string.
    */
   const transformResponse: AxiosResponseTransformer = data =>
-    JSON.parse(
-      data
-        .replace(/"transactionId":(\d+),/g, '"transactionId":"$1",')
-        .replace(/"refundTransactionId":(\d+),/g, '"refundTransactionId":"$1",')
-    )
+    typeof data !== 'string'
+      ? data
+      : JSON.parse(
+          data
+            .replace(/"transactionId":\s*(\d+)/g, '"transactionId":"$1"')
+            .replace(
+              /"refundTransactionId":\s*(\d+)/g,
+              '"refundTransactionId":"$1"'
+            )
+        )
 
   const axiosInstance = axios.create({
     baseURL: BASE_URL,

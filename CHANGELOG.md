@@ -1,3 +1,18 @@
+# [0.7.0](https://github.com/enylin/line-pay-merchant/compare/v0.6.0...v0.7.0) (2021-12-31)
+
+
+### Bug Fixes
+
+* **check-payment-status:** fix check-payment-status API ([76f87de](https://github.com/enylin/line-pay-merchant/commit/76f87de6923146cb1a9e1b1ddde00decefb6b153))
+* **http-client:** parse last field in JSON object also ([ef2088b](https://github.com/enylin/line-pay-merchant/commit/ef2088bfe1e2b94dd0625497c98952a4db5fb3f5))
+
+
+### Features
+
+* **void:** implement void API ([3c4869c](https://github.com/enylin/line-pay-merchant/commit/3c4869c462c42b97a38b9a6ab19d2bd4849127cd))
+
+
+
 # [0.6.0](https://github.com/enylin/line-pay-merchant/compare/v0.5.0...v0.6.0) (2021-12-27)
 
 

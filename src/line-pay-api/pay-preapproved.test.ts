@@ -43,6 +43,28 @@ describe('payPreapproved', () => {
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req: PayPreapprovedRequestConfig = {
+      regKey,
+      body,
+      timeout: 1000
+    }
+
+    payPreapprovedWithClient(httpClient)(req)
+
+    expect(httpClient.post).toHaveBeenCalledWith(
+      `/v3/payments/preapprovedPay/${regKey}/payment`,
+      body,
+      {
+        timeout: 1000
+      }
+    )
+  })
+
   it('should throw exception if regKey does not exist in request config', async () => {
     expect.assertions(1)
 

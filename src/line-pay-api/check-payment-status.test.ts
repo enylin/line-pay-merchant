@@ -38,6 +38,28 @@ describe('check-payment-status', () => {
     expect(httpClient.get).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.get.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req: CheckPaymentStatusRequestConfig = {
+      transactionId: transactionId,
+      params,
+      timeout: 1000
+    }
+
+    checkPaymentStatusWithClient(httpClient)(req)
+
+    expect(httpClient.get).toHaveBeenCalledWith(
+      `/v3/payments/requests/${transactionId}/check`,
+      {
+        params,
+        timeout: 1000
+      }
+    )
+  })
+
   it('should throw exception if transactionId does not exist in request config', async () => {
     expect.assertions(1)
 

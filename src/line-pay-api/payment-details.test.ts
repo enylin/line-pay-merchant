@@ -36,6 +36,24 @@ describe('payment-details', () => {
     expect(httpClient.get).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.get.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req: PaymentDetailsRequestConfig = {
+      params,
+      timeout: 1000
+    }
+
+    paymentDetailsWithClient(httpClient)(req)
+
+    expect(httpClient.get).toHaveBeenCalledWith('/v3/payments', {
+      ...req,
+      timeout: 1000
+    })
+  })
+
   it('should throw exception if params does not exist in request config', async () => {
     expect.assertions(1)
 

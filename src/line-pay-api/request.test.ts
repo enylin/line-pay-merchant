@@ -55,6 +55,22 @@ describe('request', () => {
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req = {
+      body,
+      timeout: 1000
+    }
+
+    requestWithClient(httpClient)(req)
+
+    expect(httpClient.post).toHaveBeenCalledWith('/v3/payments/request', body, {
+      timeout: 1000
+    })
+  })
   it('should throw exception if body does not exist in request config', async () => {
     expect.assertions(1)
 

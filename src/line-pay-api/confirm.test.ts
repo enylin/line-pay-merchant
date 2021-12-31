@@ -41,6 +41,28 @@ describe('confirm', () => {
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req: ConfirmRequestConfig = {
+      transactionId,
+      body,
+      timeout: 1000
+    }
+
+    confirmWithClient(httpClient)(req)
+
+    expect(httpClient.post).toHaveBeenCalledWith(
+      `/v3/payments/${transactionId}/confirm`,
+      body,
+      {
+        timeout: 1000
+      }
+    )
+  })
+
   it('should throw exception if transactionId does not exist in request config', async () => {
     expect.assertions(1)
 

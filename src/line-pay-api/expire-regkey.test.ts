@@ -38,6 +38,30 @@ describe('expireRegKey', () => {
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const regKey = 'RK9D2BA19XTFQWC'
+
+    const req: ExpireRegKeyRequestConfig = {
+      regKey,
+      body,
+      timeout: 1000
+    }
+
+    expireRegKeyWithClient(httpClient)(req)
+
+    expect(httpClient.post).toHaveBeenCalledWith(
+      `/v3/payments/preapprovedPay/${regKey}/expire`,
+      body,
+      {
+        timeout: 1000
+      }
+    )
+  })
+
   it('should throw exception if regKey does not exist in request config', async () => {
     expect.assertions(1)
 

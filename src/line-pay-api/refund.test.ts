@@ -40,6 +40,28 @@ describe('refund', () => {
     expect(httpClient.post).toHaveBeenCalledTimes(1)
   })
 
+  it('should replace default timeout with timeout in config', async () => {
+    const httpClient = mockHttpClient
+
+    mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
+
+    const req: RefundRequestConfig = {
+      transactionId,
+      body,
+      timeout: 1000
+    }
+
+    refundWithClient(httpClient)(req)
+
+    expect(httpClient.post).toHaveBeenCalledWith(
+      `/v3/payments/${transactionId}/refund`,
+      body,
+      {
+        timeout: 1000
+      }
+    )
+  })
+
   it('should throw exception if transactionId does not exist in request config', async () => {
     expect.assertions(1)
 

@@ -85,4 +85,25 @@ describe('payment-details', () => {
       }
     }
   })
+
+  it('should throw exception if both transactionId and orderId have length 0', async () => {
+    expect.assertions(1)
+
+    const req = {
+      params: {
+        transactionId: [],
+        orderId: []
+      }
+    } as PaymentDetailsRequestConfig
+
+    try {
+      await paymentDetailsWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(
+          new FormatError('transactionId or orderId is required')
+        )
+      }
+    }
+  })
 })

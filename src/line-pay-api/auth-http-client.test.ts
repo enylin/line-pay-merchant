@@ -456,5 +456,31 @@ describe('auth-http-client', () => {
         expect(res.config.headers).toEqual(header)
       })
     })
+
+    describe('put()', () => {
+      it('should not set headers', async () => {
+        expect.assertions(1)
+
+        const header = {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        }
+
+        const httpClient = createAuthHttpClient(merchantConfig)
+        const mock = new MockAdapter(httpClient)
+
+        const mockResult = {
+          returnCode: '0000',
+          returnMessage: 'Success.'
+        }
+        mock.onPut(/.*/).reply(200, JSON.stringify(mockResult))
+
+        const res = await httpClient.put(url, {
+          transactionId
+        })
+
+        expect(res.config.headers).toEqual(header)
+      })
+    })
   })
 })

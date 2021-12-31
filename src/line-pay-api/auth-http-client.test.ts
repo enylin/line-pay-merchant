@@ -2,7 +2,7 @@ import { createAuthHttpClient, paramsSerializer } from './auth-http-client'
 import { LineMerchantConfig } from './type'
 import MockAdapter from 'axios-mock-adapter'
 import { isLinePayApiError, LinePayApiError } from './error/line-pay-api'
-import { TimeoutError } from './error/timeout'
+import { isTimeoutError, TimeoutError } from './error/timeout'
 import { HttpError, isHttpError } from './error/http'
 
 const mockedUuid = '00000000-0000-0000-0000-000000000000'
@@ -175,7 +175,9 @@ describe('auth-http-client', () => {
       try {
         await httpClient.post(url)
       } catch (e) {
-        expect(e).toEqual(error)
+        if (isTimeoutError(e)) {
+          expect(e).toEqual(error)
+        }
       }
     })
 

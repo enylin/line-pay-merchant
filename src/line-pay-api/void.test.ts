@@ -1,3 +1,4 @@
+import { FormatError, isFormatError } from './error/format'
 import { voidWithClient, VoidRequestBody, VoidRequestConfig } from './void'
 
 const mockHttpClient = {
@@ -31,5 +32,19 @@ describe('void', () => {
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if transactionId does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {} as VoidRequestConfig
+
+    try {
+      await voidWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"transactionId" is required'))
+      }
+    }
   })
 })

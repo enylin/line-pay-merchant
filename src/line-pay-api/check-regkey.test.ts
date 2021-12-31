@@ -3,6 +3,7 @@ import {
   CheckRegKeyRequestParams,
   checkRegKeyWithClient
 } from './check-regkey'
+import { FormatError, isFormatError } from './error/format'
 
 const mockHttpClient = {
   get: jest.fn(),
@@ -35,5 +36,19 @@ describe('check-regkey', () => {
     )
 
     expect(httpClient.get).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if regKey does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {} as CheckRegKeyRequestConfig
+
+    try {
+      await checkRegKeyWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"regKey" is required'))
+      }
+    }
   })
 })

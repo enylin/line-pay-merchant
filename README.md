@@ -3,6 +3,7 @@
 
 ![NPM](https://img.shields.io/npm/l/line-pay-merchant)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/enylin/line-pay-merchant/ci/main)
+[![codecov](https://codecov.io/gh/enylin/line-pay-merchant/branch/main/graph/badge.svg)](https://codecov.io/gh/enylin/line-pay-merchant)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/enylin/line-pay-merchant)
 ![npm](https://img.shields.io/npm/dt/line-pay-merchant)
 ![npm](https://img.shields.io/npm/v/line-pay-merchant)

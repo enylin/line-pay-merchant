@@ -1,3 +1,4 @@
+import { FormatError, isFormatError } from './error/format'
 import {
   payPreapprovedWithClient,
   PayPreapprovedRequestBody,
@@ -17,12 +18,12 @@ describe('payPreapproved', () => {
     orderId: '20211221001'
   }
 
+  const regKey = 'RK9D2BA19XTFQWC'
+
   it('should call httpClient.post', async () => {
     const httpClient = mockHttpClient
 
     mockHttpClient.post.mockReturnValueOnce(Promise.resolve({ data: {} }))
-
-    const regKey = 'RK9D2BA19XTFQWC'
 
     const req: PayPreapprovedRequestConfig = {
       regKey,
@@ -40,5 +41,37 @@ describe('payPreapproved', () => {
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if regKey does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      body
+    } as PayPreapprovedRequestConfig
+
+    try {
+      await payPreapprovedWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"regKey" is required'))
+      }
+    }
+  })
+
+  it('should throw exception if body does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {
+      regKey
+    } as PayPreapprovedRequestConfig
+
+    try {
+      await payPreapprovedWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"body" is required'))
+      }
+    }
   })
 })

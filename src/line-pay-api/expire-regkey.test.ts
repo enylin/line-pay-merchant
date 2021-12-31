@@ -1,3 +1,4 @@
+import { FormatError, isFormatError } from './error/format'
 import {
   expireRegKeyWithClient,
   ExpireRegKeyRequestBody,
@@ -35,5 +36,19 @@ describe('expireRegKey', () => {
     )
 
     expect(httpClient.post).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if regKey does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {} as ExpireRegKeyRequestConfig
+
+    try {
+      await expireRegKeyWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"regKey" is required'))
+      }
+    }
   })
 })

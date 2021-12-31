@@ -1,3 +1,4 @@
+import { FormatError, isFormatError } from './error/format'
 import {
   PaymentDetailsRequestConfig,
   PaymentDetailsRequestParams,
@@ -33,5 +34,37 @@ describe('payment-details', () => {
     })
 
     expect(httpClient.get).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw exception if params does not exist in request config', async () => {
+    expect.assertions(1)
+
+    const req = {} as PaymentDetailsRequestConfig
+
+    try {
+      await paymentDetailsWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(new FormatError('"params" is required'))
+      }
+    }
+  })
+
+  it('should throw exception if both transactionId and orderId do not exist in params', async () => {
+    expect.assertions(1)
+
+    const req = {
+      params: {}
+    } as PaymentDetailsRequestConfig
+
+    try {
+      await paymentDetailsWithClient(mockHttpClient)(req)
+    } catch (e) {
+      if (isFormatError(e)) {
+        expect(e).toEqual(
+          new FormatError('transactionId or orderId is required')
+        )
+      }
+    }
   })
 })

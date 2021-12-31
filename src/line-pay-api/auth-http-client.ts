@@ -67,9 +67,8 @@ function handleGetRequest(
   config: AxiosRequestConfig
 ): AxiosRequestConfig {
   const nonce = uuidv4()
-  const queryString = paramsSerializer({
-    ...config?.params
-  })
+
+  const queryString = paramsSerializer({ ...config.params })
 
   const text = `${merchantConfig.channelSecretKey}${config.url}${queryString}${nonce}`
   const signature = encrypt(text, merchantConfig.channelSecretKey)
@@ -146,8 +145,12 @@ export function createAuthHttpClient(
 
   axiosInstance.interceptors.response.use(
     (res: AxiosResponse<GeneralResponseBody>) => {
+      if (!res.data) {
+        throw new Error('Empty result')
+      }
+
       if (res.data.returnCode.length !== 4) {
-        throw new Error('LINE Pay API error')
+        throw new Error('Length of returnCode should be 4')
       }
 
       if (!res.data.returnCode.startsWith('0')) {

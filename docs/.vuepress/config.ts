@@ -26,7 +26,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: 'Guide',
-        link: '/guide/introduction'
+        link: '/guide/getting-started'
       },
       {
         text: 'API Reference',
@@ -73,12 +73,16 @@ export default defineUserConfig<DefaultThemeOptions>({
       }
     ],
     sidebar: {
-      '/': [],
+      '/': [
+        {
+          text: 'Home',
+          children: ['/']
+        }
+      ],
       '/guide/': [
         {
           text: 'Guide',
           children: [
-            '/guide/introduction.md',
             '/guide/getting-started.md',
             '/guide/basic-usage.md',
             '/guide/handlers.md'

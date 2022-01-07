@@ -1,13 +1,12 @@
 import { defineUserConfig } from 'vuepress'
 import type { DefaultThemeOptions } from 'vuepress'
-import { version } from '../../package.json'
 import path from 'path'
 
 export default defineUserConfig<DefaultThemeOptions>({
   // site config
   base: '/line-pay-merchant/',
   lang: 'en-US',
-  title: `LINE Pay Merchant (v${version})`,
+  title: 'LINE Pay Merchant',
   description: 'LINE Pay V3 Online APIs library for Node.js',
 
   markdown: {
@@ -37,8 +36,34 @@ export default defineUserConfig<DefaultThemeOptions>({
         text: 'Resources',
         children: [
           {
-            text: 'Official Online API V3 Guide',
-            link: 'https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US'
+            text: 'Official Documentation',
+            children: [
+              {
+                text: 'Online API V3 Guide',
+                link: 'https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US'
+              },
+              {
+                text: 'Test flow',
+                link: 'https://pay.line.me/tw/developers/techsupport/sandbox/testflow?locale=en_US'
+              },
+              {
+                text: 'Channel ID & SK',
+                link: 'https://pay.line.me/tw/developers/techsupport/sandbox/channel?locale=en_US'
+              }
+            ]
+          },
+          {
+            text: 'Installation',
+            children: [
+              {
+                text: 'npm',
+                link: 'https://www.npmjs.com/package/line-pay-merchant'
+              },
+              {
+                text: 'Yarn',
+                link: 'https://yarnpkg.com/package/line-pay-merchant'
+              }
+            ]
           }
         ]
       },

@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/enylin/line-pay-merchant/issues"
   },
-  "homepage": "https://github.com/enylin/line-pay-merchant#readme",
+  "homepage": "https://enylin.github.io/line-pay-merchant/",
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-angular": "^15.0.0",

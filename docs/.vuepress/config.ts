@@ -80,7 +80,6 @@ export default defineUserConfig<DefaultThemeOptions>({
           children: [
             '/guide/introduction.md',
             '/guide/getting-started.md',
-            '/guide/sandbox-account-creation.md',
             '/guide/basic-usage.md',
             '/guide/handlers.md'
           ]

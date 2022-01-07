@@ -36,6 +36,9 @@
   },
   "keywords": [
     "LINE Pay",
+    "LINE",
+    "Payment",
+    "Merchant",
     "V3",
     "ES6",
     "TypeScript"

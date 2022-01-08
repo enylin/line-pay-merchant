@@ -23,8 +23,8 @@ For added flexibility, users can define custom request/response handlers.
 ## Features
 
 - Auto-generated LINE Pay API V3 authentication header
-- Built-in API request and response [handler](#built-in-handler)
-- Fully customizable API request and response [handler](#custom-handler)
+- Built-in API request and response [handler](./guide/handlers)
+- Fully customizable API request and response [handler](./guide/handlers)
 - [TypeScript](http://typescript.net/) support
 - Handles transaction ID parsing (see [Transaction ID](#transaction-id))
 

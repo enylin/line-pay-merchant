@@ -82,11 +82,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       '/guide/': [
         {
           text: 'Guide',
-          children: [
-            '/guide/getting-started.md',
-            '/guide/basic-usage.md',
-            '/guide/handlers.md'
-          ]
+          children: ['/guide/getting-started.md', '/guide/handlers.md']
         }
       ],
       '/api-reference/': [

@@ -26,7 +26,7 @@ For added flexibility, users can define custom request/response handlers.
 - Built-in API request and response [handler](./guide/handlers)
 - Fully customizable API request and response [handler](./guide/handlers)
 - [TypeScript](http://typescript.net/) support
-- Handles transaction ID parsing (see [Transaction ID](#transaction-id))
+- Handles transaction ID parsing (see [Transaction ID](./guide/further-details.md#transaction-id))
 
 ## Installation
 
@@ -45,11 +45,11 @@ import { createLinePayClient } from 'line-pay-merchant'
 
 ## Documentation
 
-Please visit [documentation](https://enylin.github.io/line-pay-merchant/).
+Please visit [LINE Pay Merchant](https://enylin.github.io/line-pay-merchant/) for more details.
 
 ## Changelog
 
-Please visit [changelog](https://github.com/enylin/line-pay-merchant/blob/main/CHANGELOG.md).
+Please visit [Changelog](https://github.com/enylin/line-pay-merchant/blob/main/CHANGELOG.md).
 
 ## License
 

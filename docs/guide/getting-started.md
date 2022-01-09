@@ -25,18 +25,25 @@ You can install the package from [NPM](https://www.npmjs.com/package/line-pay-me
 
 :::: code-group
 ::: code-group-item NPM
-```sh
-# latest
+```sh:no-line-numbers
 npm install line-pay-merchant
 ```
 :::
 ::: code-group-item YARN
-```sh
-# latest
+```sh:no-line-numbers
 yarn add line-pay-merchant
 ```
 :::
 ::::
+
+Or build from source:
+
+```sh:no-line-numbers
+git clone https://github.com/enylin/line-pay-merchant
+cd line-pay-merchant
+npm install
+npm run build
+```
 
 ## Example
 

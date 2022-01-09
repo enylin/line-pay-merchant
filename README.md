@@ -11,14 +11,14 @@
 LINE Pay V3 Online APIs library for Node.js
 
 <!-- omit in toc -->
-# Quick start
+# Quick Start
 
-```
+```sh
 npm install line-pay-merchant
 ```
 
 <!-- omit in toc -->
-## Basic example
+## Basic Example
 
 Request:
 ```ts
@@ -35,7 +35,7 @@ try {
     body: {
       amount: 1000,
       currency: 'TWD',
-      orderId: '20211209003',
+      orderId: '20211216003',
       packages: [
         {
           id: 'c99abc79-3b29-4f40-8851-bc618ca57856',
@@ -63,21 +63,21 @@ try {
 ```
 
 Response:
-```ts
+```json
 {
-  body: {
-    returnCode: '0000',
-    returnMessage: 'Success.',
-    info: {
-      paymentUrl: {
-        web: 'https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=MGG5dXZZaatkK3Y0NlFmTVVCdXVpTWtyYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJbGhWdzNiU0M2ZlBFTA',
-        app: 'line://pay/payment/MGY5dXZZaitkK3Y0NlFmTVVCdXVpTWtzYlp1SEhVQUwwRnkzRkhTTXBQRjZRV0pkUEFJcGhWdzNiU0M2ZlBFTA'
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "paymentUrl": {
+        "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw",
+        "app": "line://pay/payment/eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw"
       },
-      transactionId: '2021120900898162210',
-      paymentAccessToken: '361925937255'
+      "transactionId": "2021121600698709710",
+      "paymentAccessToken": "656097936065"
     }
   },
-  comments: {}
+  "comments": {}
 }
 ```
 
@@ -85,28 +85,30 @@ Response:
 # Table of Contents
 
 - [Features](#features)
-- [APIs](#apis)
-- [Error handling](#error-handling)
+- [Guide](#guide)
+- [Documentation](#documentation)
+- [Error Handling](#error-handling)
   - [Error](#error)
-- [Further details](#further-details)
-  - [TypeScript support](#typescript-support)
-  - [Transaction ID](#transaction-id)
 - [Resources](#resources)
 
 
 # Features
 
 - Auto-generated LINE Pay API V3 authentication header
-- Built-in API request and response [handler](#built-in-handler)
-- Fully customizable API request and response [handler](#custom-handler)
+- Built-in API request and response [handler]((https://enylin.github.io/line-pay-merchant/guide/handlers.html)
+- Fully customizable API request and response [handler](https://enylin.github.io/line-pay-merchant/guide/handlers.html)
 - [TypeScript](http://typescript.net/) support
-- Handles transaction ID parsing (see [Transaction ID](#transaction-id))
+- Handles transaction ID parsing (see [Transaction ID](https://enylin.github.io/line-pay-merchant/guide/further-details.html#transaction-id)
 
-# APIs
+# Guide
 
-See [API Reference](https://enylin.github.io/line-pay-merchant/api-reference/request.html) for more details.
+Please visit [Guide](https://enylin.github.io/line-pay-merchant/guide/getting-started.html) for more details.
 
-# Error handling
+# Documentation
+
+Please visit [LINE Pay Merchant](https://enylin.github.io/line-pay-merchant/) for more details.
+
+# Error Handling
 
 ## Error
 
@@ -114,19 +116,6 @@ See [API Reference](https://enylin.github.io/line-pay-merchant/api-reference/req
 - HttpError: HTTP error (ex. 400, 403, 404, 500)
 - TimeoutError: HTTP request timeout.
 - LinePayError: LINE Pay API returns non-0000 return code.
-
-# Further details
-
-## TypeScript support
-
-This library is written in TypeScript. Users can get type definitions without installing additional libraries.
-
-## Transaction ID
-
-JavaScript numbers are double-precision floating-point numbers.
-LINE Pay Transaction ID is a number larger than the largest integer JavaScript can be precisely stored (which is 2^53, 9007199254740992).
-This may cause the transaction ID received from LINE Pay APIs to be recognized incorrectly. For example, the transaction ID number 2021121300698360310 may be converted to 2021121300698360300 by default parser.
-This library handles the behavior by converting the transaction ID number to string format before the default parser (`JSON.parse`) parses the response received from LINE Pay APIs.
 
 # Resources
 

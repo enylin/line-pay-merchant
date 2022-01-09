@@ -33,19 +33,72 @@ For added flexibility, users can define custom request/response handlers.
 You can install the package from [NPM](https://www.npmjs.com/package/line-pay-merchant) with the following command:
 
 ```sh
-# latest
 npm install line-pay-merchant
 ```
 
-## Example Usage
+## Quick Start
 
 ```js
 import { createLinePayClient } from 'line-pay-merchant'
+
+const linePayClient = createLinePayClient({
+  channelId: '1479113123', // channel ID
+  channelSecretKey: '1f021e50f28fb3f40b7a9c5e758b0a19', // channel secret key
+  env: 'development' // env can be 'development' or 'production'
+})
+
+async function sendRequest() {
+  try {
+    const res = await linePayClient.request.send({
+      body: {
+        amount: 1000,
+        currency: 'TWD',
+        orderId: '20211216003',
+        packages: [
+          {
+            id: 'c99abc79-3b29-4f40-8851-bc618ca57856',
+            amount: 1000,
+            products: [
+              {
+                name: 'Product Name',
+                quantity: 2,
+                price: 500
+              }
+            ]
+          }
+        ],
+        redirectUrls: {
+          confirmUrl: 'https://myshop.com/confirmUrl',
+          cancelUrl: 'https://myshop.com/cancelUrl'
+        }
+      }
+    })
+
+    console.log(res)
+  } catch (e) {
+    console.log('error', e)
+  }
+}
 ```
 
-## Documentation
-
-Please visit [LINE Pay Merchant](https://enylin.github.io/line-pay-merchant/) for more details.
+Response:
+```json
+{
+  "body": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "paymentUrl": {
+        "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw",
+        "app": "line://pay/payment/eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw"
+      },
+      "transactionId": "2021121600698709710",
+      "paymentAccessToken": "656097936065"
+    }
+  },
+  "comments": {}
+}
+```
 
 ## Changelog
 

@@ -2,6 +2,31 @@ import { defineUserConfig } from 'vuepress'
 import type { DefaultThemeOptions } from 'vuepress'
 import path from 'path'
 
+const googleStructuredDataString = `
+[ {
+  "@context" : "http://schema.org",
+  "@type" : "SoftwareApplication",
+  "name" : "LINE Pay Merchant",
+  "url" : "https://github.com/enylin/line-pay-merchant",
+  "author" : {
+    "@type" : "Person",
+    "name" : "Sean Lin"
+  },
+  "datePublished" : "2022-01-09T06:15:47",
+  "publisher" : {
+    "@type" : "Organization",
+    "name" : "Sean Lin"
+  },
+  "downloadUrl" : "https://www.npmjs.com/package/line-pay-merchant",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "applicationCategory": "DeveloperApplication"
+}]
+`
+
 export default defineUserConfig<DefaultThemeOptions>({
   // site config
   base: '/line-pay-merchant/',
@@ -15,6 +40,16 @@ export default defineUserConfig<DefaultThemeOptions>({
         str.replace(/^@/, path.resolve(__dirname, '../../src'))
     }
   },
+
+  head: [
+    [
+      'script',
+      {
+        type: 'application/ld+json'
+      },
+      googleStructuredDataString
+    ]
+  ],
 
   // theme and its config
   theme: '@vuepress/theme-default',

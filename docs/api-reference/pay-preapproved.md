@@ -1,5 +1,7 @@
 # Pay Preapproved API
 
+## Overview
+
 An automatic payment registration process is required using [Request API](https://pay.line.me/documents/online_v3_en.html#request-api) and [Confirm API](https://pay.line.me/documents/online_v3_en.html#confirm-api). With **RegKey** sent through the Confirm API, the payment can be processed without use approval.
 
 ## Signature

@@ -1,5 +1,7 @@
 # Capture API
 
+## Overview
+
 Transactions that have set options.payment.capture as `false` when requesting the Request API payment will be put on hold when the payment is completed with the Confirm API. In order to finalize the payment, an additional purchase with Capture API is required.
 
 ## Signature

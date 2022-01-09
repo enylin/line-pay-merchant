@@ -1,5 +1,7 @@
 # Check Payment Status API
 
+## Overview
+
 An API to check payment request status of LINE Pay. The merchant should regularly check user payment confirm status **without using the ConfirmURL** and decide if it is possible to complete the payment.
 
 ## Signature

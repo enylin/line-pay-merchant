@@ -1,5 +1,7 @@
 # Request API
 
+## Overview
+
 An API to request payment information to LINE Pay. User can change settings such as order information or various payment methods. Once the request is successful, a transaction ID is generated and with the ID, you can complete the payment or process refund.
 
 ## Signature

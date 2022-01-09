@@ -4,30 +4,36 @@
 
 An API to expire issued RegKey
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: ExpireRegKeyRequestConfig): Promise<ApiResponse<ExpireRegKeyResponseBody>>
+## send
+
+```js:no-line-numbers
+send(expireRegKeyRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<ExpireRegKeyResponseBody>>`
+
+### Request Config
 
 @[code{5-16} ts](@/line-pay-api/expire-regkey.ts)
 
-## Response Body
+### Response Body
 
 @[code{18-18} ts](@/line-pay-api/expire-regkey.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -37,16 +43,16 @@ Code | Description
 1190 | The regKey does not exist
 1193 | The regKey has been expired
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.expireRegKey.send({
   regKey: 'RK9D2BA19XTFQWC'
 })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -55,4 +61,37 @@ const res = await linePayClient.expireRegKey.send({
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `ExpireRegKeyClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // expireRegKey
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `ExpireRegKeyClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

@@ -4,23 +4,29 @@
 
 An API to check payment request status of LINE Pay. The merchant should regularly check user payment confirm status **without using the ConfirmURL** and decide if it is possible to complete the payment.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: CheckPaymentStatusRequestConfig): Promise<ApiResponse<CheckPaymentStatusResponseBody>>
+## send
+
+```js:no-line-numbers
+send(checkPaymentStatusRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<CheckPaymentStatusResponseBody>>`
+
+### Request Config
 
 @[code{6-18} ts](@/line-pay-api/check-payment-status.ts)
 
-## Response Body
+### Response Body
 
 @[code{21-44} ts](@/line-pay-api/check-payment-status.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
@@ -30,7 +36,7 @@ Code | Description
 0122 | Payment failed - Completed status
 0123 | Payment completed - Completed status
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -38,9 +44,9 @@ Code | Description
 1105 | The merchant cannot use the LINE Pay.
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.checkPaymentStatus
   .send({
@@ -50,7 +56,7 @@ const res = await linePayClient.checkPaymentStatus
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -59,4 +65,37 @@ const res = await linePayClient.checkPaymentStatus
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `CheckPaymentStatusClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // checkPaymentStatus
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `CheckPaymentStatusClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

@@ -2,32 +2,38 @@
 
 ## Overview
 
-An API for the merchant to complete the payment when the user approves with the [ConfirmURL](https://pay.line.me/documents/online_v3_en.html?shell#confirmurl-spec) or [Check Payment Status API](https://pay.line.me/documents/online_v3_en.html?shell#check-payment-status-api). Status of a payment where authorization and purchase are separated because 'options.payment.capture' of the Request API is set as `false` will be in purchase standby (Authentication) even after it is completed. To complete the purchase, an additional purchase process is required through the [Capture API](https://pay.line.me/documents/online_v3_en.html?shell#capture-api).
+An API for the merchant to complete the payment when the user approves with the [ConfirmURL](https://pay.line.me/documents/online_v3_en.html?shell#confirmurl-spec) or [Check Payment Status API](https://pay.line.me/documents/online_v3_en.html?shell#check-payment-status-api). Status of a payment where authorization and purchase are separated because 'options.payment.confirm' of the Request API is set as `false` will be in purchase standby (Authentication) even after it is completed. To complete the purchase, an additional purchase process is required through the [Confirm API](https://pay.line.me/documents/online_v3_en.html?shell#confirm-api).
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: ConfirmRequestConfig): Promise<ApiResponse<ConfirmResponseBody>>
+## send
+
+```js:no-line-numbers
+send(confirmRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<ConfirmResponseBody>>`
+
+### Request Config
 
 @[code{7-32} ts](@/line-pay-api/confirm.ts)
 
-## Response Body
+### Response Body
 
 @[code{35-142} ts{71-101,103-108}](@/line-pay-api/confirm.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -70,9 +76,9 @@ Code | Description
 1298 | The card has been declined.
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.confirm
   .send({
@@ -84,7 +90,7 @@ const res = await linePayClient.confirm
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -117,4 +123,37 @@ const res = await linePayClient.confirm
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `ConfirmClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // confirm
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `ConfirmClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

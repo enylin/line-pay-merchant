@@ -4,30 +4,36 @@
 
 An API to check transaction history in LINE Pay. You can check histories of authorizations and payment completions. With fields setting, you can selectively check transaction information or order information as needed.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: PaymentDetailsRequestConfig): Promise<ApiResponse<PaymentDetailsResponseBody>>
+## send
+
+```js:no-line-numbers
+send(paymentDetailsRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<PaymentDetailsResponseBody>>`
+
+### Request Config
 
 @[code{7-34} ts](@/line-pay-api/payment-details.ts)
 
-## Response Body
+### Response Body
 
 @[code{37-204} ts](@/line-pay-api/payment-details.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -38,9 +44,9 @@ Code | Description
 1177 | Exceeded maximum viewable transactions (Max. 100)
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.paymentDetails
   .send({
@@ -50,7 +56,7 @@ const res = await linePayClient.paymentDetails
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -99,4 +105,37 @@ const res = await linePayClient.paymentDetails
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `PaymentDetailsClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // paymentDetails
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `PaymentDetailsClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

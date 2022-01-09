@@ -4,30 +4,36 @@
 
 An API to void payment data that are in authorization status. The API cancels authorization transaction after the payment is completed with the Confirm API. Only the transactions that are in authorization status(purchase standby status) can be cancelled and purchased transactions should be refunded with [Refund API](https://pay.line.me/documents/online_v3_en.html#refund-api).
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: VoidRequestConfig): Promise<ApiResponse<VoidResponseBody>>
+## send
+
+```js:no-line-numbers
+send(voidRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<VoidResponseBody>>`
+
+### Request Config
 
 @[code{5-16} ts](@/line-pay-api/void.ts)
 
-## Response Body
+### Response Body
 
 @[code{18-18} ts](@/line-pay-api/void.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -47,9 +53,9 @@ Code | Description
 1999 | The request information is different than the previous one.
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.void
   .send({
@@ -57,7 +63,7 @@ const res = await linePayClient.void
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -66,4 +72,37 @@ const res = await linePayClient.void
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `VoidClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // void
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `VoidClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

@@ -4,30 +4,36 @@
 
 An automatic payment registration process is required using [Request API](https://pay.line.me/documents/online_v3_en.html#request-api) and [Confirm API](https://pay.line.me/documents/online_v3_en.html#confirm-api). With **RegKey** sent through the Confirm API, the payment can be processed without use approval.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: PayPreapprovedRequestConfig): Promise<ApiResponse<PayPreapprovedResponseBody>>
+## send
+
+```js:no-line-numbers
+send(payPreapprovedRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<PayPreapprovedResponseBody>>`
+
+### Request Config
 
 @[code{5-44} ts](@/line-pay-api/pay-preapproved.ts)
 
-## Response Body
+### Response Body
 
 @[code{46-70} ts](@/line-pay-api/pay-preapproved.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -69,9 +75,9 @@ Code | Description
 1296 | Unable to proceed the amount
 1298 | The card has been declined.
 9000 | An internal error
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.payPreapproved.send({
   regKey: 'RK9A2BA1937EQTO',
@@ -84,7 +90,7 @@ const res = await linePayClient.payPreapproved.send({
 })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -97,4 +103,37 @@ const res = await linePayClient.payPreapproved.send({
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `PayPreapprovedClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // payPreapproved
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `PayPreapprovedClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

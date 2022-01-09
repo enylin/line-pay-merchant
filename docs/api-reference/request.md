@@ -4,30 +4,36 @@
 
 An API to request payment information to LINE Pay. User can change settings such as order information or various payment methods. Once the request is successful, a transaction ID is generated and with the ID, you can complete the payment or process refund.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: RequestRequestConfig): Promise<ApiResponse<RequestResponseBody>>
+## send
+
+```js:no-line-numbers
+send(requestRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<RequestResponseBody>>`
+
+### Request Config
 
 @[code{8-199} ts{157-185,187-192}](@/line-pay-api/request.ts)
 
-## Response Body
+### Response Body
 
 @[code{203-240} ts{18-31,33-38}](@/line-pay-api/request.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -44,9 +50,9 @@ Code | Description
 2102 | A JSON data format error
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.request.send({
   body: {
@@ -74,7 +80,7 @@ const res = await linePayClient.request.send({
 })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -91,4 +97,37 @@ const res = await linePayClient.request.send({
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `RequestClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // request
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `RequestClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

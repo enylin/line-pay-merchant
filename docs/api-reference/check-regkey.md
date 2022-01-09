@@ -4,30 +4,36 @@
 
 An API to check issued RegKey status
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: CheckRegKeyRequestConfig): Promise<ApiResponse<CheckRegKeyResponseBody>
+## send
+
+```js:no-line-numbers
+send(checkRegKeyRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<CheckRegKeyResponseBody>>`
+
+### Request Config
 
 @[code{5-23} ts](@/line-pay-api/check-regkey.ts)
 
-## Response Body
+### Response Body
 
 @[code{25-25} ts](@/line-pay-api/check-regkey.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -41,9 +47,9 @@ Code | Description
 1190 | The regKey doesn't exist.
 1193 | The regKey has expired.
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.checkRegKey
   .send({
@@ -53,7 +59,7 @@ const res = await linePayClient.checkRegKey
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -62,4 +68,37 @@ const res = await linePayClient.checkRegKey
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `CheckRegKeyClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // checkRegKey
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `CheckRegKeyClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

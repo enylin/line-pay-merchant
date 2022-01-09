@@ -4,30 +4,36 @@
 
 An API to refund transactions that has been completed the payment (purchase). The transaction ID of LINE Pay user must be passed when refunded and partial refund is also possible.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: RefundRequestConfig): Promise<ApiResponse<RefundResponseBody>>
+## send
+
+```js:no-line-numbers
+send(refundRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<RefundResponseBody>>`
+
+### Request Config
 
 @[code{6-23} ts](@/line-pay-api/refund.ts)
 
-## Response Body
+### Response Body
 
 @[code{26-42} ts](@/line-pay-api/refund.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -47,9 +53,9 @@ Code | Description
 1199 | An internal request error
 9000 | An internal request
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.refund
   .send({
@@ -60,7 +66,7 @@ const res = await linePayClient.refund
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -73,4 +79,37 @@ const res = await linePayClient.refund
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `RefundClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // refund
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `RefundClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

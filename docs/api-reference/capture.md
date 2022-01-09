@@ -4,30 +4,35 @@
 
 Transactions that have set options.payment.capture as `false` when requesting the Request API payment will be put on hold when the payment is completed with the Confirm API. In order to finalize the payment, an additional purchase with Capture API is required.
 
-## Signature
+- [`send`](#send)
+- [`addHandler`](#addhandler)
+- [`addHandlers`](#addhandlers)
 
-```ts
-send(req: CaptureRequestConfig): Promise<ApiResponse<CaptureResponseBody>>
+## send
+
+```js:no-line-numbers
+send(captureRequestConfig)
 ```
 
-## Request Config
+Returns `Promise<ApiResponse<CaptureResponseBody>>`
+### Request Config
 
 @[code{6-49} ts](@/line-pay-api/capture.ts)
 
-## Response Body
+### Response Body
 
 @[code{52-86} ts](@/line-pay-api/capture.ts)
 
-## Return Code
+### Return Code
 
-### Success
+#### Success
 
 Code | Description
 :----:|:------------------------
 0000 | Success
 
 
-### Error
+#### Error
 
 Code | Description
 :----:|:------------------------
@@ -63,9 +68,9 @@ Code | Description
 1298 | The card has been declined.
 9000 | An internal error
 
-## Example
+### Example
 
-### Request
+#### Request
 ```ts
 const res = await linePayClient.capture
   .send({
@@ -77,7 +82,7 @@ const res = await linePayClient.capture
   })
 ```
 
-### Response
+#### Response
 ```json
 {
   "body": {
@@ -97,4 +102,37 @@ const res = await linePayClient.capture
   },
   "comments": {}
 }
+```
+
+## addHandler
+
+```js:no-line-numbers
+addHandler(handler)
+```
+
+Returns `CaptureClient`
+
+Example:
+```js
+client.addHandler(({ type, req, next, httpClient }) => {
+  console.log(type) // capture
+  return next(req)
+})
+```
+
+## addHandlers
+
+```js:no-line-numbers
+addHandlers(...handlers)
+```
+
+Returns `CaptureClient`
+
+Example:
+```js
+client.addHandlers(
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req),
+  ({ req, next }) => next(req)
+)
 ```

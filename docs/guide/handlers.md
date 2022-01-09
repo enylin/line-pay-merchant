@@ -99,33 +99,40 @@ To make our application stable, we need to deal with errors when encountering th
 This library provides some built-in handlers to help developers handle errors more easily.
 
 ```js
-import { createLinePayClient, handler, error } from 'line-pay-merchant'
+import {
+  createLinePayClient,
+  createTimeoutRetryHandler,
+  createPaymentDetailsRecoveryHandler,
+  paymentDetailsToConfirm,
+  LinePayApiError,
+  HttpError,
+  TimeoutError
+} from 'line-pay-merchant'
 
 const linePayClient = createLinePayClient(config)
 
-try {
-  const res = await linePayClient
-    .confirm
-    .addHandler(handler.createTimeoutRetryHandler())
-    .addHandler(
-      handler.createPaymentDetailsRecoveryHandler(handler.toConfirmResponse)
-    )
-    .send({
-      transactionId: '2021121300698360310',
-      body: {
-        currency: 'TWD',
-        amount: 1000
-      }
-    })
+async function confirm() {
+  try {
+    const res = await linePayClient.confirm
+      .addHandler(createTimeoutRetryHandler())
+      .addHandler(createPaymentDetailsRecoveryHandler(paymentDetailsToConfirm))
+      .send({
+        transactionId: '2021121300698360310',
+        body: {
+          currency: 'TWD',
+          amount: 1000
+        }
+      })
 
-  console.log('res = ', JSON.stringify(res, null, 2))
-} catch (e) {
-  if (e instanceof error.LinePayApiError) {
-    console.log('LinePayApiError = ', e)
-  } else if (e instanceof error.HttpError) {
-    console.log('HttpError = ', e)
-  } else if (e instanceof error.TimeoutError) {
-    console.log('TimeoutError = ', e)
+    console.log('res = ', JSON.stringify(res, null, 2))
+  } catch (e) {
+    if (e instanceof LinePayApiError) {
+      console.log('LinePayApiError = ', e)
+    } else if (e instanceof HttpError) {
+      console.log('HttpError = ', e)
+    } else if (e instanceof TimeoutError) {
+      console.log('TimeoutError = ', e)
+    }
   }
 }
 ```

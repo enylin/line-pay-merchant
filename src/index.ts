@@ -6,19 +6,19 @@ import { LineMerchantConfig } from './line-pay-api/type'
 import { LinePayClient } from './type'
 import { createPaymentApi } from './payment-api/create'
 import { paymentDetailsWithClient } from './line-pay-api/payment-details'
-import {
+export {
   createPaymentDetailsRecoveryHandler,
-  toConfirmResponse,
-  toRefundResponse
+  paymentDetailsToConfirm,
+  paymentDetailsToRefund
 } from './handler/payment-details-recovery'
-import { createTimeoutRetryHandler } from './handler/timeout-retry'
+export { createTimeoutRetryHandler } from './handler/timeout-retry'
 import { captureWithClient } from './line-pay-api/capture'
-import { HttpError, isHttpError } from './line-pay-api/error/http'
-import {
+export { HttpError, isHttpError } from './line-pay-api/error/http'
+export {
   LinePayApiError,
   isLinePayApiError
 } from './line-pay-api/error/line-pay-api'
-import { TimeoutError, isTimeoutError } from './line-pay-api/error/timeout'
+export { TimeoutError, isTimeoutError } from './line-pay-api/error/timeout'
 import { checkPaymentStatusWithClient } from './line-pay-api/check-payment-status'
 import { payPreapprovedWithClient } from './line-pay-api/pay-preapproved'
 import { checkRegKeyWithClient } from './line-pay-api/check-regkey'
@@ -66,20 +66,4 @@ export function createLinePayClient(config: LineMerchantConfig): LinePayClient {
       httpClient
     )
   }
-}
-
-export const handler = {
-  createPaymentDetailsRecoveryHandler,
-  createTimeoutRetryHandler,
-  toConfirmResponse,
-  toRefundResponse
-}
-
-export const error = {
-  HttpError,
-  isHttpError,
-  LinePayApiError,
-  isLinePayApiError,
-  TimeoutError,
-  isTimeoutError
 }

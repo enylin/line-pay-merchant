@@ -30,7 +30,7 @@ export type PaymentDetailsConverter<T extends 'confirm' | 'refund'> = (
  * @param paymentDetails response body from payment details API
  * @returns confirm API response body
  */
-export function toConfirmResponse<T extends 'confirm' | 'refund'>(
+export function paymentDetailsToConfirm<T extends 'confirm'>(
   req: RequestConfig<T>,
   paymentDetails: PaymentDetailsResponseBody
 ): ConfirmResponseBody {
@@ -53,7 +53,7 @@ export function toConfirmResponse<T extends 'confirm' | 'refund'>(
  * @param paymentDetails response body from payment details API
  * @returns refund API response body
  */
-export function toRefundResponse<T extends 'confirm' | 'refund'>(
+export function paymentDetailsToRefund<T extends 'refund'>(
   req: RequestConfig<T>,
   paymentDetails: PaymentDetailsResponseBody
 ): RefundResponseBody {

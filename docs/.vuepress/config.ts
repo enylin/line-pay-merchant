@@ -32,7 +32,8 @@ export default defineUserConfig<DefaultThemeOptions>({
   base: '/line-pay-merchant/',
   lang: 'en-US',
   title: 'LINE Pay Merchant',
-  description: 'LINE Pay V3 Online APIs library for Node.js',
+  description:
+    'LINE Pay Merchant is a JavaScript (Node.js) library for integrating LINE Pay V3 Online APIs. The goal of this library is to help developers build reliable LINE Pay applications. It handles tedious jobs to help developers focus on business logic and ideas that produce value.',
 
   markdown: {
     importCode: {

@@ -22,27 +22,15 @@ export const createTimeoutRetryHandler =
   ): ApiHandler<T> =>
   async ({ req, next }) =>
     new Promise((resolve, reject) => {
-      const f = async (count: number, originalError: unknown) => {
+      async function f(count = 0) {
         try {
-          const res = await next(req)
-
-          if (
-            originalError !== null &&
-            res.comments.originalLinePayApiError !== undefined
-          ) {
-            res.comments.originalLinePayApiError = originalError
-          }
-
-          resolve(res)
+          resolve(await next(req))
         } catch (e) {
-          if (isTimeoutError(e)) {
-            if (count < maxRetry)
-              setTimeout(() => f(count + 1, e), retryTimeout)
-            else reject(originalError)
-          }
-          reject(e)
+          if (isTimeoutError(e) && count < maxRetry)
+            setTimeout(() => f(count + 1), retryTimeout)
+          else reject(e)
         }
       }
 
-      f(0, null)
+      f()
     })

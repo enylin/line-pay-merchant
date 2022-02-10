@@ -1,3 +1,23 @@
+# [0.8.0](https://github.com/enylin/line-pay-merchant/compare/v0.7.0...v0.8.0) (2022-02-10)
+
+
+### Bug Fixes
+
+* **timeout-retry handler:** fix throwing error too early issue ([715d1d5](https://github.com/enylin/line-pay-merchant/commit/715d1d527342724ada525f359dff131eb7651fae))
+
+
+### Features
+
+* **handler:** export handlers directly in index.ts ([7208fb7](https://github.com/enylin/line-pay-merchant/commit/7208fb7ba66adcc75da3ef459ac66106a80b9430))
+* **type:** export API types ([d83e6eb](https://github.com/enylin/line-pay-merchant/commit/d83e6eb1c64a7457f183d264fe2501b6fda2c4e0))
+
+
+### BREAKING CHANGES
+
+* **handler:** remove handler and error from exports
+
+
+
 # [0.7.0](https://github.com/enylin/line-pay-merchant/compare/v0.6.0...v0.7.0) (2021-12-31)
 
 

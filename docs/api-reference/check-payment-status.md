@@ -18,11 +18,11 @@ Returns `Promise<ApiResponse<CheckPaymentStatusResponseBody>>`
 
 ### Request Config
 
-@[code{6-18} ts](@/line-pay-api/check-payment-status.ts)
+@[code{6-17} ts](@/line-pay-api/check-payment-status.ts)
 
 ### Response Body
 
-@[code{21-44} ts](@/line-pay-api/check-payment-status.ts)
+@[code{20-43} ts](@/line-pay-api/check-payment-status.ts)
 
 ### Return Code
 

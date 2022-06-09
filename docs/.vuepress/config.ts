@@ -1,5 +1,6 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
 import { sitemapPlugin } from 'vuepress-plugin-sitemap2'
+import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics'
 import path from 'path'
 
 const googleStructuredDataString = `
@@ -53,6 +54,9 @@ export default defineUserConfig({
   ],
 
   plugins: [
+    googleAnalyticsPlugin({
+      id: 'G-Z8SDFSHFWV'
+    }),
     sitemapPlugin({
       hostname: 'https://enylin.github.io/line-pay-merchant'
     })

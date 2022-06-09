@@ -50,9 +50,8 @@ Code | Description
 ```ts
 const res = await linePayClient.checkPaymentStatus
   .send({
-    params: {
-      transactionId: '2021121600698709510'
-    }
+    transactionId: '2021121600698709510',
+    params: {}
   })
 ```
 

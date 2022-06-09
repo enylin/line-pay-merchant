@@ -53,9 +53,8 @@ Code | Description
 ```ts
 const res = await linePayClient.checkRegKey
   .send({
-    params: {
-      regKey: 'RK9A2BA1942EQTO'
-    }
+    regKey: 'RK9A2BA1942EQTO',
+    params: {}
   })
 ```
 

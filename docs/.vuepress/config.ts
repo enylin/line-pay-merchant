@@ -1,4 +1,5 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
+import { sitemapPlugin } from 'vuepress-plugin-sitemap2'
 import path from 'path'
 
 const googleStructuredDataString = `
@@ -11,7 +12,7 @@ const googleStructuredDataString = `
     "@type" : "Person",
     "name" : "Sean Lin"
   },
-  "datePublished" : "2022-01-09T06:15:47",
+  "datePublished" : "2022-06-09T06:15:47",
   "publisher" : {
     "@type" : "Organization",
     "name" : "Sean Lin"
@@ -49,6 +50,12 @@ export default defineUserConfig({
       },
       googleStructuredDataString
     ]
+  ],
+
+  plugins: [
+    sitemapPlugin({
+      hostname: 'https://enylin.github.io/line-pay-merchant'
+    })
   ],
 
   // theme and its config

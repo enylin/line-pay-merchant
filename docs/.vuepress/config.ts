@@ -1,5 +1,4 @@
-import { defineUserConfig } from 'vuepress'
-import type { DefaultThemeOptions } from 'vuepress'
+import { defineUserConfig, defaultTheme } from 'vuepress'
 import path from 'path'
 
 const googleStructuredDataString = `
@@ -27,7 +26,7 @@ const googleStructuredDataString = `
 }]
 `
 
-export default defineUserConfig<DefaultThemeOptions>({
+export default defineUserConfig({
   // site config
   base: '/line-pay-merchant/',
   lang: 'en-US',
@@ -53,8 +52,7 @@ export default defineUserConfig<DefaultThemeOptions>({
   ],
 
   // theme and its config
-  theme: '@vuepress/theme-default',
-  themeConfig: {
+  theme: defaultTheme({
     navbar: [
       {
         text: 'Home',
@@ -144,5 +142,5 @@ export default defineUserConfig<DefaultThemeOptions>({
         }
       ]
     }
-  }
+  })
 })

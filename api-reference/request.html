@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="VuePress 2.0.0-beta.46">
+    <style>
+      :root {
+        --c-bg: #fff;
+      }
+      html.dark {
+        --c-bg: #22272e;
+      }
+      html, body {
+        background-color: var(--c-bg);
+      }
+    </style>
+    <script>
+      const userMode = localStorage.getItem('vuepress-color-scheme');
+			const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+				document.documentElement.classList.toggle('dark', true);
+			}
+    </script>
+    <script type="application/ld+json">
+[ {
+  "@context" : "http://schema.org",
+  "@type" : "SoftwareApplication",
+  "name" : "LINE Pay Merchant",
+  "url" : "https://github.com/enylin/line-pay-merchant",
+  "author" : {
+    "@type" : "Person",
+    "name" : "Sean Lin"
+  },
+  "datePublished" : "2022-06-09T06:15:47",
+  "publisher" : {
+    "@type" : "Organization",
+    "name" : "Sean Lin"
+  },
+  "downloadUrl" : "https://www.npmjs.com/package/line-pay-merchant",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "applicationCategory": "DeveloperApplication"
+}]
+</script><title>Request API | LINE Pay Merchant</title><meta name="description" content="LINE Pay Merchant is a JavaScript (Node.js) library for integrating LINE Pay V3 Online APIs. The goal of this library is to help developers build reliable LINE Pay applications. It handles tedious jobs to help developers focus on business logic and ideas that produce value.">
+    <link rel="modulepreload" href="/line-pay-merchant/assets/app.951013b3.js"><link rel="modulepreload" href="/line-pay-merchant/assets/request.html.dbf45b6f.js"><link rel="modulepreload" href="/line-pay-merchant/assets/request.html.37b5f300.js"><link rel="prefetch" href="/line-pay-merchant/assets/index.html.3ede0bc2.js"><link rel="prefetch" href="/line-pay-merchant/assets/capture.html.e6f8f835.js"><link rel="prefetch" href="/line-pay-merchant/assets/check-payment-status.html.791d1a05.js"><link rel="prefetch" href="/line-pay-merchant/assets/check-regkey.html.b035bc8c.js"><link rel="prefetch" href="/line-pay-merchant/assets/common.html.d52b442d.js"><link rel="prefetch" href="/line-pay-merchant/assets/confirm.html.bf9cce94.js"><link rel="prefetch" href="/line-pay-merchant/assets/expire-regkey.html.c4658df8.js"><link rel="prefetch" href="/line-pay-merchant/assets/pay-preapproved.html.8d7123ad.js"><link rel="prefetch" href="/line-pay-merchant/assets/payment-details.html.b56b70db.js"><link rel="prefetch" href="/line-pay-merchant/assets/refund.html.06b6d828.js"><link rel="prefetch" href="/line-pay-merchant/assets/void.html.0abc711d.js"><link rel="prefetch" href="/line-pay-merchant/assets/further-details.html.ab86e35f.js"><link rel="prefetch" href="/line-pay-merchant/assets/getting-started.html.fa205e95.js"><link rel="prefetch" href="/line-pay-merchant/assets/handlers.html.ecb5fcb8.js"><link rel="prefetch" href="/line-pay-merchant/assets/404.html.f166316b.js"><link rel="prefetch" href="/line-pay-merchant/assets/index.html.17b94959.js"><link rel="prefetch" href="/line-pay-merchant/assets/capture.html.1d51169a.js"><link rel="prefetch" href="/line-pay-merchant/assets/check-payment-status.html.755d346a.js"><link rel="prefetch" href="/line-pay-merchant/assets/check-regkey.html.172e0465.js"><link rel="prefetch" href="/line-pay-merchant/assets/common.html.e5ff0666.js"><link rel="prefetch" href="/line-pay-merchant/assets/confirm.html.adedbd74.js"><link rel="prefetch" href="/line-pay-merchant/assets/expire-regkey.html.f43f5774.js"><link rel="prefetch" href="/line-pay-merchant/assets/pay-preapproved.html.e78c2306.js"><link rel="prefetch" href="/line-pay-merchant/assets/payment-details.html.99608ad8.js"><link rel="prefetch" href="/line-pay-merchant/assets/refund.html.0baebe44.js"><link rel="prefetch" href="/line-pay-merchant/assets/void.html.85ef70e8.js"><link rel="prefetch" href="/line-pay-merchant/assets/further-details.html.0eabe503.js"><link rel="prefetch" href="/line-pay-merchant/assets/getting-started.html.20a2e379.js"><link rel="prefetch" href="/line-pay-merchant/assets/handlers.html.7474746d.js"><link rel="prefetch" href="/line-pay-merchant/assets/404.html.222fd9c0.js"><link rel="prefetch" href="/line-pay-merchant/assets/404.0c57e72b.js"><link rel="prefetch" href="/line-pay-merchant/assets/Layout.3e5dafaa.js">
+    <link rel="stylesheet" href="/line-pay-merchant/assets/style.6033c1ca.css">
+  </head>
+  <body>
+    <div id="app"><!--[--><div class="theme-container"><!--[--><header class="navbar"><div class="toggle-sidebar-button" title="toggle sidebar" aria-expanded="false" role="button" tabindex="0"><div class="icon" aria-hidden="true"><span></span><span></span><span></span></div></div><span><a href="/line-pay-merchant/" class=""><!----><span class="site-name">LINE Pay Merchant</span></a></span><div class="navbar-items-wrapper" style=""><!--[--><!--]--><nav class="navbar-items can-hide"><!--[--><div class="navbar-item"><a href="/line-pay-merchant/" class="" aria-label="Home"><!--[--><!--]--> Home <!--[--><!--]--></a></div><div class="navbar-item"><a href="/line-pay-merchant/guide/getting-started" class="" aria-label="Guide"><!--[--><!--]--> Guide <!--[--><!--]--></a></div><div class="navbar-item"><a href="/line-pay-merchant/api-reference/request" class="router-link-active" aria-label="API Reference"><!--[--><!--]--> API Reference <!--[--><!--]--></a></div><div class="navbar-item"><div class="navbar-dropdown-wrapper"><button class="navbar-dropdown-title" type="button" aria-label="Resources"><span class="title">Resources</span><span class="arrow down"></span></button><button class="navbar-dropdown-title-mobile" type="button" aria-label="Resources"><span class="title">Resources</span><span class="right arrow"></span></button><ul style="display:none;" class="navbar-dropdown"><!--[--><li class="navbar-dropdown-item"><!--[--><h4 class="navbar-dropdown-subtitle"><span>Official Documentation</span></h4><ul class="navbar-dropdown-subitem-wrapper"><!--[--><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Online API V3 Guide"><!--[--><!--]--> Online API V3 Guide <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/techsupport/sandbox/testflow?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Test flow"><!--[--><!--]--> Test flow <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/techsupport/sandbox/channel?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Channel ID &amp; SK"><!--[--><!--]--> Channel ID &amp; SK <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><!--]--></ul><!--]--></li><li class="navbar-dropdown-item"><!--[--><h4 class="navbar-dropdown-subtitle"><span>Installation</span></h4><ul class="navbar-dropdown-subitem-wrapper"><!--[--><li class="navbar-dropdown-subitem"><a class="external-link" href="https://www.npmjs.com/package/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="npm"><!--[--><!--]--> npm <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://yarnpkg.com/package/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="Yarn"><!--[--><!--]--> Yarn <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><!--]--></ul><!--]--></li><!--]--></ul></div></div><div class="navbar-item"><a class="external-link" href="https://github.com/enylin/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="GitHub"><!--[--><!--]--> GitHub <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><!--]--></nav><!--[--><!--]--><button class="toggle-dark-button" title="toggle dark mode"><svg style="" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M16 12.005a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6z" fill="currentColor"></path><path d="M5.394 6.813l1.414-1.415l3.506 3.506L8.9 10.318z" fill="currentColor"></path><path d="M2 15.005h5v2H2z" fill="currentColor"></path><path d="M5.394 25.197L8.9 21.691l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 25.005h2v5h-2z" fill="currentColor"></path><path d="M21.687 23.106l1.414-1.415l3.506 3.506l-1.414 1.414z" fill="currentColor"></path><path d="M25 15.005h5v2h-5z" fill="currentColor"></path><path d="M21.687 8.904l3.506-3.506l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 2.005h2v5h-2z" fill="currentColor"></path></svg><svg style="display:none;" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M13.502 5.414a15.075 15.075 0 0 0 11.594 18.194a11.113 11.113 0 0 1-7.975 3.39c-.138 0-.278.005-.418 0a11.094 11.094 0 0 1-3.2-21.584M14.98 3a1.002 1.002 0 0 0-.175.016a13.096 13.096 0 0 0 1.825 25.981c.164.006.328 0 .49 0a13.072 13.072 0 0 0 10.703-5.555a1.01 1.01 0 0 0-.783-1.565A13.08 13.08 0 0 1 15.89 4.38A1.015 1.015 0 0 0 14.98 3z" fill="currentColor"></path></svg></button><!----></div></header><!--]--><div class="sidebar-mask"></div><!--[--><aside class="sidebar"><nav class="navbar-items"><!--[--><div class="navbar-item"><a href="/line-pay-merchant/" class="" aria-label="Home"><!--[--><!--]--> Home <!--[--><!--]--></a></div><div class="navbar-item"><a href="/line-pay-merchant/guide/getting-started" class="" aria-label="Guide"><!--[--><!--]--> Guide <!--[--><!--]--></a></div><div class="navbar-item"><a href="/line-pay-merchant/api-reference/request" class="router-link-active" aria-label="API Reference"><!--[--><!--]--> API Reference <!--[--><!--]--></a></div><div class="navbar-item"><div class="navbar-dropdown-wrapper"><button class="navbar-dropdown-title" type="button" aria-label="Resources"><span class="title">Resources</span><span class="arrow down"></span></button><button class="navbar-dropdown-title-mobile" type="button" aria-label="Resources"><span class="title">Resources</span><span class="right arrow"></span></button><ul style="display:none;" class="navbar-dropdown"><!--[--><li class="navbar-dropdown-item"><!--[--><h4 class="navbar-dropdown-subtitle"><span>Official Documentation</span></h4><ul class="navbar-dropdown-subitem-wrapper"><!--[--><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/apis/onlineApis?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Online API V3 Guide"><!--[--><!--]--> Online API V3 Guide <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/techsupport/sandbox/testflow?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Test flow"><!--[--><!--]--> Test flow <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://pay.line.me/tw/developers/techsupport/sandbox/channel?locale=en_US" rel="noopener noreferrer" target="_blank" aria-label="Channel ID &amp; SK"><!--[--><!--]--> Channel ID &amp; SK <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><!--]--></ul><!--]--></li><li class="navbar-dropdown-item"><!--[--><h4 class="navbar-dropdown-subtitle"><span>Installation</span></h4><ul class="navbar-dropdown-subitem-wrapper"><!--[--><li class="navbar-dropdown-subitem"><a class="external-link" href="https://www.npmjs.com/package/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="npm"><!--[--><!--]--> npm <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><li class="navbar-dropdown-subitem"><a class="external-link" href="https://yarnpkg.com/package/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="Yarn"><!--[--><!--]--> Yarn <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></li><!--]--></ul><!--]--></li><!--]--></ul></div></div><div class="navbar-item"><a class="external-link" href="https://github.com/enylin/line-pay-merchant" rel="noopener noreferrer" target="_blank" aria-label="GitHub"><!--[--><!--]--> GitHub <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><!--]--></nav><!--[--><!--]--><ul class="sidebar-items"><!--[--><li><p tabindex="0" class="sidebar-item sidebar-heading active">Reference <!----></p><ul style="" class="sidebar-item-children"><!--[--><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html" class="router-link-active router-link-exact-active router-link-active sidebar-item active" aria-label="Request API"><!--[--><!--]--> Request API <!--[--><!--]--></a><ul style="" class="sidebar-item-children"><!--[--><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#overview" class="router-link-active router-link-exact-active sidebar-item" aria-label="Overview"><!--[--><!--]--> Overview <!--[--><!--]--></a><!----></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#send" class="router-link-active router-link-exact-active sidebar-item" aria-label="send"><!--[--><!--]--> send <!--[--><!--]--></a><ul style="" class="sidebar-item-children"><!--[--><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#request-config" class="router-link-active router-link-exact-active sidebar-item" aria-label="Request Config"><!--[--><!--]--> Request Config <!--[--><!--]--></a><!----></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#response-body" class="router-link-active router-link-exact-active sidebar-item" aria-label="Response Body"><!--[--><!--]--> Response Body <!--[--><!--]--></a><!----></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#return-code" class="router-link-active router-link-exact-active sidebar-item" aria-label="Return Code"><!--[--><!--]--> Return Code <!--[--><!--]--></a><!----></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#example" class="router-link-active router-link-exact-active sidebar-item" aria-label="Example"><!--[--><!--]--> Example <!--[--><!--]--></a><!----></li><!--]--></ul></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#addhandler" class="router-link-active router-link-exact-active sidebar-item" aria-label="addHandler"><!--[--><!--]--> addHandler <!--[--><!--]--></a><!----></li><li><a aria-current="page" href="/line-pay-merchant/api-reference/request.html#addhandlers" class="router-link-active router-link-exact-active sidebar-item" aria-label="addHandlers"><!--[--><!--]--> addHandlers <!--[--><!--]--></a><!----></li><!--]--></ul></li><li><a href="/line-pay-merchant/api-reference/confirm.html" class="sidebar-item" aria-label="Confirm API"><!--[--><!--]--> Confirm API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/capture.html" class="sidebar-item" aria-label="Capture API"><!--[--><!--]--> Capture API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/void.html" class="sidebar-item" aria-label="Void API"><!--[--><!--]--> Void API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/refund.html" class="sidebar-item" aria-label="Refund API"><!--[--><!--]--> Refund API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/payment-details.html" class="sidebar-item" aria-label="Payment Details API"><!--[--><!--]--> Payment Details API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/check-payment-status.html" class="sidebar-item" aria-label="Check Payment Status API"><!--[--><!--]--> Check Payment Status API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/check-regkey.html" class="sidebar-item" aria-label="Check RegKey API"><!--[--><!--]--> Check RegKey API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/pay-preapproved.html" class="sidebar-item" aria-label="Pay Preapproved API"><!--[--><!--]--> Pay Preapproved API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/expire-regkey.html" class="sidebar-item" aria-label="Expire RegKey API"><!--[--><!--]--> Expire RegKey API <!--[--><!--]--></a><!----></li><li><a href="/line-pay-merchant/api-reference/common.html" class="sidebar-item" aria-label="Common Types"><!--[--><!--]--> Common Types <!--[--><!--]--></a><!----></li><!--]--></ul></li><!--]--></ul><!--[--><!--]--></aside><!--]--><!--[--><main class="page"><!--[--><!--]--><div class="theme-default-content"><!--[--><!--]--><div><h1 id="request-api" tabindex="-1"><a class="header-anchor" href="#request-api" aria-hidden="true">#</a> Request API</h1><h2 id="overview" tabindex="-1"><a class="header-anchor" href="#overview" aria-hidden="true">#</a> Overview</h2><p>An API to request payment information to LINE Pay. User can change settings such as order information or various payment methods. Once the request is successful, a transaction ID is generated and with the ID, you can complete the payment or process refund.</p><ul><li><a href="#send"><code>send</code></a></li><li><a href="#addhandler"><code>addHandler</code></a></li><li><a href="#addhandlers"><code>addHandlers</code></a></li></ul><h2 id="send" tabindex="-1"><a class="header-anchor" href="#send" aria-hidden="true">#</a> send</h2><div class="language-javascript ext-js"><pre class="language-javascript"><code><span class="token function">send</span><span class="token punctuation">(</span>requestRequestConfig<span class="token punctuation">)</span>
+</code></pre></div><p>Returns <code>Promise&lt;ApiResponse&lt;RequestResponseBody&gt;&gt;</code></p><h3 id="request-config" tabindex="-1"><a class="header-anchor" href="#request-config" aria-hidden="true">#</a> Request Config</h3><div class="language-typescript ext-ts line-numbers-mode"><pre class="language-typescript"><code><span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Package</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * An unique ID of package list
+   */</span>
+  id<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Total amount of products per package\
+   * `=sum(products[].quantity * products[].price)`
+   */</span>
+  amount<span class="token operator">:</span> <span class="token builtin">number</span>
+  <span class="token doc-comment comment">/**
+   * User fee: Respond if a commission is found within the payment amount.
+   */</span>
+  userFee<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span>
+  <span class="token doc-comment comment">/**
+   * Name of the package or name of internal shops
+   */</span>
+  name<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * products in the package
+   */</span>
+  products<span class="token operator">:</span> Product<span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">RedirectUrls</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * An information to prevent phishing while transferring between apps in Android.
+   */</span>
+  appPackageName<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * A merchant URL user moves to after requesting the payment.
+   */</span>
+  confirmUrl<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * A navigation type of the ConfirmURL after user approves the payment request.
+   */</span>
+  confirmUrlType<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * A URL that moves to the next when LINE Pay member cancels the payment from the payment page.
+   */</span>
+  cancelUrl<span class="token operator">:</span> <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Payment</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Regarding automatic payment
+   * - True: Processing authorization and purchase with the Confirm API at the same time
+   * - False: Authorized with the Confirm API but need to purchase with the Capture API.
+   *
+   * Note that this field is not available by default. Users should contact LINE Pay to activate manually.
+   */</span>
+  capture<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span>
+  <span class="token doc-comment comment">/**
+   * Payment options
+   * - NORMAL
+   * - PREAPPROVED
+   */</span>
+  payType<span class="token operator">?</span><span class="token operator">:</span> <span class="token string">&#39;NORMAL&#39;</span> <span class="token operator">|</span> <span class="token string">&#39;PREAPPROVED&#39;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Display</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Language codes of the payment standby screen. The default language is English (en).
+   * - Supported languages: en, ja, ko, th, zh_TW, zh_CN
+   */</span>
+  locale<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Checking the payment browser when moving to the ConfirmURL
+   * - True : Guide user to go to the LINE Pay payment request browser if payment request browser and the ConfirmURL navigation browser are different.
+   * - False : Move the the ConfirmURL immediately without checking the browser
+   */</span>
+  checkConfirmUrlBrowser<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Shipping</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Shipping address options
+   * - NO_SHIPPING
+   * - FIXED_ADDRESS
+   * - SHIPPING
+   */</span>
+  type<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Shipping fee
+   */</span>
+  feeAmount<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span>
+  <span class="token doc-comment comment">/**
+   * A URL to check shipping method
+   */</span>
+  feeInquiryUrl<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Shipping fee options
+   * - CONDITION : Check the shipping method (fee) when the shipping address is changed.
+   * - FIXED : If fixed, not checking the shipping address even after it is changed.
+   */</span>
+  feeInquiryType<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Shipping address
+   */</span>
+  address<span class="token operator">?</span><span class="token operator">:</span> Address
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">AddFriend</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Service type of the friend add list
+   * - lineAt
+   */</span>
+  type<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * A list of ID by service
+   */</span>
+  idList<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">FamilyService</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Service type of the family service list
+   */</span>
+  addFriends<span class="token operator">?</span><span class="token operator">:</span> AddFriend<span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Extra</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Branch Name where the payment is requested from (Only 100 letters will be displayed if it&#39;s exceeded.)
+   */</span>
+  branchName<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Branch Id where the payment is requested.\
+   * It can be support alphabets, numbers and special characters.
+   */</span>
+  branchId<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Options</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Payment options
+   */</span>
+  payment<span class="token operator">?</span><span class="token operator">:</span> Payment
+  <span class="token doc-comment comment">/**
+   * Display options
+   */</span>
+  display<span class="token operator">?</span><span class="token operator">:</span> Display
+  <span class="token doc-comment comment">/**
+   * Shipping options
+   */</span>
+  shipping<span class="token operator">?</span><span class="token operator">:</span> Shipping
+  <span class="token doc-comment comment">/**
+   * Family service options
+   */</span>
+  familyService<span class="token operator">?</span><span class="token operator">:</span> FamilyService
+  <span class="token doc-comment comment">/**
+   * Extra options
+   */</span>
+  extra<span class="token operator">?</span><span class="token operator">:</span> Extra
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">RequestRequestBody</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Payment amount\
+   * `= sum(packages[].amount) + sum(packages[].userFee) + options.shipping.feeAmount`
+   */</span>
+  amount<span class="token operator">:</span> <span class="token builtin">number</span>
+  <span class="token doc-comment comment">/**
+   * Payment currency (ISO 4217)
+   * - Supported currencies: USD, JPY, TWD, THB
+   */</span>
+  currency<span class="token operator">:</span> Currency
+  <span class="token doc-comment comment">/**
+   * An order ID of payment request from the merchant
+   * - An unique ID managed by the merchant
+   */</span>
+  orderId<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Package list
+   */</span>
+  packages<span class="token operator">:</span> Package<span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token doc-comment comment">/**
+   * Redirect URLs
+   */</span>
+  redirectUrls<span class="token operator">:</span> RedirectUrls
+  <span class="token doc-comment comment">/**
+   * options
+   */</span>
+  options<span class="token operator">?</span><span class="token operator">:</span> Options
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">RequestRequestConfig</span> <span class="token operator">=</span> GeneralRequestConfig <span class="token operator">&amp;</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Request body of request API
+   */</span>
+  body<span class="token operator">:</span> RequestRequestBody
+<span class="token punctuation">}</span>
+</code></pre><div class="highlight-lines"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><br><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div></div><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="response-body" tabindex="-1"><a class="header-anchor" href="#response-body" aria-hidden="true">#</a> Response Body</h3><div class="language-typescript ext-ts line-numbers-mode"><pre class="language-typescript"><code><span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">PaymentUrl</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * App URL to move to the payment page
+   * - Used when payment reservation is done in the app
+   * - URL to move from the merchant app to the LINE Pay.
+   */</span>
+  app<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * 	Web URL to move to the payment page
+   * - Used when payment reservation is done in the web
+   * - URL to move to the LINE Pay payment standby page
+   * - Move to URL that is delivered without particular parameter
+   * - If opening a pop-up in the desktop, follow the size: Width: 700px, Height : 546px
+   */</span>
+  web<span class="token operator">:</span> <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">Info</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Transaction ID
+   */</span>
+  transactionId<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * The code value entered when code is used instead of scanner in the LINE Pay.
+   */</span>
+  paymentAccessToken<span class="token operator">:</span> <span class="token builtin">string</span>
+  <span class="token doc-comment comment">/**
+   * Payment URL
+   */</span>
+  paymentUrl<span class="token operator">:</span> PaymentUrl
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">RequestResponseBody</span> <span class="token operator">=</span> GeneralResponseBody <span class="token operator">&amp;</span> <span class="token punctuation">{</span>
+  <span class="token doc-comment comment">/**
+   * Payment information
+   */</span>
+  info<span class="token operator">:</span> Info
+<span class="token punctuation">}</span>
+</code></pre><div class="highlight-lines"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><br><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div><div class="highlight-line"> </div></div><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="return-code" tabindex="-1"><a class="header-anchor" href="#return-code" aria-hidden="true">#</a> Return Code</h3><h4 id="success" tabindex="-1"><a class="header-anchor" href="#success" aria-hidden="true">#</a> Success</h4><table><thead><tr><th style="text-align:center;">Code</th><th style="text-align:left;">Description</th></tr></thead><tbody><tr><td style="text-align:center;">0000</td><td style="text-align:left;">Success</td></tr></tbody></table><h4 id="error" tabindex="-1"><a class="header-anchor" href="#error" aria-hidden="true">#</a> Error</h4><table><thead><tr><th style="text-align:center;">Code</th><th style="text-align:left;">Description</th></tr></thead><tbody><tr><td style="text-align:center;">1104</td><td style="text-align:left;">Non-existing merchant</td></tr><tr><td style="text-align:center;">1105</td><td style="text-align:left;">The merchant cannot use the LINE Pay.</td></tr><tr><td style="text-align:center;">1106</td><td style="text-align:left;">A header information error</td></tr><tr><td style="text-align:center;">1124</td><td style="text-align:left;">An amount info error</td></tr><tr><td style="text-align:center;">1145</td><td style="text-align:left;">Payment in process</td></tr><tr><td style="text-align:center;">1172</td><td style="text-align:left;">A record of transaction with the same order number already exists.</td></tr><tr><td style="text-align:center;">1178</td><td style="text-align:left;">Unsupported currency</td></tr><tr><td style="text-align:center;">1183</td><td style="text-align:left;">The payment amount must be less than 0.</td></tr><tr><td style="text-align:center;">1194</td><td style="text-align:left;">The merchant cannot use the preapproved payment.</td></tr><tr><td style="text-align:center;">2101</td><td style="text-align:left;">A parameter error</td></tr><tr><td style="text-align:center;">2102</td><td style="text-align:left;">A JSON data format error</td></tr><tr><td style="text-align:center;">9000</td><td style="text-align:left;">An internal error</td></tr></tbody></table><h3 id="example" tabindex="-1"><a class="header-anchor" href="#example" aria-hidden="true">#</a> Example</h3><h4 id="request" tabindex="-1"><a class="header-anchor" href="#request" aria-hidden="true">#</a> Request</h4><div class="language-typescript ext-ts line-numbers-mode"><pre class="language-typescript"><code><span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> linePayClient<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  body<span class="token operator">:</span> <span class="token punctuation">{</span>
+    amount<span class="token operator">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    currency<span class="token operator">:</span> <span class="token string">&#39;TWD&#39;</span><span class="token punctuation">,</span>
+    orderId<span class="token operator">:</span> <span class="token string">&#39;20211209003&#39;</span><span class="token punctuation">,</span>
+    packages<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        id<span class="token operator">:</span> <span class="token string">&#39;c99abc79-3b29-4f40-8851-bc618ca57857&#39;</span><span class="token punctuation">,</span>
+        amount<span class="token operator">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+        products<span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            name<span class="token operator">:</span> <span class="token string">&#39;Demo Product&#39;</span><span class="token punctuation">,</span>
+            quantity<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            price<span class="token operator">:</span> <span class="token number">500</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    redirectUrls<span class="token operator">:</span> <span class="token punctuation">{</span>
+      confirmUrl<span class="token operator">:</span> <span class="token string">&#39;https://example.com/confirmUrl&#39;</span><span class="token punctuation">,</span>
+      cancelUrl<span class="token operator">:</span> <span class="token string">&#39;https://example.com/cancelUrl&#39;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="response" tabindex="-1"><a class="header-anchor" href="#response" aria-hidden="true">#</a> Response</h4><div class="language-json ext-json line-numbers-mode"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;body&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;returnCode&quot;</span><span class="token operator">:</span> <span class="token string">&quot;0000&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;returnMessage&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Success.&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;info&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;paymentUrl&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;web&quot;</span><span class="token operator">:</span> <span class="token string">&quot;https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;app&quot;</span><span class="token operator">:</span> <span class="token string">&quot;line://pay/payment/eVBISG5rQ09QL2JBVmJsdGdGN3RiUlBLaU0vMUtKWGEvVzhZS3o5NnBvSUlqZXdLdXk3Wlh0RXY2a0o3ZHp6Yw&quot;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;transactionId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2021121600698709710&quot;</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;paymentAccessToken&quot;</span><span class="token operator">:</span> <span class="token string">&quot;656097936065&quot;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;comments&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="addhandler" tabindex="-1"><a class="header-anchor" href="#addhandler" aria-hidden="true">#</a> addHandler</h2><div class="language-javascript ext-js"><pre class="language-javascript"><code><span class="token function">addHandler</span><span class="token punctuation">(</span>handler<span class="token punctuation">)</span>
+</code></pre></div><p>Returns <code>RequestClient</code></p><p>Example:</p><div class="language-javascript ext-js line-numbers-mode"><pre class="language-javascript"><code>client<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> type<span class="token punctuation">,</span> req<span class="token punctuation">,</span> next<span class="token punctuation">,</span> httpClient <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span> <span class="token comment">// request</span>
+  <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="addhandlers" tabindex="-1"><a class="header-anchor" href="#addhandlers" aria-hidden="true">#</a> addHandlers</h2><div class="language-javascript ext-js"><pre class="language-javascript"><code><span class="token function">addHandlers</span><span class="token punctuation">(</span><span class="token operator">...</span>handlers<span class="token punctuation">)</span>
+</code></pre></div><p>Returns <code>RequestClient</code></p><p>Example:</p><div class="language-javascript ext-js line-numbers-mode"><pre class="language-javascript"><code>client<span class="token punctuation">.</span><span class="token function">addHandlers</span><span class="token punctuation">(</span>
+  <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> req<span class="token punctuation">,</span> next <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">next</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> req<span class="token punctuation">,</span> next <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">next</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> req<span class="token punctuation">,</span> next <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">next</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></div><!--[--><!--]--></div><footer class="page-meta"><!----><div class="meta-item last-updated"><span class="meta-item-label">Last Updated: </span><!----></div><div class="meta-item contributors"><span class="meta-item-label">Contributors: </span><span class="meta-item-info"><!--[--><!--[--><span class="contributor" title="email: sean.enylin@gmail.com">Sean Lin</span><!----><!--]--><!--]--></span></div></footer><nav class="page-nav"><p class="inner"><!----><span class="next"><a href="/line-pay-merchant/api-reference/confirm.html" class="" aria-label="Confirm API"><!--[--><!--]--> Confirm API <!--[--><!--]--></a></span></p></nav><!--[--><!--]--></main><!--]--></div><!----><!--]--></div>
+    <script type="module" src="/line-pay-merchant/assets/app.951013b3.js" defer></script>
+  </body>
+</html>

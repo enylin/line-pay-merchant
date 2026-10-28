@@ -1,44 +1,67 @@
 name: docs
 
 on:
-  # trigger deployment on every push to main branch
   push:
     branches: [main]
-  # trigger deployment manually
+    paths:
+      - docs/**
+      - examples/**
+      - src/**
+      - typedoc.json
+      - package.json
+      - package-lock.json
+      - .github/workflows/docs.yaml
   workflow_dispatch:
 
-jobs:
-  docs:
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
+# One deployment at a time; let a running one finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          # fetch all commits to get last updated time or other git log info
+          # The "last updated" time of a page comes from the git history.
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup node
-        uses: actions/setup-node@v2.5.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: '16.x'
+          node-version-file: .nvmrc
+          cache: npm
 
-      - name: Install npm packages
-        run: npm install
+      - run: npm ci
 
-      # run build script
-      - name: Build VuePress site
-        run: npm run docs:build
+      # The API reference is generated from the TSDoc of the source, then
+      # VitePress builds the site. Dead links fail the build.
+      - run: npm run docs:build
 
-      # please check out the docs of the workflow for more details
-      # @see https://github.com/crazy-max/ghaction-github-pages
+      - name: Setup Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          # deploy to gh-pages branch
-          target_branch: gh-pages
-          # deploy the default output dir of VuePress
-          build_dir: docs/.vuepress/dist
-        env:
-          # @see https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

@@ -1,0 +1,10 @@
+dist
+coverage
+node_modules
+package-lock.json
+CHANGELOG.md
+docs/.vitepress/cache
+docs/.vitepress/dist
+docs/api
+docs/en/api
+docs/public/googlec18df094ffcf1b42.html

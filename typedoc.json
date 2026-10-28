@@ -1,0 +1,33 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "tsconfig": "tsconfig.json",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+  "out": "docs/api",
+  "readme": "none",
+  "entryFileName": "index",
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "hidePageHeader": true,
+  "hideBreadcrumbs": true,
+  "useCodeBlocks": true,
+  "expandObjects": false,
+  "navigation": {
+    "includeCategories": false,
+    "includeGroups": true
+  },
+  "groupOrder": ["Functions", "Classes", "Interfaces", "Type Aliases", "*"],
+  "sort": ["kind", "alphabetical"],
+  "treatWarningsAsErrors": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "docsRoot": "./docs",
+  "sidebar": {
+    "autoConfiguration": true,
+    "pretty": true,
+    "collapsed": true
+  }
+}

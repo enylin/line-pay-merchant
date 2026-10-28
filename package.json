@@ -1,95 +1,114 @@
 {
   "name": "line-pay-merchant",
-  "version": "0.9.0",
-  "description": "LINE Pay Merchant API V3",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "engines": {
-    "node": ">=10.12.0 <=17"
-  },
-  "scripts": {
-    "build": "npm run clean && npx tsc",
-    "check-types": "tsc --noemit -p tsconfig.json",
-    "clean": "rimraf dist coverage",
-    "eslint": "eslint \"src/**/*.ts\"",
-    "lint": "npm run eslint && npm run check-types",
-    "prepare": "husky install",
-    "release": "npm run build && npm publish",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "test": "jest --silent",
-    "test:cov": "jest --coverage",
-    "test:log": "jest",
-    "test:watch": "jest --watch",
-    "v:major": "npm version major -m \"build: release %s\"",
-    "v:minor": "npm version minor -m \"build: release %s\"",
-    "v:patch": "npm version patch -m \"build: release %s\"",
-    "v:premajor": "npm version premajor -m \"build: release %s\"",
-    "v:preminor": "npm version preminor -m \"build: release %s\"",
-    "v:prepatch": "npm version prepatch -m \"build: release %s\"",
-    "v:prerelease": "npm version prerelease -m \"build: release %s\"",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/enylin/line-pay-merchant.git"
-  },
+  "version": "1.0.0-alpha.0",
+  "description": "LINE Pay Online API V4 client for Node.js: zero dependencies, typed, with a way to look up payments whose outcome is unknown",
   "keywords": [
     "LINE Pay",
     "LINE",
     "Payment",
     "Merchant",
-    "V3",
-    "ES6",
-    "TypeScript"
+    "V4",
+    "TypeScript",
+    "ESM",
+    "CommonJS"
   ],
+  "homepage": "https://enylin.github.io/line-pay-merchant/",
+  "bugs": {
+    "url": "https://github.com/enylin/line-pay-merchant/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enylin/line-pay-merchant.git"
+  },
+  "license": "MIT",
   "author": {
     "name": "Sean Lin",
     "email": "sean.enylin@gmail.com"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/enylin/line-pay-merchant/issues"
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
-  "homepage": "https://enylin.github.io/line-pay-merchant/",
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-TW.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "node -e \"for (const d of ['dist', 'coverage']) require('node:fs').rmSync(d, { recursive: true, force: true })\"",
+    "typecheck": "tsc --noEmit && tsc -p examples/tsconfig.json && tsc -p docs/tsconfig.json",
+    "lint": "eslint . && prettier --check . && npm run check:any",
+    "check:any": "node scripts/check-no-any.mjs",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:types": "vitest run --typecheck.only",
+    "check:package": "publint --strict && attw --pack . --profile node16",
+    "check:pack": "node scripts/pack-smoke.mjs",
+    "docs:api": "typedoc && typedoc --out docs/en/api",
+    "docs:dev": "npm run docs:api && vitepress dev docs",
+    "docs:build": "npm run docs:api && vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "verify": "npm run typecheck && npm run lint && npm run test:cov && npm run build && npm run check:package && npm run check:pack",
+    "prepare": "husky",
+    "prepublishOnly": "npm run verify",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
+  },
+  "lint-staged": {
+    "*.{ts,mts,js,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": "prettier --write"
+  },
   "devDependencies": {
-    "@commitlint/cli": "^15.0.0",
-    "@commitlint/config-angular": "^15.0.0",
-    "@commitlint/config-conventional": "^15.0.0",
-    "@types/crypto-js": "^4.0.2",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.10",
-    "@types/uuid": "^8.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "@vuepress/plugin-back-to-top": "^2.0.0-beta.30",
-    "@vuepress/plugin-google-analytics": "^2.0.0-beta.46",
-    "axios-mock-adapter": "^1.20.0",
-    "commitizen": "^4.2.4",
-    "conventional-changelog-cli": "^2.1.1",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.3.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "husky": "^7.0.4",
-    "jest": "^27.3.1",
-    "prettier": "^2.5.0",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^27.0.7",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.2",
-    "vuepress": "^2.0.0-beta.46",
-    "vuepress-plugin-sitemap2": "^2.0.0-beta.79"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "dependencies": {
-    "axios": "^0.26.0",
-    "crypto-js": "^4.1.1",
-    "uuid": "^8.3.2"
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "conventional-changelog-cli": "^5.0.0",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.9.10",
+    "publint": "^0.3.25",
+    "tsdown": "^0.23.2",
+    "typedoc": "^0.28.20",
+    "typedoc-plugin-markdown": "^4.14.1",
+    "typedoc-vitepress-theme": "^1.1.4",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitepress": "^1.6.4",
+    "vitest": "^5.0.5"
   }
 }

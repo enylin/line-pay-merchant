@@ -1,33 +1,98 @@
 name: ci
+
 on:
   push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint:
+  verify:
+    name: lint, types, build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Setup node
-        uses: actions/setup-node@v2.5.0
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          node-version: '16.x'
-      - run: npx pretty-quick --staged
-      - run: npx eslint
-      - run: npm i typescript
-      - run: npx tsc --noemit -p tsconfig.json
-  run-test:
+          # Nothing here pushes: the token does not stay in .git/config.
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      # What is published, not what is in the working tree.
+      - name: Check the package (publint, arethetypeswrong)
+        run: npm run check:package
+      - name: Use the packed package from ESM, CommonJS and TypeScript
+        run: npm run check:pack
+
+  docs:
+    name: build the documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          # Nothing here pushes: the token does not stay in .git/config.
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Generates the API reference from the source and builds both languages.
+      # A dead link or a TSDoc link that does not resolve fails here.
+      - run: npm run docs:build
+
+  test:
+    name: test (node ${{ matrix.node }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [10.12.0, 16.x, 17.x]
+        # The oldest supported release, the active LTS and the current release.
+        node: [22, 24, 26]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Setup node
-        uses: actions/setup-node@v2.5.0
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install
+          # Nothing here pushes: the token does not stay in .git/config.
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      # The coverage thresholds in vitest.config.ts fail the job when they drop.
       - run: npm run test:cov
+
       - name: Upload coverage report
-        uses: codecov/codecov-action@v2
+        if: matrix.node == 24
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5
+        with:
+          files: coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false

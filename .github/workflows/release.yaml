@@ -1,21 +1,164 @@
-name: Publish Package to npm
+name: release
+
+# Publishes to npm when a GitHub release is published. There is no npm token:
+# npm trusted publishing exchanges the OIDC token of this run for a short-lived
+# credential and records a provenance statement. Set it up once on npmjs.com
+# (package settings, "Trusted Publisher"): repository enylin/line-pay-merchant,
+# workflow filename release.yaml, environment npm.
+#
+# Two jobs, so that the code of the dependencies never runs where the credential
+# can be had: `build` installs and runs everything (which is where a poisoned
+# dependency would run) and may only read; `publish` runs nothing but npm on the
+# tarball that `build` made, and is the only job that can ask for the token.
+#
+# What this file cannot do is decide who may release. A release can be made from
+# any commit, and the run uses this file as it is in that commit, so the settings
+# of the repository have to say it: give the `npm` environment required reviewers
+# and let it deploy from tags `v*` only (Settings, Environments), protect `main`
+# (a pull request, the checks of ci.yaml, no force push) and the tags `v*`
+# (Settings, Rules), and put the same environment name in the Trusted Publisher.
+# The step below at least refuses a commit that is not on `main`.
 on:
   release:
-    types: [created]
+    types: [published]
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tarball: ${{ steps.pack.outputs.tarball }}
+      digest: ${{ steps.pack.outputs.digest }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
-      # Setup .npmrc file to publish to npm
-      - name: Setup node
-        uses: actions/setup-node@v2.5.0
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run build
-      - run: npm publish
+          # The whole history, to see whether the commit is one of main.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          # No dependency cache here: a poisoned cache must not reach a release.
+          # (It would be switched on by a `packageManager` field; this says no.)
+          package-manager-cache: false
+
+      - name: Check that the commit is on main
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$GITHUB_SHA is not a commit of main. Releases are made from main."
+            exit 1
+          fi
+
+      - name: Check that the tag is the version in package.json
+        id: version
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version $version in package.json"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      # What is still to be checked against V4 is marked in the source. A stable
+      # release says it has been; a pre-release may still carry the markers.
+      - name: A stable release has no open question about V4
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          case "$VERSION" in
+            *-*) echo "Pre-release $VERSION: open questions about V4 are allowed." ;;
+            *)
+              if grep -rn "TODO(v4-spec)" src examples; then
+                echo "::error::$VERSION is a stable release, and src/ still has TODO(v4-spec) markers."
+                exit 1
+              fi ;;
+          esac
+
+      # No install scripts of the dependencies run here: none is needed to build.
+      - run: npm ci --ignore-scripts
+      - run: npm run verify
+
+      - name: Pack
+        id: pack
+        run: |
+          mkdir "$RUNNER_TEMP/pack"
+          tarball="$(npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP/pack" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8'))[0].filename")"
+          echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
+          echo "digest=$(sha256sum "$RUNNER_TEMP/pack/$tarball" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      # The file that is published, not another one packed from the same tree.
+      - name: Use that very tarball from ESM, CommonJS and TypeScript
+        env:
+          PACK_TARBALL: ${{ runner.temp }}/pack/${{ steps.pack.outputs.tarball }}
+        run: npm run check:pack
+
+      - name: Keep the tarball for the publish job
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: package
+          path: ${{ runner.temp }}/pack/${{ steps.pack.outputs.tarball }}
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Check that npm can publish with trusted publishing
+        run: |
+          version="$(npm --version)"
+          if [ "$(printf '%s\n' 11.5.1 "$version" | sort -V | head -n1)" != "11.5.1" ]; then
+            echo "::error::npm $version is too old for trusted publishing (11.5.1 or later is needed)"
+            exit 1
+          fi
+
+      - name: Download the tarball
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: package
+          path: ${{ runner.temp }}/package
+
+      # What is published is what `build` verified, and it is the version of the tag.
+      - name: Check the tarball
+        env:
+          TARBALL: ${{ runner.temp }}/package/${{ needs.build.outputs.tarball }}
+          VERSION: ${{ needs.build.outputs.version }}
+          DIGEST: ${{ needs.build.outputs.digest }}
+        run: |
+          echo "$DIGEST  $TARBALL" | sha256sum --check --strict -
+          found="$(tar -xOf "$TARBALL" package/package.json | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")"
+          if [ "$found" != "$VERSION" ] || [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
+            echo "::error::The tarball is version $found, the tag is $GITHUB_REF_NAME, build verified $VERSION"
+            exit 1
+          fi
+
+      # A pre-release (1.1.0-rc.1) must not become the "latest" version.
+      - name: Publish
+        env:
+          TARBALL: ${{ runner.temp }}/package/${{ needs.build.outputs.tarball }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          case "$VERSION" in
+            *-*) tag=next ;;
+            *)   tag=latest ;;
+          esac
+          npm publish "$TARBALL" --ignore-scripts --tag "$tag"

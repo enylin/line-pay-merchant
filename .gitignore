@@ -70,7 +70,13 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.test
+.env.*
+!.env.example
+
+# Credentials: registry tokens, keys
+.npmrc
+*.pem
+*.key
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -104,3 +110,10 @@ dist
 .tern-port
 .temp
 .cache
+
+# VitePress
+docs/.vitepress/cache
+docs/.vitepress/dist
+# Generated API reference (TypeDoc)
+docs/api
+docs/en/api

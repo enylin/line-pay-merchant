@@ -146,7 +146,6 @@ describe('interpretResponse: LINE Pay failures', () => {
     '1199',
     '1280',
     '1999',
-    '2042',
     '9000',
     '1900',
     '1905',
@@ -169,7 +168,7 @@ describe('interpretResponse: LINE Pay failures', () => {
     }
   })
 
-  it.each(['1142', '1150', '1190', '1899', '1910', '1990', '2101'])(
+  it.each(['1142', '1150', '1190', '1899', '1910', '1990', '2042', '2101'])(
     'takes %s for a refusal',
     code => {
       const error = apiError(() =>

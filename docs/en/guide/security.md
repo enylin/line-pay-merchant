@@ -1,0 +1,59 @@
+# Security
+
+Most of the risk in a payment integration is not in the library but in the flow around it. This is the checklist to go through before going live.
+
+## What you have to do
+
+**1. The amount comes from your database, not from the URL.** Use the amount of the order for the `amount` of `confirm`. Every parameter in the URL comes from the user's browser.
+
+**2. Parse the parameters of the `confirmUrl` with `parseConfirmQuery()`.**
+
+```ts
+const { transactionId } = parseConfirmQuery(req.query)
+```
+
+It only accepts exactly one `transactionId` of 1 to 19 digits, and throws a `LinePayValidationError` for everything else (several values, arrays, objects, path characters, SQL fragments). Then find the order in **your database** by the `transactionId` you stored when you called `request` for it; if there is none, answer 404. Do not rely on the `orderId` of the URL: the browser can pair any `orderId` with any `transactionId`, so an order found by `orderId` and confirmed with the `transactionId` of the URL could be a cheap order paid with the approval of somebody else's payment. If you do look the order up by `orderId`, check that `order.transactionId` is the `transactionId` of the URL.
+
+**3. Make the `confirmUrl` safe to call repeatedly.** Users reload the page, press back, and URLs get forwarded. Check the state of the order: if it is already `paid`, return the result without calling `confirm` again. Claim the order with a conditional update so that requests arriving together do not both confirm (see the [recipes](/en/recipes/)).
+
+**4. Reconcile when the outcome is unknown; do not re-send.** See [Unknown outcomes and reconcile](./unknown-outcome).
+
+**5. Keep the secret on the server.** Use environment variables or a secret manager, do not commit it to Git, and never send it to a browser. If you suspect a leak, generate a new one in the Merchant Center and update your deployment.
+
+**6. Use https for the confirmUrl and the cancelUrl, and write them in the configuration.** Do not build them from the `Host` header of the request: a forged `Host` sends the user (and the transaction) to another site.
+
+**7. Control who can refund.** A refund moves money. Use [middleware](./middleware#block-an-operation) to keep operations that only certain services should run out of everything else, and log who started it and why. Queue (lock) the refunds of one payment: two refunds of the same amount at the same time cannot be told apart by reconcile (see [Unknown outcomes and reconcile](./unknown-outcome#refunds-need-extra-care)).
+
+**8. Authenticate the route that starts a payment, and check that the order is the user's.** The URL of `startCheckout` and the page that shows the order after the `confirmUrl` are public. Before you start, check that the signed-in user owns the order; a form request needs CSRF protection. The example (`examples/express.ts`) leaves these out to show only the part about LINE Pay.
+
+**9. Rate-limit the public confirm route**, and make sure the `transactionId` that comes back belongs to one of your orders before you touch LINE Pay (the `unknown-order` of the example answers 404 before LINE Pay is called).
+
+**10. Fulfil once.** The request that took the claim, the request that lost it, every reload and the background job may all see "paid". Do not hang shipping, e-mail or points on every sight of `paid`: hang them on the one time **this process** moved the order from `confirming` to `paid` (the `onPaid` of the example). The process can die between the update and the fulfilment, so to lose nothing, write the work to do in the same database transaction as the update (an outbox).
+
+**11. Check that the payment is for this order.** After a `confirm` succeeded (or reconcile said `applied`), compare the `info.orderId` of the response with the order ID you sent to `request`, and do not mark the order paid if they differ (the example stores it on the order and hands a mismatch to a person).
+
+**12. The `regKey` is a credential.** The response of the `confirm` of a pre-approved payment holds a `regKey`: store it encrypted (or in a secret manager), limit who can read it, and keep it out of logs, error reports and analytics; a `body` is a plain object and is not masked. When the user removes the payment method, call `expireRegKey`.
+
+**13. Store the IDs as text, not as numbers.** A `transactionId` has 19 digits, more than 2^53: stored in a `BIGINT` and then read back by the driver as a JavaScript `number`, its last digits silently change, and the changed ID still has 19 digits, so it passes the checks and a refund goes out for another payment. Use a `TEXT` or `VARCHAR` column, and the same for the `orderId` (it may have leading zeros). See [Two identifiers](./payment-flow#two-identifiers).
+
+## What the library does for you
+
+| Protection                               | Description                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Path parameters are always checked       | `transactionId` allows only 1–19 digits and `regKey` only letters and digits, and they are encoded before they enter the path, even with `validate: false`. 0.9 put them into the path as they were, so `../` could rewrite the signed path.                                                                                                                                                               |
+| It signs the string that is sent         | The signature covers exactly what is sent: the query is signed the way the URL parser leaves it, and that URL is the one sent, so a difference in serialisation (a quote rewritten as `%27`, say) cannot make the two differ.                                                                                                                                                                              |
+| The input is copied at the call          | Retries and the context that reconcile works from read the copy. A caller that reuses its object for the next call cannot change which refund a retry sends or which payment is looked up. Only plain data is taken: an instance of a class, a getter or a field that is not enumerable would be left out of the copy without a word (a refund without `refundAmount` is a full refund), so it is refused. |
+| Unknown fields are refused               | A misspelled `refundAmout` or an extra `customerEmail` is not signed and sent on to LINE Pay (except with `validate: false`); the check of the amount of a refund is always on.                                                                                                                                                                                                                            |
+| Responses are checked, then typed        | The response of every operation is checked field by field before you get it. One with a missing field or a field of the wrong type is an `unexpected-shape` error (outcome `unknown`: reconcile), not a value whose type is a lie. The code base has no `as` and no `!`.                                                                                                                                   |
+| Responses are capped                     | At most 8 MiB of a response are read (`body-too-large`), so a response without an end cannot fill the memory.                                                                                                                                                                                                                                                                                              |
+| Settings are read from the object itself | A polluted `Object.prototype.baseUrl` cannot send signed requests to another host.                                                                                                                                                                                                                                                                                                                         |
+| The `regKey` stays out of the context    | The `regKey` is a credential. Reconcile looks the payment up by `orderId`, so it is not needed, and does not end up in an error.                                                                                                                                                                                                                                                                           |
+| Redirects are not followed               | The custom `X-LINE-Authorization` header is not forwarded to another origin.                                                                                                                                                                                                                                                                                                                               |
+| 19-digit IDs are exact                   | Integers beyond 2^53 are turned into strings while parsing.                                                                                                                                                                                                                                                                                                                                                |
+| Errors and client do not leak            | The `toJSON()` of an error is a whitelist, and `console.log(error)` and `util.inspect` print the same view (plus the stack), without the response body or the context; `error.body`, `error.bodyText` and `error.context` are not enumerable, so a logger that copies the properties of an error does not write them down; the client only has methods, so serialising it shows no secret.                 |
+| `baseUrl` must be https                  | Only localhost may use http.                                                                                                                                                                                                                                                                                                                                                                               |
+| Retries only when provably safe          | See [Middleware](./middleware#retrywhennotsent).                                                                                                                                                                                                                                                                                                                                                           |
+
+## Reporting a security problem
+
+Please do not post keys or exploitable details in a public issue. Use the private reporting on the [Security page on GitHub](https://github.com/enylin/line-pay-merchant/security). If there is no report button there, open an issue that says only that you have a security report, with no details, and wait for the maintainer to offer a private channel.

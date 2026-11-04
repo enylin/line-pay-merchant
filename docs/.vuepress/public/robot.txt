@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://enylin.github.io/line-pay-merchant/sitemap.xml
-

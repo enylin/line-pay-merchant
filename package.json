@@ -1,6 +1,6 @@
 {
   "name": "line-pay-merchant",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "LINE Pay Online API V4 client for Node.js: zero dependencies, typed, with a way to look up payments whose outcome is unknown",
   "keywords": [
     "LINE Pay",

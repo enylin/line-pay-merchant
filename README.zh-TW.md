@@ -12,7 +12,7 @@
 
 > **非官方。**這是獨立的函式庫，不是 LINE Pay 製作、背書或支援的。「LINE」與「LINE Pay」是各自所有人的商標。
 
-> **1.0 目前是 alpha。** V4 Sandbox 已驗證付款請求、付款／退款明細、狀態查詢、退款、重複 confirm 與對帳。一般付款流程也已在正式環境測試。預先授權、先授權後請款、已授權但尚未 confirm、混合支付及其他幣別仍需更多測試，相關項目保留 `TODO(v4-spec)`。還在用 V3？請留在 [0.9.x](https://www.npmjs.com/package/line-pay-merchant/v/0.9.0)：`npm install line-pay-merchant@0.9`。
+> **1.0 的 V4 支援範圍。** 一般付款流程已在正式環境測試，付款請求、付款／退款明細、狀態查詢、退款、重複 confirm 與對帳已在 V4 Sandbox 驗證。預先授權付款、先授權後請款、已授權但尚未 confirm、混合支付與其他幣別等進階情境**尚未完整驗證**。部分退款後的折扣／促銷金額對帳也尚未完整驗證，這些情境不可視為已保證正確。V3 使用者請留在 [0.9.x](https://www.npmjs.com/package/line-pay-merchant/v/0.9.0)：`npm install line-pay-merchant@0.9`。
 
 ## 為什麼用它
 

@@ -1,3 +1,26 @@
+# [1.0.0](https://github.com/enylin/line-pay-merchant/compare/v0.9.0...v1.0.0)
+
+### Breaking Changes
+
+- Switch to LINE Pay Online API V4. The 0.9.x V3 handler interface is not compatible. See the [migration guide](https://enylin.github.io/line-pay-merchant/en/migration/from-0.9).
+- Require Node.js 22 or newer.
+
+### Features
+
+- Add `createLinePayClient()` with 10 V4 API operations and typed ESM/CommonJS exports.
+- Remove all runtime dependencies. Use built-in `fetch` and Web Crypto.
+- Classify payment errors as `not-sent`, `unknown`, or `rejected`, with cautious retries and reconciliation.
+- Add bilingual documentation, examples, package smoke tests, and a GitHub Actions release workflow.
+- Stage npm releases for maintainer review and 2FA approval before they become public.
+
+### Known Limitations
+
+- Preapproved registration options and authorization-only capture have not been fully verified with the required V4 merchant capabilities.
+- Payment reconciliation involving discounts and promotions after partial refunds has not been fully verified. Ambiguous amounts are reported as indeterminate, not as confirmed payments.
+- Other advanced flows, mixed payment methods, and currencies outside the tested cases require additional verification.
+
+---
+
 # [0.9.0](https://github.com/enylin/line-pay-merchant/compare/v0.8.0...v0.9.0) (2022-06-09)
 
 

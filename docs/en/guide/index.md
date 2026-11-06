@@ -2,8 +2,8 @@
 
 line-pay-merchant is a library for the LINE Pay Online API **V4** on Node.js back ends. It takes care of signing, transport and types, and it treats "the outcome of a payment is uncertain" as a first-class case.
 
-::: warning Pre-release
-1.0 is still in alpha. V4 Sandbox testing has covered payment requests, payment and refund details, status checks, refunds, and duplicate confirm behavior and reconciliation. The ordinary payment flow has also been tested in production. Preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies still require additional access or test conditions. Unverified details remain marked `TODO(v4-spec)`.
+::: warning Known limitations in 1.0
+The ordinary payment flow has been tested in production, and the core payment, query, refund, and reconciliation operations have been tested in V4 Sandbox. Preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies need more testing. Reconciliation totals involving discounts or promotions after partial refunds are not yet fully verified. Do not treat these scenarios as guaranteed behavior. The outstanding questions remain visible in source comments.
 
 If you use V3, stay on 0.9.x. See the [migration guide](/en/migration/from-0.9).
 :::

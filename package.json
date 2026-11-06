@@ -99,7 +99,7 @@
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "globals": "^17.13.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.0",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
     "tsdown": "^0.23.2",

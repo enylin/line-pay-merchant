@@ -12,7 +12,7 @@ A Node.js library for the **LINE Pay Online API V4**. Zero runtime dependencies,
 
 > **Unofficial.** This is an independent library. It is not made, endorsed or supported by LINE Pay. "LINE" and "LINE Pay" are trademarks of their owners.
 
-> **1.0 is in alpha.** V4 Sandbox testing has covered payment requests, payment and refund details, status checks, refunds, duplicate confirm, and reconciliation. The ordinary payment flow has also been tested in production. Preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies still need more testing; remaining items are marked `TODO(v4-spec)`. Using V3? Stay on [0.9.x](https://www.npmjs.com/package/line-pay-merchant/v/0.9.0): `npm install line-pay-merchant@0.9`.
+> **V4 support in 1.0.** The ordinary payment flow has been tested in production, and payment requests, payment/refund details, status checks, refunds, duplicate confirm, and reconciliation have been tested in V4 Sandbox. Advanced flows (preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies) are **not fully verified**. Discount/promotion totals in reconciliation after partial refunds are also not fully verified. For these cases, do not assume the SDK has proven behavior. Using V3? Stay on [0.9.x](https://www.npmjs.com/package/line-pay-merchant/v/0.9.0): `npm install line-pay-merchant@0.9`.
 
 ## Why
 

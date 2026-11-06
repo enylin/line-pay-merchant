@@ -39,6 +39,6 @@ npm install line-pay-merchant
 
 <<< @/../examples/reconcile.ts#basic{ts}
 
-::: warning Pre-release
-1.0 is still in alpha. V4 Sandbox testing has covered payment requests, payment and refund details, status checks, refunds, and duplicate confirm behavior and reconciliation. The ordinary payment flow has also been tested in production. Preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies still require additional access or test conditions. Unverified details remain marked `TODO(v4-spec)`.
+::: warning Known limitations in 1.0
+The ordinary payment flow has been tested in production. Payment requests, payment/refund details, status checks, refunds, duplicate confirm, and reconciliation have been tested in V4 Sandbox. Advanced scenarios including preapproved payments, authorization-only capture, buyer authorization before confirm, mixed payment methods, and other currencies remain incompletely verified. Discount/promotion totals in reconciliation after partial refunds are also not fully verified. These behaviors are not guaranteed, and outstanding questions remain marked in source.
 :::

@@ -451,6 +451,10 @@ const matchesCall = (entry: EntryModel, ctx: Ctx) =>
   entry.currency === ctx.currency &&
   close(sumOf(entry), ctx.amount)
 
+/** A refund of the payment: it is not necessarily held now (the guide's table). */
+const refundedSince = (entry: EntryModel): boolean =>
+  (entry.refundList ?? []).length > 0
+
 /** What a context must carry for the lookup of its operation (the guide's table). */
 const NEEDS: Record<ReconcilableOperation, ('amount' | 'currency')[]> = {
   confirm: ['amount', 'currency'],
@@ -545,12 +549,15 @@ function judgeEntry(ctx: Ctx, payment: EntryModel): Status {
       return payment.transactionType === 'PAYMENT' &&
         (payment.payStatus === 'CAPTURE' ||
           payment.payStatus === 'AUTHORIZATION') &&
-        matchesCall(payment, ctx)
+        matchesCall(payment, ctx) &&
+        !refundedSince(payment)
         ? 'applied'
         : 'indeterminate'
     case 'capture':
       if (payment.payStatus === 'AUTHORIZATION') return 'not-applied'
-      return payment.payStatus === 'CAPTURE' && matchesCall(payment, ctx)
+      return payment.payStatus === 'CAPTURE' &&
+        matchesCall(payment, ctx) &&
+        !refundedSince(payment)
         ? 'applied'
         : 'indeterminate'
     case 'void':

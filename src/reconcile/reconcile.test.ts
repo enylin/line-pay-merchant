@@ -67,6 +67,19 @@ const confirmed = lost({
   currency: 'TWD'
 })
 
+/**
+ * A refund as the payment details of the V4 Sandbox list it: the amount is
+ * negative, and the payment itself keeps `payStatus: CAPTURE` and its original
+ * `payInfo`.
+ */
+const refundedBy = (overrides: Record<string, unknown> = {}) => ({
+  refundTransactionId: REFUND_TX,
+  transactionType: 'PAYMENT_REFUND',
+  refundAmount: -1000,
+  refundTransactionDate: '2026-10-27T00:00:30Z',
+  ...overrides
+})
+
 function expectStatus<S extends ReconcileResult['status']>(
   result: ReconcileResult,
   status: S
@@ -1186,6 +1199,98 @@ describe('reconcile confirm', () => {
       'The transaction is a PAYMENT_REFUND, not a payment.'
     )
   })
+
+  // The details keep `payStatus: CAPTURE` and the original `payInfo` after a
+  // refund, so "the payment is there for the amount that was asked" is also true
+  // of a payment that is no longer held. The documented way to use `applied` is to
+  // mark the order paid.
+  it.each([
+    ['in full', refundedBy()],
+    [
+      'in part',
+      refundedBy({ transactionType: 'PARTIAL_REFUND', refundAmount: -100 })
+    ]
+  ])(
+    'is indeterminate when the payment has been refunded %s since',
+    async (_how, refund) => {
+      const { client } = clientWith(
+        detailsResponse(paymentInfo({ refundList: [refund] }))
+      )
+
+      const result = expectStatus(
+        await client.reconcile(confirmed),
+        'indeterminate'
+      )
+
+      expect(result.reason).toMatch(/refunded since/)
+      expect(result.reason).toMatch(/Merchant Center/)
+    }
+  )
+
+  it('does not call a replayed confirm of a refunded payment applied', async () => {
+    // What happens when a customer opens an old confirmUrl again after the
+    // merchant refunded the payment: LINE Pay answers a confirm of a refunded
+    // payment with 1172, the same as for a repeated one (observed on the V4
+    // Sandbox), and the details show the refund.
+    const { client } = clientWith(
+      json({
+        returnCode: '1172',
+        returnMessage: 'Already confirmed transaction'
+      }),
+      detailsResponse(paymentInfo({ refundList: [refundedBy()] }))
+    )
+    const error = await failure(
+      client.confirm({ transactionId: TX, amount: 1000, currency: 'TWD' })
+    )
+
+    const result = expectStatus(await client.reconcile(error), 'indeterminate')
+
+    expect(result.reason).toMatch(/refunded since/)
+  })
+
+  it('is applied when the payment has an empty refundList', async () => {
+    const { client } = clientWith(
+      detailsResponse(paymentInfo({ refundList: [] }))
+    )
+    expectStatus(await client.reconcile(confirmed), 'applied')
+  })
+
+  // The rule rests on one assumption: LINE Pay lists a refund in `refundList` of
+  // the payment, and leaves the key out until there is one (the V4 Sandbox does
+  // both: the details of a payment that was never refunded have no `refundList`,
+  // and the details of a refunded one have an entry). A missing key therefore
+  // reads as "not refunded"; it has to, or no confirm could ever be recovered.
+  it('is applied when the payment has no refundList key at all', async () => {
+    const info = paymentInfo()
+    expect(Object.hasOwn(info, 'refundList')).toBe(false)
+    const { client } = clientWith(detailsResponse(info))
+    expectStatus(await client.reconcile(confirmed), 'applied')
+  })
+
+  // A `refundList` that is there but is not a list of refunds is another matter:
+  // the details are not read, and what the library cannot read is not evidence
+  // that nothing was refunded.
+  it.each([
+    ['a string', 'oops'],
+    ['null', null],
+    ['a list with an entry that has no fields', [{}]]
+  ])(
+    'is indeterminate when the refundList is %s',
+    async (_what, refundList) => {
+      const { client } = clientWith(
+        json({
+          returnCode: '0000',
+          returnMessage: 'Success.',
+          info: [{ ...paymentInfo(), refundList }]
+        })
+      )
+      const result = expectStatus(
+        await client.reconcile(confirmed),
+        'indeterminate'
+      )
+      expect(result.reason).toMatch(/could not be read/)
+    }
+  )
 })
 
 describe('reconcile capture', () => {
@@ -1241,6 +1346,15 @@ describe('reconcile capture', () => {
     expect(
       expectStatus(await client.reconcile(capture), 'indeterminate').reason
     ).toMatch(/differs from the capture call/)
+  })
+
+  it('is indeterminate when the captured payment has been refunded since', async () => {
+    const { client } = clientWith(
+      detailsResponse(paymentInfo({ refundList: [refundedBy()] }))
+    )
+    expect(
+      expectStatus(await client.reconcile(capture), 'indeterminate').reason
+    ).toMatch(/refunded since/)
   })
 
   it('is indeterminate when the payment cannot be found', async () => {

@@ -269,6 +269,20 @@ function absent(
   return notApplied(operation, reason)
 }
 
+/**
+ * Why a confirm or a capture whose payment has been refunded is `indeterminate`.
+ *
+ * The payment details keep `payStatus: CAPTURE` and the original `payInfo` after a
+ * refund, so "the payment is there, for the amount that was asked" is also true of
+ * a payment that is no longer held. LINE Pay answers a confirm of a refunded
+ * payment with `1172`, as it does a repeated one, so a customer who opens an old
+ * confirmUrl again lands here. `applied` is what a caller marks the order paid
+ * on; the refund list cannot say whether this call is what took the money, or how
+ * much of it is still held (a partial refund leaves part of it), so a person looks.
+ */
+const REFUNDED =
+  'The payment has been refunded since (its refundList is not empty), so it is not necessarily held now, and the details cannot tell whether this call is what took it. Look in the Merchant Center before treating the order as paid.'
+
 const AUTHORIZED_NOTE =
   'The payment is authorized, not captured. That is as it should be if the call asked not to capture. If it asked to capture (the default), look at the payment again before treating it as paid: an authorization that is never captured expires.'
 
@@ -319,6 +333,7 @@ export async function reconcileConfirm(env: RuleEnv): Promise<ReconcileResult> {
       'The payment exists, but its amount or currency differs from the confirm call.'
     )
   }
+  if (payment.refundList.length > 0) return indeterminate('confirm', REFUNDED)
 
   const body: ConfirmResponse = {
     returnCode: '0000',
@@ -376,6 +391,9 @@ export async function reconcileCapture(env: RuleEnv): Promise<ReconcileResult> {
           'capture',
           'The payment is captured, but its amount or currency differs from the capture call.'
         )
+      }
+      if (payment.refundList.length > 0) {
+        return indeterminate('capture', REFUNDED)
       }
       return applied(
         'capture',

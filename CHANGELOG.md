@@ -1,3 +1,22 @@
+# [1.1.0](https://github.com/enylin/line-pay-merchant/compare/v1.0.0...v1.1.0)
+
+### Bug Fixes
+
+- Avoid reporting `applied` from `reconcile(confirm)` and `reconcile(capture)` after a full or partial refund. Return `indeterminate` when payment details contain a refund, so applications do not mistakenly mark a refunded order as paid.
+- Reject malformed LINE Pay `returnCode` values instead of treating nonnumeric four-character codes as a confirmed refusal.
+
+### Features
+
+- Expose `LinePayHttpError.returnCode` for HTTP 2xx `unexpected-shape` errors with a valid four-digit response code. Keep the raw response body out of normal error logging and preserve `outcome: 'unknown'`.
+
+### Notes
+
+- Payment details may omit `refundList` before the first refund. A malformed present list remains inconclusive.
+- `returnCode` is diagnostic only. For `checkPaymentStatus`, `0000` means the buyer has not authorized the payment, not that payment completed.
+- No breaking changes are intended.
+
+---
+
 # [1.0.0](https://github.com/enylin/line-pay-merchant/compare/v0.9.0...v1.0.0)
 
 ### Breaking Changes

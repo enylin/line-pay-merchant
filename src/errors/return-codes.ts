@@ -5,6 +5,16 @@
 export const SUCCESS_RETURN_CODE = '0000'
 
 /**
+ * Whether a value is the return code of LINE Pay: four digits (`0000`, `1172`,
+ * `9000`, `1900`). A body with anything else in `returnCode` is not an answer of
+ * LINE Pay, and the library does not take its word: a word of four letters would
+ * be read as a refusal, and a refusal means that the call did not happen.
+ */
+export function isReturnCode(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}$/.test(value)
+}
+
+/**
  * The other codes that start with `0` are statuses, not failures: the status
  * check of a payment answers with them (waiting, cancelled, done). No other
  * operation is known to.

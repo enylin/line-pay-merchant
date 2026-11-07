@@ -5,6 +5,7 @@ import {
 } from '../errors'
 import {
   classifyReturnCode,
+  isReturnCode,
   isStatusReturnCode,
   SUCCESS_RETURN_CODE
 } from '../errors/return-codes'
@@ -32,9 +33,10 @@ function tryParse(text: string): { ok: true; value: unknown } | { ok: false } {
 }
 
 /**
- * What a LINE Pay answer has for certain: a return code. The message may be
- * missing, or `null`: it is never worth losing the code over (a duplicate code
- * must lead to a lookup whatever else the answer lacks).
+ * What a LINE Pay answer has for certain: a return code, four digits. The message
+ * may be missing, or `null`: it is never worth losing the code over (a duplicate
+ * code must lead to a lookup whatever else the answer lacks). A body with another
+ * kind of code is not an answer of LINE Pay, and is not read as a refusal.
  */
 interface Envelope {
   returnCode: string
@@ -46,8 +48,7 @@ function isEnvelope(value: unknown): value is Envelope {
   if (!isRecord(value)) return false
   const { returnCode, returnMessage } = value
   return (
-    typeof returnCode === 'string' &&
-    returnCode.length === 4 &&
+    isReturnCode(returnCode) &&
     (returnMessage === undefined ||
       returnMessage === null ||
       typeof returnMessage === 'string')

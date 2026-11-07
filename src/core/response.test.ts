@@ -221,6 +221,19 @@ describe('interpretResponse: responses that are not from LINE Pay', () => {
       '{"returnCode":"000","returnMessage":"x"}'
     ],
     ['returnCode that is not a string', '{"returnCode":0,"returnMessage":"x"}'],
+    ['returnCode of four letters', '{"returnCode":"oops","returnMessage":"x"}'],
+    [
+      'returnCode of four characters, not all digits',
+      '{"returnCode":"12ab","returnMessage":"x"}'
+    ],
+    [
+      'returnCode of full-width digits',
+      '{"returnCode":"１２３４","returnMessage":"x"}'
+    ],
+    [
+      'returnCode with a line break at the end',
+      '{"returnCode":"0000\\n","returnMessage":"x"}'
+    ],
     [
       'returnMessage that is not a string',
       '{"returnCode":"0000","returnMessage":1}'
@@ -302,6 +315,7 @@ describe('interpretResponse: HTTP status', () => {
       for (const text of [
         '{"returnCode":1172}',
         '{"returnCode":"12"}',
+        '{"returnCode":"oops","returnMessage":"x"}',
         '{"message":"nope"}',
         '[]',
         'null',

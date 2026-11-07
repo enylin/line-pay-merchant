@@ -26,6 +26,7 @@ import {
 } from './index'
 import {
   classifyReturnCode,
+  isReturnCode,
   isStatusReturnCode,
   SUCCESS_RETURN_CODE
 } from './return-codes'
@@ -457,6 +458,67 @@ describe('the shape of an error', () => {
     expect(network.meta).toBeUndefined()
     expect(network.reconcileConclusion).toBeUndefined()
     expect(network.causeCode).toBeUndefined()
+  })
+
+  it('shows the return code of an unexpected-shape error once the body has one', () => {
+    const received = (body: unknown) =>
+      new LinePayHttpError({
+        httpStatus: 200,
+        reason: 'unexpected-shape',
+        outcome: 'unknown',
+        body
+      })
+    const answered = received({ returnCode: '0000', returnMessage: 'Success.' })
+    expect(answered.returnCode).toBe('0000')
+    expect(Object.keys(answered)).toContain('returnCode')
+    expect(answered.toJSON()).toMatchObject({
+      reason: 'unexpected-shape',
+      returnCode: '0000'
+    })
+    // The body itself stays out of sight, as before.
+    expect(Object.keys(answered)).not.toContain('body')
+    expect(JSON.stringify(answered.toJSON())).not.toContain('Success.')
+
+    // Anything that is not a LINE Pay response has no return code, and no
+    // property for it either.
+    for (const body of [
+      undefined,
+      null,
+      '<html>maintenance</html>',
+      [],
+      {},
+      { returnCode: 0 },
+      { returnCode: '00000' },
+      { returnCode: 'oops' },
+      { returnCode: '12ab' },
+      { returnCode: '１２３４' },
+      { returnCode: '' }
+    ]) {
+      const other = received(body)
+      expect(other.returnCode, JSON.stringify(body)).toBeUndefined()
+      expect(Object.hasOwn(other, 'returnCode')).toBe(false)
+      expect(other.toJSON()).not.toHaveProperty('returnCode')
+    }
+  })
+
+  it('has no return code for any reason but unexpected-shape, whatever the body says', () => {
+    // A body of a failed HTTP status, or one that is not a LINE Pay response, is
+    // not LINE Pay saying that the call succeeded.
+    for (const [reason, httpStatus] of [
+      ['http-status', 502],
+      ['invalid-response', 200],
+      ['body-too-large', 200]
+    ] as const) {
+      const error = new LinePayHttpError({
+        httpStatus,
+        reason,
+        outcome: 'unknown',
+        body: { returnCode: '0000', returnMessage: 'Success.' }
+      })
+      expect(error.returnCode, reason).toBeUndefined()
+      expect(Object.hasOwn(error, 'returnCode'), reason).toBe(false)
+      expect(error.toJSON(), reason).not.toHaveProperty('returnCode')
+    }
   })
 
   it('shows the cause code of a network error once it has one', () => {
@@ -1144,6 +1206,28 @@ describe('needsReconcile', () => {
 })
 
 describe('return codes', () => {
+  it('knows a return code: four digits, and nothing else', () => {
+    for (const code of ['0000', '0110', '1172', '2042', '9000', '1900']) {
+      expect(isReturnCode(code), code).toBe(true)
+    }
+    for (const value of [
+      '',
+      '000',
+      '00000',
+      'oops',
+      '12ab',
+      '１２３４',
+      '0000\n',
+      ' 000',
+      1172,
+      null,
+      undefined,
+      {}
+    ]) {
+      expect(isReturnCode(value), JSON.stringify(value)).toBe(false)
+    }
+  })
+
   it('knows 0000 as the success, and the other 0xxx codes as statuses', () => {
     expect(SUCCESS_RETURN_CODE).toBe('0000')
     expect(isStatusReturnCode('0000')).toBe(false)

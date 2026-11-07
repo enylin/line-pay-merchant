@@ -435,6 +435,9 @@ describe('executor: a response that is not what the operation promises', () => {
       // What was received stays with the error, for whoever has to look at it.
       if (!isLinePayHttpError(error)) throw error
       expect(error.body).toEqual(body)
+      // LINE Pay did answer, and said that the call succeeded: the error says so
+      // without anyone reading the body.
+      expect(error.returnCode).toBe('0000')
     }
   )
 
@@ -478,6 +481,60 @@ describe('executor: a response that is not what the operation promises', () => {
       })
     }
   )
+
+  // `returnCode` on the error is for the one case it was made for: LINE Pay's
+  // answer, in a shape the operation does not promise. A `returnCode` in a body
+  // that is not an answer of LINE Pay says nothing about the call, and neither
+  // does one that came with a failed HTTP status.
+  it.each([
+    [
+      'a message that is not a string',
+      200,
+      '{"returnCode":"0000","returnMessage":123}',
+      'invalid-response'
+    ],
+    [
+      'a return code that is four letters',
+      200,
+      '{"returnCode":"oops","returnMessage":"x"}',
+      'invalid-response'
+    ],
+    [
+      'a failed HTTP status',
+      502,
+      '{"returnCode":"0000","returnMessage":"ok"}',
+      'http-status'
+    ]
+  ])(
+    'has no returnCode on the error for %s, even if the body has one',
+    async (_what, status, text, reason) => {
+      const client = clientFor(raw(text, status))
+      const error = await failure(
+        client.confirm({ transactionId: TX, amount: 1000, currency: 'TWD' })
+      )
+      expect(error).toMatchObject({
+        code: 'LINE_PAY_HTTP_ERROR',
+        reason,
+        outcome: 'unknown'
+      })
+      expect(Object.hasOwn(error, 'returnCode')).toBe(false)
+    }
+  )
+
+  it('does not take four letters for a refusal of LINE Pay', async () => {
+    // A return code is four digits. A body with another kind of code is not an
+    // answer of LINE Pay: it is not a refusal ("the call did not happen") either.
+    const client = clientFor(json({ returnCode: 'oops', returnMessage: 'x' }))
+    const error = await failure(
+      client.confirm({ transactionId: TX, amount: 1000, currency: 'TWD' })
+    )
+    expect(error).toMatchObject({
+      code: 'LINE_PAY_HTTP_ERROR',
+      reason: 'invalid-response',
+      outcome: 'unknown'
+    })
+    expect(needsReconcile(error)).toBe(true)
+  })
 
   it('refuses an ID that is a number: the IDs of LINE Pay are strings', async () => {
     // 19 digits come as strings, because they do not fit a number. A short one

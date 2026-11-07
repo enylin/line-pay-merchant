@@ -1,6 +1,10 @@
 import type { OperationName } from '../operations/names'
 import { isReconcilableOperation } from '../operations/names'
-import { classifyReturnCode, type ReturnCodeCategory } from './return-codes'
+import {
+  classifyReturnCode,
+  isReturnCode,
+  type ReturnCodeCategory
+} from './return-codes'
 
 /**
  * Brand used by the type guards instead of `instanceof`. A package that ships
@@ -450,6 +454,13 @@ const HTTP_ERROR_MESSAGES: Readonly<
     `LINE Pay responded with HTTP ${status}, but the body is too large to read`
 }
 
+/** The `returnCode` of a body, when it has one: four digits. Else `undefined`. */
+function returnCodeOf(body: unknown): string | undefined {
+  if (typeof body !== 'object' || body === null) return undefined
+  const code: unknown = Reflect.get(body, 'returnCode')
+  return isReturnCode(code) ? code : undefined
+}
+
 /**
  * The HTTP status was not 2xx, the body of a 2xx response is not a LINE Pay
  * response (for example an HTML page from a proxy), or it is one without the
@@ -461,6 +472,20 @@ export class LinePayHttpError extends LinePayError {
   declare readonly outcome: 'rejected' | 'unknown'
   readonly httpStatus: number
   readonly reason: HttpErrorReason
+  /**
+   * The `returnCode` of the answer, for `reason: 'unexpected-shape'` only: an
+   * answer of LINE Pay (it has a return code, four digits) that is not the one the
+   * operation promises. `'0000'` there means that LINE Pay answered that the call
+   * succeeded, only not in the shape this library promises.
+   *
+   * For every other reason there is no property. The body is not an answer of LINE
+   * Pay (an HTML page of a proxy, JSON of something else), or it came with an HTTP
+   * status that is not 2xx, and a `returnCode` in it says nothing about the call.
+   *
+   * It is diagnostic: it does not change the outcome (`unknown`); `reconcile` is
+   * what finds out what became of the call.
+   */
+  declare readonly returnCode?: string | undefined
   /**
    * What was received, parsed (for an answer that is no LINE Pay response, or
    * not the one the operation promises). Not enumerable, like `bodyText`.
@@ -477,6 +502,11 @@ export class LinePayHttpError extends LinePayError {
     )
     this.httpStatus = init.httpStatus
     this.reason = init.reason
+    // Only for an answer that the library took for LINE Pay's: any other body
+    // (a proxy's JSON, a failed HTTP status) says nothing about the call.
+    const returnCode =
+      init.reason === 'unexpected-shape' ? returnCodeOf(init.body) : undefined
+    if (returnCode !== undefined) this.returnCode = returnCode
     keepApart(this, 'body', init.body)
     keepApart(this, 'bodyText', init.bodyText)
   }
@@ -484,11 +514,13 @@ export class LinePayHttpError extends LinePayError {
   override toJSON(): LinePayErrorJSON & {
     readonly httpStatus: number
     readonly reason: HttpErrorReason
+    readonly returnCode?: string
   } {
     return {
       ...super.toJSON(),
       httpStatus: this.httpStatus,
-      reason: this.reason
+      reason: this.reason,
+      ...(this.returnCode === undefined ? {} : { returnCode: this.returnCode })
     }
   }
 }
